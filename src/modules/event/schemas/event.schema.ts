@@ -25,6 +25,9 @@ export class Event {
     author: string;
 
     @Prop()
+    userId: string;
+
+    @Prop()
     categoryList: string[];
 
     @Prop()

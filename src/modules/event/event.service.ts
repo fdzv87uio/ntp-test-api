@@ -14,6 +14,11 @@ export class EventService {
         return events;
     }
 
+    async findAllEventsByUserId(userId: string): Promise<Event[]> {
+        const events = await this.eventModel.find({ userId: userId });
+        return events;
+    }
+
     async createEvent(event: Event): Promise<Event> {
         const res = await this.eventModel.create(event);
         return res;
