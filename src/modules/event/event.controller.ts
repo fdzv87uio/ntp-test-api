@@ -4,7 +4,7 @@ import { EventType } from './interfaces/event.interface';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { JwtAuthGuard } from '../auth/guard';
 
-@ApiTags('Preference')
+@ApiTags('Events')
 @Controller('events')
 export class EventController {
     constructor(
