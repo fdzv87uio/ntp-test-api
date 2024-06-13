@@ -12,28 +12,29 @@ async function bootstrap() {
   const globalPrefix = 'v1';
   app.setGlobalPrefix(globalPrefix);
   const options = new DocumentBuilder()
-  .setTitle('Events-CurcleUp')
-  .addBearerAuth()
-  .setDescription('Document Service Events CurcleUp, endpoints GET, POST, PUT, DELETE')
-  .setVersion('1.0')
-  .build();
-
-  
+    .setTitle('Events-CurcleUp')
+    .addBearerAuth()
+    .setDescription(
+      'Document Service Events CurcleUp, endpoints GET, POST, PUT, DELETE',
+    )
+    .setVersion('1.0')
+    .build();
 
   const document = SwaggerModule.createDocument(app, options);
   SwaggerModule.setup(`/${globalPrefix}/api`, app, document);
-  
+
   app.useGlobalPipes(
     new ValidationPipe({
       whitelist: true,
-    })
-  )
-  app.enableCors();  
+    }),
+  );
+  app.enableCors();
   app.use(cookieParser());
   app.use(helmet());
-  
 
   await app.listen(process.env.PORT ? parseInt(process.env.PORT) : 3000);
-  logger.log(`Server running on port ${process.env.PORT ? parseInt(process.env.PORT) : 3000}`);
+  logger.log(
+    `Server running on port ${process.env.PORT ? parseInt(process.env.PORT) : 3000}`,
+  );
 }
 bootstrap();
