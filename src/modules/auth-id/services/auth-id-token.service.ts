@@ -19,8 +19,7 @@ export class AuthIdTokenService {
                   
     ) {}    
 
-    async getAccessToken ()  {          
-      log("get access ");
+    async getAccessToken ()  {
       let authidToken = await this.find();
       log("token "+ authidToken);
       if (isNotNullAndNotEmpty(authidToken)){
@@ -32,9 +31,7 @@ export class AuthIdTokenService {
             'Accept-Encoding': 'gzip, deflate, br',                        
           },
         }
-        const data = JSON.stringify(authidToken.refreshToken);
-        log("data");
-        log(data);
+        const data = JSON.stringify(authidToken.refreshToken);        
         const response = await this.externalRequestService.postDataToExternalApi(url,data,config).toPromise();        
        log(response);
         if(isNotNullAndNotEmpty(response) && isNotNullAndNotEmpty(response["AccessToken"])){
@@ -68,8 +65,7 @@ export class AuthIdTokenService {
         }
         const data = [];                
         const response = await this.externalRequestService.postDataToExternalApi(url,data,config).toPromise();        
-        log(response["AccessToken"]);
-        if(isNotNullAndNotEmpty(response) && isNotNullAndNotEmpty(response["AccessToken"])){
+       if(isNotNullAndNotEmpty(response) && isNotNullAndNotEmpty(response["AccessToken"])){
           try {
             let authidToken = new CreateAuthIdToken();            
              authidToken.accessToken = isNotNullAndNotEmpty(response["AccessToken"])?response["AccessToken"]:'';
