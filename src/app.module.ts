@@ -8,19 +8,21 @@ import { UserModule } from './modules/user/user.module';
 import { PreferenceModule } from './modules/preference/preference.module';
 import { AuthIdModule } from './modules/auth-id/auth-id.module';
 import { ExternalRequestModule } from './modules/external-request/external-request.module';
+import { EventModule } from './modules/event/event.module';
 
 @Module({
-  imports: [       
+  imports: [
     ConfigModule.forRoot({
       isGlobal: true,
-      envFilePath: '.env'
+      envFilePath: '.env',
     }),
-    MongooseModule.forRoot(process.env.MONGO), 
+    MongooseModule.forRoot(process.env.MONGO),
     AuthModule,
     UserModule,
     PreferenceModule,
     AuthIdModule,
     ExternalRequestModule,   
+    EventModule,
   ],
   controllers: [AppController],
   providers: [AppService],
