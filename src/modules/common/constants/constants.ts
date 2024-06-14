@@ -1,0 +1,2 @@
+export const AUTH_ID_TOKEN_URL= "https://id.authid.ai/IDCompleteBackendEngine/IdentityService/v1/auth/token";
+export const AUTH_ID_REFRESH_TOKEN_URL = "https://id.authid.ai/IDCompleteBackendEngine/IdentityService/v1/auth/refresh";
