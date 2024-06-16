@@ -92,11 +92,10 @@ export class AuthIdTokenService {
     
     async create(createAuthIdToken: CreateAuthIdToken): Promise<AuthIdToken> {
       const result = await this.authIdTokenModel.findOne(createAuthIdToken).exec();
-      if(!result)
-       return this.authIdTokenModel.create(createAuthIdToken);
-      else{
-        throw new NotFoundException(`authid Token exists`);
-      }      
+      if(!result){  throw new NotFoundException(`authid Token exists`); }
+      return this.authIdTokenModel.create(createAuthIdToken);
+      
+        
     }
 
     async updateAuthIdToken(authIdTokenId: String, updateAuthIdTokenDto: UpdateAuthIdToken): Promise<AuthIdToken> {

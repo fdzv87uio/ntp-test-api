@@ -4,6 +4,7 @@ import { AuthIdController } from './controllers/auth-id.controller';
 import {ExternalRequestModule } from '../external-request/external-request.module'
 import { MongooseModule } from '@nestjs/mongoose';
 import { AuthIdTokenSchema } from './schemas/auth-id-token.schema';
+import { AuthIdService } from './services/auth-id.service';
 
 
 @Module({ 
@@ -11,7 +12,8 @@ import { AuthIdTokenSchema } from './schemas/auth-id-token.schema';
     ExternalRequestModule,    
     MongooseModule.forFeature([{ name: 'AuthIdToken', schema: AuthIdTokenSchema }])
   ],   
-  providers: [AuthIdTokenService],
-  controllers: [AuthIdController]
+  providers: [AuthIdTokenService,AuthIdService],
+  controllers: [AuthIdController],
+  exports: [AuthIdTokenService]
 })
 export class AuthIdModule {}

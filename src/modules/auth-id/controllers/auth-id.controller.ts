@@ -6,7 +6,7 @@ import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 @Controller('auth-id')
 export class AuthIdController {
     constructor(private readonly authIdTokenService: AuthIdTokenService) { }
-    @ApiOperation({ summary: 'Registry new user'})    
+    @ApiOperation({ summary: 'Get AuthId Token'})    
     @Get('get')
     async findAll(): Promise<String> {
         return this.authIdTokenService.getAccessToken();
