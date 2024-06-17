@@ -1,16 +1,20 @@
-import { Body, Controller, Delete, Get, NotFoundException, Param, Post, Put, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, UseGuards } from '@nestjs/common';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { JwtAuthGuard } from '../../auth/guard';
 import { UserService } from '../services/user.service';
 import { CreateUserDto } from '../dtos/create-user.dto';
 import { User } from '../interfaces/user.interface';
+import { HasRoles } from 'src/modules/auth/decorators/has-role.decorator';
+import { Role } from 'src/modules/auth/models/role.enum';
+import { RolesGuard } from 'src/modules/auth/guard/roles.guard';
 
 @ApiTags('User')
 @Controller('user')
 export class UserController {
-    constructor(private readonly userService: UserService) { }
+    constructor(private readonly userService: UserService) {}
 
-    @UseGuards(JwtAuthGuard)
+    @HasRoles(Role.Admin)
+    @UseGuards(JwtAuthGuard, RolesGuard)
     @ApiBearerAuth()
     @ApiOperation({ summary: 'List of the user registers' })
     @Get('list')
@@ -25,7 +29,7 @@ export class UserController {
     }
 
 
-    @ApiOperation({ summary: 'Registry new user'})
+    @ApiOperation({ summary: 'Registry new user' })
     @Post()
     async create(@Body() createUserDto: CreateUserDto): Promise<User> {
         return this.userService.create(createUserDto);
