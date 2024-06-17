@@ -8,4 +8,5 @@ export interface User extends Document {
   user_status: string;
   created_at: Date;
   updated_at?: Date;
+  roles: string[];
 }
