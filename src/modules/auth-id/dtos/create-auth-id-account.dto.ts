@@ -31,7 +31,7 @@ export class CreateAuthIdAccount {
     @ApiProperty()
     @IsString() 
     @IsOptional() 
-    OperationId: String;
+    operationId: String;
 
     @ApiProperty()
     @IsString() 
