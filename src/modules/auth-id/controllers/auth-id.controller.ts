@@ -4,8 +4,8 @@ import  { AuthIdTokenService } from '../services/auth-id-token.service';
 import { AuthIdService } from '../services/auth-id.service'
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { AuthIdResponse } from '../interfaces/auth-id.interface';
-import { CreateAuthIdAccount } from '../dtos/create-auth-id-account.dto';
-import { CreateAuthIdAccountDto } from '../dtos/create-Auth-id.dto';
+import { AuthIdAccountDto } from '../dtos/auth-id_dto.dto';
+import { AuthIdCompleteEnrollDto } from '../dtos/auth-id-complete-enroll.dto';
 @ApiTags('AuthId')
 @Controller('auth-id')
 export class AuthIdController {
@@ -17,10 +17,28 @@ export class AuthIdController {
     async findAll(): Promise<String> {
         return this.authIdTokenService.getAccessToken();
     }
-    @ApiOperation({ summary: 'Create AuthId Account'})
-    @Post('create-account')
-    async createAccount(@Body() createAuthIdAccount: CreateAuthIdAccountDto): Promise<AuthIdResponse>{
-        return this.authIdService.authid_login_send_sms(createAuthIdAccount);
+    @ApiOperation({ summary: 'AuthId Enroll Account'})
+    @Post('enroll-account')
+    async createAccount(@Body() authIdAccount: AuthIdAccountDto): Promise<AuthIdResponse>{
+        return this.authIdService.authid_Enrollment(authIdAccount);
+    }
+
+    @ApiOperation({summary: 'AuthId Verify Account'})
+    @Post('verify-account')
+    async verifyAccount(@Body() authIdAccount: AuthIdAccountDto): Promise<AuthIdResponse>{
+        return this.authIdService.authid_Verification(authIdAccount);       
+    }
+
+    @ApiOperation({summary: 'AuthId Transaction Account'})
+    @Post('transaction-account')
+    async transactionAccount(@Body() authIdAccount: AuthIdAccountDto): Promise<AuthIdResponse>{
+        return this.authIdService.authId_create_transaction(authIdAccount);       
+    }
+
+    @ApiOperation({summary: 'AuthId Complete Enrollment'})
+    @Post('complete-enrollment')
+    async completeEnrollment(@Body() completeEnroll:AuthIdCompleteEnrollDto): Promise<AuthIdResponse>{
+        return this.authIdService.authid_complete_enrollment(completeEnroll);       
     }
      
 }

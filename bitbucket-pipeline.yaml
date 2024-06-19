@@ -1,0 +1,40 @@
+image: atlassian/default-image:4
+
+definitions:
+  steps:
+    - step: &buildDev
+        name: "Build Development"
+        deployment: Development
+        script:
+          - docker build -t dev-curcleup-backend .
+          - pipe: atlassian/aws-ecr-push-image:2.3.0
+            variables:
+              AWS_ACCESS_KEY_ID: $AWS_ACCESS_KEY_ID
+              AWS_SECRET_ACCESS_KEY: $AWS_SECRET_ACCESS_KEY
+              AWS_DEFAULT_REGION: us-east-1
+              TAGS: latest
+              IMAGE_NAME: dev-curcleup-backend   
+          
+          
+    - step: &buildAndDeployProd
+        name: "Build Prod"
+        deployment: Production
+        script:
+          - docker build -t prod-curcleup-backend .
+          - pipe: atlassian/aws-ecr-push-image:2.3.0
+            variables:
+              AWS_ACCESS_KEY_ID: $AWS_ACCESS_KEY_ID
+              AWS_SECRET_ACCESS_KEY: $AWS_SECRET_ACCESS_KEY
+              AWS_DEFAULT_REGION: us-east-1
+              TAGS: latest
+              IMAGE_NAME: prod-curcleup-backend 
+          
+pipelines:
+  branches:
+    'develop':
+      - step: *buildDev
+      #- step: *restartServiceDev
+    'feature/*':
+      - step: *buildDev      
+    'master':
+      - step: *buildAndDeployProd

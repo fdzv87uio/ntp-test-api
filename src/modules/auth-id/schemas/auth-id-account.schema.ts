@@ -5,7 +5,19 @@ const mongooseHidden  = require('mongoose-hidden');
 export  const AuthIdAccountSchema = new Schema({ 
     name: { type: String, trim: true, required: true, },
     lastname:{type:String, trim:true, required: true },
-    email : { type: String, trim: true, index: { unique: true } },
+    email : { type: String, trim: true, index: { unique: true } },    
+    transactionType: {
+        type: [String],
+        enum: ["enrollment", "verify"],
+        default: "enrollment",
+        required: true,
+      },
+    status: {
+        type: [String],
+        enum: ["pending", "accepted", "expired","rejected"],
+        default: "pending",
+        required: true,
+    },  
     phone: {type: String, trim: true },
     accountNumber:{type: String, trim: true },
     oneTimeSecret:{type: String, trim: true },

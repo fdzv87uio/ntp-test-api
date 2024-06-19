@@ -5,7 +5,7 @@ import { AuthIdToken } from '../interfaces/auth-id-token.interface';
 import { ExternalRequestService } from '../../external-request/services/external-request.service';
 import { AUTH_ID_TOKEN_URL, AUTH_ID_REFRESH_TOKEN_URL } from '../../common/constants/constants'
 import { log } from 'console';
-import { CreateAuthIdToken } from '../dtos/create-Auth-id-token.dto';
+import { CreateAuthIdToken } from '../dtos/create-auth-id-token.dto';
 import { isNotNullAndNotEmpty } from 'src/modules/common/utils/utils';
 import { UpdateAuthIdToken } from '../dtos/update-auth-id-token.dto';
 

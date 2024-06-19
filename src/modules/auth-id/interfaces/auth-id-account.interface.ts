@@ -5,6 +5,8 @@ export interface AuthIdAccount extends Document {
     email:String;
     phone:String;
     accountNumber:String;
+    operationId:String;
+    operationUrl:String;
     created_at: Date;
     updated_at?: Date;
 }

@@ -42,6 +42,16 @@ export class CreateAuthIdAccount {
     @IsString() 
     @IsOptional() 
     qrcodeUrl: String;
+    
+    @ApiProperty()
+    @IsString()
+    @IsOptional()
+    transactionType: String;
+
+    @ApiProperty()
+    @IsString()
+    @IsOptional()
+    status: String;
   }
 
   
