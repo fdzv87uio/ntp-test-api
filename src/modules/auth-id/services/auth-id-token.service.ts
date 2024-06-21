@@ -20,8 +20,7 @@ export class AuthIdTokenService {
     ) {}    
 
     async getAccessToken ()  {
-      let authidToken = await this.find();
-      log("token "+ authidToken);
+      let authidToken = await this.find();     
       if (isNotNullAndNotEmpty(authidToken)){
         const url = AUTH_ID_REFRESH_TOKEN_URL;
         const config = {
@@ -32,8 +31,7 @@ export class AuthIdTokenService {
           },
         }
         const data = JSON.stringify(authidToken.refreshToken);        
-        const response = await this.externalRequestService.postDataToExternalApi(url,data,config).toPromise();        
-       log(response);
+        const response = await this.externalRequestService.postDataToExternalApi(url,data,config).toPromise(); 
         if(isNotNullAndNotEmpty(response) && isNotNullAndNotEmpty(response["AccessToken"])){
           try {
              authidToken.accessToken = isNotNullAndNotEmpty(response["AccessToken"])?response["AccessToken"]:'';
@@ -44,10 +42,11 @@ export class AuthIdTokenService {
             this.delete(authidToken.id);
             return authidToken.accessToken;             
           } catch (error) {            
-            error("Failed to parse JSON string:", error);
+            log("Failed to parse JSON string:", error);
             throw new NotFoundException(`authIdTokenId  not found`);
           }
         }else{
+          log("refresh token not found");
           return null;
         }
       }else{

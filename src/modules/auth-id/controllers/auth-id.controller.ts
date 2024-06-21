@@ -29,9 +29,9 @@ export class AuthIdController {
         return this.authIdService.authid_Verification(authIdAccount);       
     }
 
-    @ApiOperation({summary: 'AuthId Transaction Account'})
-    @Post('transaction-account')
-    async transactionAccount(@Body() authIdAccount: AuthIdAccountDto): Promise<AuthIdResponse>{
+    @ApiOperation({summary: 'AuthId Create Transaction Biometric'})
+    @Post('create-transaction')
+    async createTransaction(@Body() authIdAccount: AuthIdAccountDto): Promise<AuthIdResponse>{
         return this.authIdService.authId_create_transaction(authIdAccount);       
     }
 

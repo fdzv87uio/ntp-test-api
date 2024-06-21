@@ -3,6 +3,7 @@ import { HttpService } from '@nestjs/axios';
 import { AxiosResponse } from 'axios';
 import { Observable } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
+import { log } from 'console';
 
 @Injectable()
 export class ExternalRequestService {
@@ -13,6 +14,7 @@ export class ExternalRequestService {
           .pipe(
             map((response: AxiosResponse) => response.data),
             catchError(error => {
+              log(`error get service ${error}`);
               throw new HttpException(error.response?.data || 'External API request failed', HttpStatus.BAD_REQUEST);
             })
           );

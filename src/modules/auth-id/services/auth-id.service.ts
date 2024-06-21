@@ -133,11 +133,9 @@ export class AuthIdService {
   async authid_complete_enrollment(completeEnroll: AuthIdCompleteEnrollDto):Promise<AuthIdResponse> {
     try{
       const accessToken = await this.authIdTokenService.getAccessToken();
-      if (isNotNullAndNotEmpty(accessToken)) {
-        log(completeEnroll);
+      if (isNotNullAndNotEmpty(accessToken)) {        
       const account = await this.findEmail(completeEnroll.email);
-       if(isNotNullAndNotEmpty(account)){
-        log(account.operationId);
+       if(isNotNullAndNotEmpty(account)){        
         const config = {
           headers: {
             'Authorization': `Bearer ${accessToken}`,            
@@ -145,31 +143,24 @@ export class AuthIdService {
             'Accept-Encoding': 'gzip, deflate, br',
           },
         }
-        const urlForeingOperation = `${AUTH_ID_FOREING_OPERATIONS_URL}/${account.operationId}`;
-        log(urlForeingOperation);
+        const urlForeingOperation = `${AUTH_ID_FOREING_OPERATIONS_URL}/${account.operationId}`;        
         const resultOperation = await this.externalRequestService.getDataFromExternalApi(urlForeingOperation, config).toPromise();
-        if(isNotNullAndNotEmpty(resultOperation)){
+        if(isNotNullAndNotEmpty(resultOperation)){          
          const tempId = isNotNullAndNotEmpty(resultOperation["TempId"])?resultOperation["TempId"]:"";
          const oneTimeSecret = isNotNullAndNotEmpty(resultOperation["OneTimeSecret"])?resultOperation["OneTimeSecret"]:"";
          const data = { 
           "TempId": tempId,
          }         
-         const resultBiometricCredentials = await this.externalRequestService.postDataToExternalApi(`${AUTH_ID_CREATE_ACCOUNT_URL}/${account.accountNumber}/proofedBioCredential`,data,config).toPromise();
-         if(isNotNullAndNotEmpty(resultBiometricCredentials.status===200)){
+         const biometricUrl = `${AUTH_ID_CREATE_ACCOUNT_URL}/${account.accountNumber}/proofedBioCredential`;  
+         log(`biometricurl ${biometricUrl}`);     
+           await this.externalRequestService.postDataToExternalApi(biometricUrl,data,config).toPromise();
           return {
             success: false,
             statusCode: "0",
             messageCode: "Operation complete",
             data: undefined
           } as unknown as AuthIdResponse;
-         } else{
-          return {
-            success: false,
-            statusCode: "-1",
-            messageCode: "Operation not response",
-            data: undefined
-          } as unknown as AuthIdResponse;
-         }
+         
         } else {
           return {
             success: false,
