@@ -341,7 +341,7 @@ async authId_create_transaction(account: AuthIdAccountDto): Promise<AuthIdRespon
   async findEmail(email: String): Promise < AuthIdAccount > {
   try {
     const account = await this.authIdAccountModel.findOne({ email: email }).exec()
-      if(!account) throw new NotFoundException('User not found');
+      if(!account) return null;
     return account;
   } catch(error) {
     log(`Error finding user: ${error}`);
