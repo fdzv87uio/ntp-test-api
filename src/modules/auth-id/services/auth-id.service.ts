@@ -59,7 +59,7 @@ export class AuthIdService {
 
           const payload = {
             "DocumentTypes": [
-              "1002"
+              createAccount.documentType
             ],
           }
           const dataOperation = {

@@ -20,6 +20,7 @@ export class UserService {
 
   async create(createUserDto: CreateUserDto): Promise<User> {
     const createdUser = new this.userModel(createUserDto);
+     createdUser.user_status = "disabled";
     return createdUser.save();
   }
 
