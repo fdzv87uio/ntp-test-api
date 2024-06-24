@@ -25,9 +25,4 @@ export class AuthIdAccountDto {
     @ApiProperty()
     @IsNumber()
     documentType: DocumentTypeEnum;
-
-    @ApiProperty()
-    @IsString()
-    location: String;
-
   }
