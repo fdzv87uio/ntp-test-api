@@ -9,6 +9,7 @@ import { PreferenceModule } from './modules/preference/preference.module';
 import { AuthIdModule } from './modules/auth-id/auth-id.module';
 import { ExternalRequestModule } from './modules/external-request/external-request.module';
 import { EventModule } from './modules/event/event.module';
+import { TransactionModule } from './modules/transaction/transaction.module';
 
 @Module({
   imports: [
@@ -22,7 +23,7 @@ import { EventModule } from './modules/event/event.module';
     PreferenceModule,
     AuthIdModule,
     ExternalRequestModule,   
-    EventModule,
+    EventModule, TransactionModule,
   ],
   controllers: [AppController],
   providers: [AppService],
