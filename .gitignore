@@ -3,9 +3,6 @@
 /node_modules
 /build
 
-## lock files
-yarn.lock
-
 # Logs
 logs
 *.log
