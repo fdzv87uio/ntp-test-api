@@ -1,4 +1,5 @@
 import { Schema, model } from 'mongoose'
+import { DocumentTypeEnum } from '../enums/document-types.enum';
 const uniqueValidator = require('mongoose-unique-validator');
 const mongooseHidden  = require('mongoose-hidden');
 
@@ -17,6 +18,11 @@ export  const AuthIdAccountSchema = new Schema({
         enum: ["pending", "accepted", "expired","rejected"],
         default: "pending",
         required: true,
+    },
+    documentType: {
+        type: Number,
+        enum: Object.values(DocumentTypeEnum),
+        required: false, 
     },  
     phone: {type: String, trim: true },
     accountNumber:{type: String, trim: true },

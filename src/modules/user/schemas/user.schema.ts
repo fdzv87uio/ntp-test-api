@@ -16,7 +16,7 @@ export const UserSchema = new Schema({
   email: { type: String, trim: true, required: true, index: { unique: true } },
   password: { type: String, trim: true, hide: true },
   address:{type: String, trim: true, require: true },
-  birth_date: { type: Date, trim: true, required: true},  
+  birthDate: { type: Date, trim: true, required: true},  
   user_status: {
     type: [String],
     enum: ["enabled", "disabled", "deleted"],
@@ -24,7 +24,7 @@ export const UserSchema = new Schema({
     required: true,
   },
   documentType: {
-    type: Number,
+    type: String,
     enum: Object.values(DocumentTypeEnum),
     required: true,
   },

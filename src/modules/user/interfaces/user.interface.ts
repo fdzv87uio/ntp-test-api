@@ -6,6 +6,7 @@ export interface User extends Document {
   email: string;
   password: string;
   address: string;
+  birthDate: Date;
   user_status: string;
   documentType: DocumentTypeEnum;
   created_at: Date;
