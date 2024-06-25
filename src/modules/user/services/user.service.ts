@@ -16,14 +16,14 @@ export class UserService {
     const user = this.userModel.findOne({email: email}).exec()
     if(!user)  throw new NotFoundException('User not found');
     return user; 
-  }
+  }  
 
   async create(createUserDto: CreateUserDto): Promise<User> {
     const createdUser = new this.userModel(createUserDto);
      createdUser.user_status = "disabled";
     return createdUser.save();
   }
-
+   
   async myProfile (email: any, needPassword: boolean = true)  {
     const select: any = ['email']
     if (needPassword) select.push('password')

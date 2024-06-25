@@ -17,10 +17,16 @@ export class AuthIdController {
     async findAll(): Promise<String> {
         return this.authIdTokenService.getAccessToken();
     }
-    @ApiOperation({ summary: 'AuthId Enroll Account'})
-    @Post('enroll-account')
+    @ApiOperation({ summary: 'AuthId Enroll Document Account'})
+    @Post('enroll-document-account')
     async createAccount(@Body() authIdAccount: AuthIdAccountDto): Promise<AuthIdResponse>{
-        return this.authIdService.authid_Enrollment(authIdAccount);
+        return this.authIdService.authid_Enrollment_Document(authIdAccount);
+    }
+
+    @ApiOperation({ summary: 'AuthId Enroll Face Account'})
+    @Post('enroll-face-account')
+    async createAccountFace(@Body() authIdAccount: AuthIdAccountDto): Promise<AuthIdResponse>{
+        return this.authIdService.authid_Enrollment_Face(authIdAccount);
     }
 
     @ApiOperation({summary: 'AuthId Verify Account'})
@@ -35,10 +41,12 @@ export class AuthIdController {
         return this.authIdService.authId_create_transaction(authIdAccount);       
     }
 
-    @ApiOperation({summary: 'AuthId Complete Enrollment'})
+    @ApiOperation({summary: 'AuthId Complete Enrollment '})
     @Post('complete-enrollment')
     async completeEnrollment(@Body() completeEnroll:AuthIdCompleteEnrollDto): Promise<AuthIdResponse>{
         return this.authIdService.authid_complete_enrollment(completeEnroll);       
     }
+
+    
      
 }

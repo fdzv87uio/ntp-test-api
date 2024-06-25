@@ -22,7 +22,7 @@ export  const AuthIdAccountSchema = new Schema({
     documentType: {
         type: Number,
         enum: Object.values(DocumentTypeEnum),
-        required: true, 
+        required: false, 
     },  
     phone: {type: String, trim: true },
     accountNumber:{type: String, trim: true },
