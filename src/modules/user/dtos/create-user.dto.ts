@@ -1,5 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsString, IsEmail, IsOptional, IsPhoneNumber, IsNumber, Min, Max, IsEnum, IsDate } from 'class-validator';
+import { Type } from 'class-transformer';
+import { IsString, IsEmail, IsOptional, IsPhoneNumber, IsNumber, Min, Max, IsEnum, IsDate, IsNotEmpty } from 'class-validator';
 import { DocumentTypeEnum } from '../enums/document-type.enum';
 
 export class CreateUserDto {
@@ -25,7 +26,9 @@ export class CreateUserDto {
     address: String;
 
     @ApiProperty()
-    @IsDate()
+    @IsNotEmpty()
+    @Type(() => Date)
+    @IsDate({ message: 'birthDate must be a valid date' })
     birthDate: Date;
     
     @ApiProperty()
