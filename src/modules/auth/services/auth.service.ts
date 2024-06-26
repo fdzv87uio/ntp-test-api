@@ -41,6 +41,10 @@ export class AuthService {
     }
 
     async register(createUserDto: CreateUserDto):Promise<any>{
+        const userRegisted = await this.userService.findOne(createUserDto.email);
+        if(userRegisted){
+            throw new UnauthorizedException('User already exists')
+        }
       const user =  await this.userService.create(createUserDto);
       const token =  await this.login(user);
       const accessToken = token.accessToken;

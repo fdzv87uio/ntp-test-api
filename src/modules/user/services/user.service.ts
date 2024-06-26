@@ -13,9 +13,9 @@ export class UserService {
     return this.userModel.find().exec();
   }  
 
-  async findOne(email: string): Promise<User> {    
+  async findOne(email: String): Promise<User> {    
     const user = this.userModel.findOne({email: email}).exec()
-    if(!user)  throw new NotFoundException('User not found');
+    if(!user) return null;
     return user; 
   }  
 
@@ -28,7 +28,9 @@ export class UserService {
   async myProfile (email: any, needPassword: boolean = true)  {
     const select: any = ['email']
     if (needPassword) select.push('password')
-    const profile = await this.findOne(email);        
+    const profile = await this.findOne(email);
+    if (!profile)
+      throw new BadRequestException('Your account not found');      
     if (!profile.user_status.includes('enabled'))
         throw new BadRequestException('Your account is not active');   
     return profile; 
