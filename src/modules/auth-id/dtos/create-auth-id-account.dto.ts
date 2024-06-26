@@ -1,5 +1,5 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { IsDate, IsOptional, IsString } from "class-validator";
+import { IsDate, IsNumber, IsOptional, IsString } from "class-validator";
 
 export class CreateAuthIdAccount {
     @ApiProperty()
@@ -52,6 +52,11 @@ export class CreateAuthIdAccount {
     @IsString()
     @IsOptional()
     status: String;
+
+    @ApiProperty()
+    @IsNumber()
+    @IsOptional() 
+    documentType: Number;
   }
 
   
