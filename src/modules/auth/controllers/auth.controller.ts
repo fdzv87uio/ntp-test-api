@@ -1,6 +1,6 @@
 import { Controller, Get, Post, UseGuards, Body, Req } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
-import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOperation, ApiTags  } from '@nestjs/swagger';
 import { UserService } from '../../user/services/user.service';
 import { User } from '../../common/decorators';
 import { AuthService } from '../services/auth.service';
@@ -39,5 +39,15 @@ export class AuthController {
     @Get('profile')
     profile(@User() user: CreateUserDto) {
         return this.userService.myProfile(user);
+    }
+
+    @ApiOperation({ summary: 'Registry new user' })
+    @Post('register')
+    async create(@Body() createUserDto: CreateUserDto) {
+        const dataAuthRegister = await this.authService.register(createUserDto);
+        return {
+            message: 'register success',
+            dataAuthRegister
+        }
     }
 }
