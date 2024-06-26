@@ -15,7 +15,10 @@ export class TransactionService {
     }
 
     async findAllTransactionsByUserEmail(email: string): Promise<Transaction[]> {
-        const res = await this.transactionModel.find({ userEmail: email });
+        const res = await this.transactionModel.find({ userEmail: email })
+            .sort({ datetime: -1 })
+            .limit(10)
+            .sort({ _id: 1 });
         if (!res) {
             throw new NotFoundException('Transactions Not Found');
         }
