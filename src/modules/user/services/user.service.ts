@@ -4,6 +4,7 @@ import { Model } from 'mongoose';
 import { User } from '../interfaces/user.interface';
 import { CreateUserDto } from '../dtos/create-user.dto';
 import { AuthService } from '../../auth/services/auth.service';
+import { log } from 'console';
 
 @Injectable()
 export class UserService {
@@ -13,15 +14,15 @@ export class UserService {
     return this.userModel.find().exec();
   }  
 
-  async findOne(email: String): Promise<User> {    
-    const user = this.userModel.findOne({email: email}).exec()
+  async findOne(email: String): Promise<User> {        
+    const user = await this.userModel.findOne({email: email}).exec()    
     if(!user) return null;
     return user; 
   }  
 
   async create(createUserDto: CreateUserDto): Promise<User> {
     const createdUser = new this.userModel(createUserDto);
-     createdUser.user_status = "disabled";
+     createdUser.user_status = "enabled";
     return createdUser.save();
   }
    
@@ -29,6 +30,7 @@ export class UserService {
     const select: any = ['email']
     if (needPassword) select.push('password')
     const profile = await this.findOne(email);
+  log(profile);
     if (!profile)
       throw new BadRequestException('Your account not found');      
     if (!profile.user_status.includes('enabled'))

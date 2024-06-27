@@ -26,7 +26,7 @@ export const UserSchema = new Schema({
   documentType: {
     type: String,
     enum: Object.values(DocumentTypeEnum),
-    required: true,
+    required: false,
   },
   roles: {
     type: [String],
