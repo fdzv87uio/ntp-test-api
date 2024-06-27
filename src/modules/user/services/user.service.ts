@@ -29,8 +29,7 @@ export class UserService {
   async myProfile (email: any, needPassword: boolean = true)  {
     const select: any = ['email']
     if (needPassword) select.push('password')
-    const profile = await this.findOne(email);
-  log(profile);
+    const profile = await this.findOne(email);  
     if (!profile)
       throw new BadRequestException('Your account not found');      
     if (!profile.user_status.includes('enabled'))
