@@ -12,6 +12,7 @@ import { CreateAuthIdAccount } from '../dtos/create-auth-id-account.dto';
 import { AuthIdAccount } from '../interfaces/auth-id-account.interface';
 import * as QRCode from 'qrcode';
 import { AuthIdCompleteEnrollDto } from '../dtos/auth-id-complete-enroll.dto';
+import { AuthIdCheckOperationDto } from '../dtos/auth-id-check-operation.dto';
 
 const { v4: uuidv4 } = require('uuid');
 
@@ -28,17 +29,17 @@ export class AuthIdService {
     try {
       const accessToken = await this.authIdTokenService.getAccessToken();
       if (accessToken) {
-        const responseAccount = await this.create_account(accessToken,createAccount);   
+        const responseAccount = await this.create_account(accessToken, createAccount);
         if (isNotNullAndNotEmpty(responseAccount)) {
-        const accountNumber =  responseAccount.data["AccountNumber"];          
-        const config = {
-          headers: {
-            'Authorization': `Bearer ${accessToken}`,
-            'Content-Type': 'application/json',
-            'Accept': '*/*',
-            'Accept-Encoding': 'gzip, deflate, br',
-          },
-        }
+          const accountNumber = responseAccount.data["AccountNumber"];
+          const config = {
+            headers: {
+              'Authorization': `Bearer ${accessToken}`,
+              'Content-Type': 'application/json',
+              'Accept': '*/*',
+              'Accept-Encoding': 'gzip, deflate, br',
+            },
+          }
           const payload = {
             "DocumentTypes": [
               createAccount.documentType
@@ -117,20 +118,20 @@ export class AuthIdService {
     try {
       const accessToken = await this.authIdTokenService.getAccessToken();
       if (accessToken) {
-        const responseAccount = await this.create_account(accessToken,createAccount);   
+        const responseAccount = await this.create_account(accessToken, createAccount);
         if (isNotNullAndNotEmpty(responseAccount)) {
           log("response account");
           log(responseAccount)
-        const accountNumber =  responseAccount.data["AccountNumber"]; 
-        log(`accountnumber ${accountNumber}`)         
-        const config = {
-          headers: {
-            'Authorization': `Bearer ${accessToken}`,
-            'Content-Type': 'application/json',
-            'Accept': '*/*',
-            'Accept-Encoding': 'gzip, deflate, br',
-          },
-        }         
+          const accountNumber = responseAccount.data["AccountNumber"];
+          log(`accountnumber ${accountNumber}`)
+          const config = {
+            headers: {
+              'Authorization': `Bearer ${accessToken}`,
+              'Content-Type': 'application/json',
+              'Accept': '*/*',
+              'Accept-Encoding': 'gzip, deflate, br',
+            },
+          }
           const dataOperation = {
             "AccountNumber": accountNumber,
             "Name": "EnrollBioCredential",
@@ -160,7 +161,7 @@ export class AuthIdService {
               status: "pending",
               documentType: null
             }
-            await this.create(data);                          
+            await this.create(data);
             return {
               success: true,
               statusCode: "0",
@@ -168,7 +169,7 @@ export class AuthIdService {
               data: data
             } as unknown as AuthIdResponse;
 
-          }else{
+          } else {
             return {
               success: false,
               statusCode: "-1",
@@ -176,7 +177,7 @@ export class AuthIdService {
               data: null
             } as unknown as AuthIdResponse;
           }
-        }else{
+        } else {
           return {
             success: false,
             statusCode: "-1",
@@ -184,65 +185,65 @@ export class AuthIdService {
             data: null
           } as unknown as AuthIdResponse;
         }
-      }else{
+      } else {
         return {
           success: false,
           statusCode: "-1",
           messageCode: "user account not created",
           data: null
         } as unknown as AuthIdResponse;
-      }   
-    }catch(error){
+      }
+    } catch (error) {
       log(`error create enroll face ${error}`)
-        throw new BadRequestException('Error enroll face');
+      throw new BadRequestException('Error enroll face');
     }
   }
 
 
 
-  async authid_complete_enrollment(completeEnroll: AuthIdCompleteEnrollDto):Promise<AuthIdResponse> {
-    try{
+  async authid_complete_enrollment(completeEnroll: AuthIdCompleteEnrollDto): Promise<AuthIdResponse> {
+    try {
       const accessToken = await this.authIdTokenService.getAccessToken();
-      if (isNotNullAndNotEmpty(accessToken)) {        
-      const account = await this.findEmail(completeEnroll.email);
-       if(isNotNullAndNotEmpty(account)){        
-        const config = {
-          headers: {
-            'Authorization': `Bearer ${accessToken}`,            
-            'Accept': 'application/json',
-            'Accept-Encoding': 'gzip, deflate, br',
-          },
-        }
-        const urlForeingOperation = `${AUTH_ID_FOREING_OPERATIONS_URL}/${account.operationId}`;
-        log(urlForeingOperation);        
-        const resultOperation = await this.externalRequestService.getDataFromExternalApi(urlForeingOperation, config).toPromise();
-       log(resultOperation);
-        if(isNotNullAndNotEmpty(resultOperation)){          
-         const tempId = isNotNullAndNotEmpty(resultOperation["TempId"])?resultOperation["TempId"]:"";
-         const oneTimeSecret = isNotNullAndNotEmpty(resultOperation["OneTimeSecret"])?resultOperation["OneTimeSecret"]:"";
-         const data = { 
-          "TempId": tempId,
-         }         
-         const biometricUrl = `${AUTH_ID_CREATE_ACCOUNT_URL}/${account.accountNumber}/proofedBioCredential`;  
-         log(`biometricurl ${biometricUrl}`);     
-           await this.externalRequestService.postDataToExternalApi(biometricUrl,data,config).toPromise();
+      if (isNotNullAndNotEmpty(accessToken)) {
+        const account = await this.findEmail(completeEnroll.email);
+        if (isNotNullAndNotEmpty(account)) {
+          const config = {
+            headers: {
+              'Authorization': `Bearer ${accessToken}`,
+              'Accept': 'application/json',
+              'Accept-Encoding': 'gzip, deflate, br',
+            },
+          }
+          const urlForeingOperation = `${AUTH_ID_FOREING_OPERATIONS_URL}/${account.operationId}`;
+          log(urlForeingOperation);
+          const resultOperation = await this.externalRequestService.getDataFromExternalApi(urlForeingOperation, config).toPromise();
+          log(resultOperation);
+          if (isNotNullAndNotEmpty(resultOperation)) {
+            const tempId = isNotNullAndNotEmpty(resultOperation["TempId"]) ? resultOperation["TempId"] : "";
+            const oneTimeSecret = isNotNullAndNotEmpty(resultOperation["OneTimeSecret"]) ? resultOperation["OneTimeSecret"] : "";
+            const data = {
+              "TempId": tempId,
+            }
+            const biometricUrl = `${AUTH_ID_CREATE_ACCOUNT_URL}/${account.accountNumber}/proofedBioCredential`;
+            log(`biometricurl ${biometricUrl}`);
+            await this.externalRequestService.postDataToExternalApi(biometricUrl, data, config).toPromise();
 
-          return {
-            success: false,
-            statusCode: "0",
-            messageCode: "Operation complete",
-            data: undefined
-          } as unknown as AuthIdResponse;
-         
+            return {
+              success: false,
+              statusCode: "0",
+              messageCode: "Operation complete",
+              data: undefined
+            } as unknown as AuthIdResponse;
+
+          } else {
+            return {
+              success: false,
+              statusCode: "-1",
+              messageCode: "Operation not response",
+              data: null
+            } as unknown as AuthIdResponse;
+          }
         } else {
-          return {
-            success: false,
-            statusCode: "-1",
-            messageCode: "Operation not response",
-            data: null
-          } as unknown as AuthIdResponse;
-        }
-      } else {
           return {
             success: false,
             statusCode: "-1",
@@ -250,19 +251,19 @@ export class AuthIdService {
             data: null
           } as unknown as AuthIdResponse;
         }
-      }else {
+      } else {
         return {
           success: false,
           statusCode: "-3",
           messageCode: "token not generated",
           data: null
         } as unknown as AuthIdResponse;
-      }  
-    }catch(error){
+      }
+    } catch (error) {
       log(`error completing enrollment ${error}`);
       throw new BadRequestException('Error completing enrollment');
     }
-    
+
   }
 
   async authid_Verification(createAccount: AuthIdAccountDto): Promise<AuthIdResponse> {
@@ -308,9 +309,9 @@ export class AuthIdService {
               email: account.email,
               phone: account.phone,
               transactionType: "verify",
-              status:"pending",
+              status: "pending",
               documentType: null
-            }           
+            }
             return {
               success: true,
               statusCode: "0",
@@ -342,72 +343,113 @@ export class AuthIdService {
           messageCode: "account not found",
           data: null
         } as unknown as AuthIdResponse;
-      }   
-  } catch(error) {
-    log(`Error creating verify transaction ${error}`)
-    throw new BadRequestException('Error creating verify transaction');
+      }
+    } catch (error) {
+      log(`Error creating verify transaction ${error}`)
+      throw new BadRequestException('Error creating verify transaction');
+    }
   }
-}
 
-async authId_create_transaction(account: AuthIdAccountDto): Promise<AuthIdResponse> {
- try{
-   const isEnrolled =  await this.findEmail(account.email);
-   if(isNotNullAndNotEmpty(isEnrolled) && isNotNullAndNotEmpty(isEnrolled.accountNumber))
-     return this.authid_Verification(account);
-    else return this.authid_Enrollment_Document(account);    
- }catch(error){
-  log(`error creating transaction ${error}`);
-  throw new BadRequestException('Error creating transaction');
- }  
-}
+  async authId_create_transaction(account: AuthIdAccountDto): Promise<AuthIdResponse> {
+    try {
+      const isEnrolled = await this.findEmail(account.email);
+      if (isNotNullAndNotEmpty(isEnrolled) && isNotNullAndNotEmpty(isEnrolled.accountNumber))
+        return this.authid_Verification(account);
+      else return this.authid_Enrollment_Document(account);
+    } catch (error) {
+      log(`error creating transaction ${error}`);
+      throw new BadRequestException('Error creating transaction');
+    }
+  }
 
- async create_account(accessToken: String, createAccount: AuthIdAccountDto):Promise<AuthIdResponse> {
-  try{
-  const config = {
-    headers: {
-      'Authorization': `Bearer ${accessToken}`,
-      'Content-Type': 'application/json',
-      'Accept': '*/*',
-      'Accept-Encoding': 'gzip, deflate, br',
-    },
+  async create_account(accessToken: String, createAccount: AuthIdAccountDto): Promise<AuthIdResponse> {
+    try {
+      const config = {
+        headers: {
+          'Authorization': `Bearer ${accessToken}`,
+          'Content-Type': 'application/json',
+          'Accept': '*/*',
+          'Accept-Encoding': 'gzip, deflate, br',
+        },
+      }
+      const accountNumber = uuidv4();
+      const data = {
+        "AccountNumber": accountNumber,
+        "Version": 0,
+        "DisplayName": createAccount.email,
+        "CustomDisplayName": createAccount.email,
+        "Description": createAccount.email,
+        "Rules": 1,
+        "Enabled": true,
+        "Custom": true,
+        "DisableReason": "",
+        "Email": createAccount.email,
+        "PhoneNumber": createAccount.phone,
+        "EmailVerified": false,
+        "PhoneNumberVerified": false
+      }
+      const responseAccount = await this.externalRequestService.postDataToExternalApi(AUTH_ID_CREATE_ACCOUNT_URL, data, config).toPromise();;
+      if (responseAccount) {
+        return {
+          success: true,
+          statusCode: "200",
+          messageCode: "user created successfully",
+          data: responseAccount,
+        } as unknown as AuthIdResponse;
+      } else {
+        return {
+          success: false,
+          statusCode: "-1",
+          messageCode: "user created failed",
+          data: null,
+        } as unknown as AuthIdResponse;
+      }
+    } catch (error) {
+      log("error creating account", error);
+      throw new BadRequestException('Error creating account');
+    }
   }
-  const accountNumber = uuidv4();
-  const data = {
-    "AccountNumber": accountNumber,
-    "Version": 0,
-    "DisplayName": createAccount.email,
-    "CustomDisplayName": createAccount.email,
-    "Description": createAccount.email,
-    "Rules": 1,
-    "Enabled": true,
-    "Custom": true,
-    "DisableReason": "",
-    "Email": createAccount.email,
-    "PhoneNumber": createAccount.phone,
-    "EmailVerified": false,
-    "PhoneNumberVerified": false
+
+  async checkAuthidTransactionStatus(authIdCheckOperation: AuthIdCheckOperationDto): Promise<AuthIdResponse> {
+    try {
+      const accessToken = await this.authIdTokenService.getAccessToken();
+      if (isNotNullAndNotEmpty(accessToken)) {
+        const config = {
+          headers: {
+            'Authorization': `Bearer ${accessToken}`
+          }
+        }
+        const url = `${AUTH_ID_OPERATION_ENROLL_URL}/${authIdCheckOperation.operationId}/status`;
+        const response = await this.externalRequestService.getDataFromExternalApi(url, config).toPromise();
+        if (isNotNullAndNotEmpty(response) && isNotNullAndNotEmpty(response["Status"])) {
+           
+          return {
+            success: true,
+            statusCode: "0",
+            messageCode: "transaction status check successful",
+            data: response,
+          } as unknown as AuthIdResponse;
+        } else {
+          return {
+            success: false,
+            statusCode: "-1",
+            messageCode: "transaction status check failed",
+            data: null,
+          } as unknown as AuthIdResponse;
+        }
+      } else {
+        return {
+          success: false,
+          statusCode: "-1",
+          messageCode: "token not found",
+          data: null,
+        } as unknown as AuthIdResponse;
+      }
+    } catch (error) {
+      log("error checking transaction status", error);
+      throw new BadRequestException('Error checking transaction status');
+    }
   }
-  const responseAccount = await this.externalRequestService.postDataToExternalApi(AUTH_ID_CREATE_ACCOUNT_URL, data, config).toPromise();;
- if(responseAccount){
-  return {
-    success: true,
-    statusCode: "200",
-    messageCode: "user created successfully",
-    data: responseAccount,
-  } as unknown as AuthIdResponse;
-  }else{
-    return {
-      success: false,
-      statusCode: "-1",
-      messageCode: "user created failed",
-      data: null,
-    } as unknown as AuthIdResponse;
-  }
-  }catch(error){
-    log("error creating account", error);
-    throw new BadRequestException('Error creating account');  
-  }
- }
 
   async create(createAuthIdAccount: CreateAuthIdAccount): Promise < AuthIdAccount > {
   const result = await this.authIdAccountModel.findOne(createAuthIdAccount).exec();

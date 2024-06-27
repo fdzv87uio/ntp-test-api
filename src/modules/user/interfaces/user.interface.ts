@@ -7,8 +7,7 @@ export interface User extends Document {
   password: string;
   address: string;
   birthDate: Date;
-  user_status: string;
-  documentType: DocumentTypeEnum;
+  user_status: string; 
   created_at: Date;
   updated_at?: Date;
   roles: string[];

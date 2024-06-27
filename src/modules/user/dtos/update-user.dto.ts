@@ -22,10 +22,6 @@ export class CreateUserDto {
     @ApiProperty()
     @IsDate()
     birthDate?: Date;
-    
-    @ApiProperty()
-    @IsEnum(DocumentTypeEnum)
-    documentType?: DocumentTypeEnum;
 
     @ApiProperty()
     @IsString()

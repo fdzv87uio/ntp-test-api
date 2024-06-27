@@ -29,9 +29,6 @@ export class CreateUserDto {
     @IsNotEmpty()
     @Type(() => Date)
     @IsDate({ message: 'birthDate must be a valid date' })
-    birthDate: Date;
+    birthDate: Date;    
     
-    @ApiProperty()
-    @IsEnum(DocumentTypeEnum)
-    documentType: DocumentTypeEnum;
   }
