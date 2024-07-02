@@ -7,6 +7,7 @@ import { AuthService } from '../services/auth.service';
 import { JwtAuthGuard } from '../guard'
 import { LoginDTO } from '../dtos/login.dto'
 import { CreateUserDto } from '../../user/dtos/create-user.dto';
+import { log } from 'console';
 
 @ApiTags('Auth')
 @Controller('auth')
@@ -19,11 +20,13 @@ export class AuthController {
 
     @UseGuards(AuthGuard('local'))
     @Post('login')
-    login(@Body() user: LoginDTO){
-        const dataAuth = this.authService.login(user);
+   async login(@Body() user: LoginDTO){
+        const dataAuth =  await this.authService.login(user);
+        log("dataauth");
+        log(dataAuth)
         return {
             message: 'Login success',
-            dataAuth
+            data : dataAuth
         }
     }
 

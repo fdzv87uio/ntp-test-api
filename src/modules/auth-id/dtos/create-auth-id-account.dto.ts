@@ -1,5 +1,6 @@
 import { ApiProperty } from "@nestjs/swagger";
 import { IsDate, IsNumber, IsOptional, IsString } from "class-validator";
+import { DocumentTypeEnum } from "../enums/document-types.enum";
 
 export class CreateAuthIdAccount {
     @ApiProperty()
@@ -54,9 +55,9 @@ export class CreateAuthIdAccount {
     status: String;
 
     @ApiProperty()
-    @IsNumber()
+    @IsString()
     @IsOptional() 
-    documentType: Number;
+    documentType: String;
   }
 
   
