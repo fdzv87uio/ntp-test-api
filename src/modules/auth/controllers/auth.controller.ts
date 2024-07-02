@@ -26,7 +26,7 @@ export class AuthController {
         log(dataAuth)
         return {
             message: 'Login success',
-            data : dataAuth
+            dataAuth : dataAuth
         }
     }
 
