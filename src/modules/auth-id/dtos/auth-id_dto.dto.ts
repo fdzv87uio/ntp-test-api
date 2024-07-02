@@ -23,6 +23,7 @@ export class AuthIdAccountDto {
     phone: String;
 
     @ApiProperty()
+    @IsOptional()
     @IsNumber()
     documentType: DocumentTypeEnum;
   }

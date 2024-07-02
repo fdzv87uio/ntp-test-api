@@ -5,7 +5,7 @@ import { ExternalRequestService } from '../../external-request/services/external
 import { AUTH_ID_CREATE_ACCOUNT_URL, AUTH_ID_FOREING_OPERATIONS_URL, AUTH_ID_OPERATION_ENROLL_URL, AUTH_ID_OPERATION_VERIFY_URL, AUTH_ID_URL } from '../../common/constants/constants'
 import { log } from 'console';
 import { AuthIdAccountDto } from '../dtos/auth-id_dto.dto';
-import { isNotNullAndNotEmpty } from 'src/modules/common/utils/utils';
+import { getEnumKeyByEnumValue, isNotNullAndNotEmpty } from 'src/modules/common/utils/utils';
 import { AuthIdResponse } from '../interfaces/auth-id.interface';
 import { AuthIdTokenService } from './auth-id-token.service';
 import { CreateAuthIdAccount } from '../dtos/create-auth-id-account.dto';
@@ -13,6 +13,10 @@ import { AuthIdAccount } from '../interfaces/auth-id-account.interface';
 import * as QRCode from 'qrcode';
 import { AuthIdCompleteEnrollDto } from '../dtos/auth-id-complete-enroll.dto';
 import { AuthIdCheckOperationDto } from '../dtos/auth-id-check-operation.dto';
+import moment from 'moment';
+import { AuthIdRepositoryService } from './auth-id-respository.service';
+import { AuthIdResponses } from '../dtos/respose-auth-id-response.dto';
+import { DocumentTypeEnum } from '../enums/document-types.enum';
 
 const { v4: uuidv4 } = require('uuid');
 
@@ -22,7 +26,8 @@ export class AuthIdService {
   constructor(
     @InjectModel('AuthIdAccount') private readonly authIdAccountModel: Model<AuthIdAccount>,
     private readonly externalRequestService: ExternalRequestService,
-    private readonly authIdTokenService: AuthIdTokenService
+    private readonly authIdTokenService: AuthIdTokenService,
+    private readonly authidRepositoryService: AuthIdRepositoryService
   ) {}
 
   async authid_Enrollment_Document(createAccount: AuthIdAccountDto): Promise<AuthIdResponse> {
@@ -52,10 +57,8 @@ export class AuthIdService {
             "TransportType": 0,
             "Tag": "",
             "Payload": payload
-          }
+          }          
           const resultOperation = await this.externalRequestService.postDataToExternalApi(AUTH_ID_OPERATION_ENROLL_URL, dataOperation, config).toPromise();
-          log("result operation");
-          log(resultOperation);
           if (isNotNullAndNotEmpty(resultOperation) && isNotNullAndNotEmpty(resultOperation['OneTimeSecret'])) {
             const oneTimeSecret = isNotNullAndNotEmpty(resultOperation['OneTimeSecret']) ? resultOperation['OneTimeSecret'] : "";
             const operationId = isNotNullAndNotEmpty(resultOperation['OperationId']) ? resultOperation['OperationId'] : "";
@@ -73,17 +76,24 @@ export class AuthIdService {
               phone: createAccount.phone,
               transactionType: "enrollment",
               status: "pending",
-              documentType: createAccount.documentType
+              documentType: getEnumKeyByEnumValue(DocumentTypeEnum, createAccount.documentType)
             }
-            const authIdAccountCreated = await this.create(data);
+            const authIdAccountCreated = await this.authidRepositoryService.create(data);
+            if (isNotNullAndNotEmpty(authIdAccountCreated)) {
             return {
               success: true,
               statusCode: "0",
               messageCode: "transaction enroll created",
               data: data
             } as unknown as AuthIdResponse;
-
-
+          }else{
+            return {
+              success: false,
+              statusCode: "-1",
+              messageCode: "user account not saved",
+              data: null
+            } as unknown as AuthIdResponse;
+          }
           } else {
             return {
               success: false,
@@ -109,7 +119,7 @@ export class AuthIdService {
         } as unknown as AuthIdResponse;
       }
     } catch (error) {
-      log(`error sending sms ${error}`)
+      log(`error Enroll document validation ${error}`)
       throw new BadRequestException('Error enroll Document');
     }
   }
@@ -161,7 +171,7 @@ export class AuthIdService {
               status: "pending",
               documentType: null
             }
-            await this.create(data);
+            await this.authidRepositoryService.create(data);
             return {
               success: true,
               statusCode: "0",
@@ -205,7 +215,7 @@ export class AuthIdService {
     try {
       const accessToken = await this.authIdTokenService.getAccessToken();
       if (isNotNullAndNotEmpty(accessToken)) {
-        const account = await this.findEmail(completeEnroll.email);
+        const account = await this.authidRepositoryService.findEmail(completeEnroll.email);
         if (isNotNullAndNotEmpty(account)) {
           const config = {
             headers: {
@@ -278,7 +288,7 @@ export class AuthIdService {
             'Accept-Encoding': 'gzip, deflate, br',
           },
         }
-        const account = await this.findEmail(createAccount.email);
+        const account = await this.authidRepositoryService.findEmail(createAccount.email);
         if (isNotNullAndNotEmpty(account)) {
           const accountNumber = account.accountNumber
           const confirmationPolicy = { "TransportType": 0, "CredentialType": 1 };
@@ -352,7 +362,7 @@ export class AuthIdService {
 
   async authId_create_transaction(account: AuthIdAccountDto): Promise<AuthIdResponse> {
     try {
-      const isEnrolled = await this.findEmail(account.email);
+      const isEnrolled = await this.authidRepositoryService.findEmail(account.email);
       if (isNotNullAndNotEmpty(isEnrolled) && isNotNullAndNotEmpty(isEnrolled.accountNumber))
         return this.authid_Verification(account);
       else return this.authid_Enrollment_Document(account);
@@ -410,38 +420,25 @@ export class AuthIdService {
     }
   }
 
-  async checkAuthidTransactionStatus(authIdCheckOperation: AuthIdCheckOperationDto): Promise<AuthIdResponse> {
+  async checkAuthidTransactionStatus(): Promise<AuthIdResponse> {
     try {
-      const accessToken = await this.authIdTokenService.getAccessToken();
-      if (isNotNullAndNotEmpty(accessToken)) {
-        const config = {
-          headers: {
-            'Authorization': `Bearer ${accessToken}`
-          }
-        }
-        const url = `${AUTH_ID_OPERATION_ENROLL_URL}/${authIdCheckOperation.operationId}/status`;
-        const response = await this.externalRequestService.getDataFromExternalApi(url, config).toPromise();
-        if (isNotNullAndNotEmpty(response) && isNotNullAndNotEmpty(response["Status"])) {
-           
-          return {
-            success: true,
-            statusCode: "0",
-            messageCode: "transaction status check successful",
-            data: response,
-          } as unknown as AuthIdResponse;
-        } else {
-          return {
-            success: false,
-            statusCode: "-1",
-            messageCode: "transaction status check failed",
-            data: null,
-          } as unknown as AuthIdResponse;
-        }
+      const currentDate = new Date();
+      const oneHourAgo = new Date(currentDate.getTime() - 60 * 60 * 1000);
+      const startDate = String(oneHourAgo);
+      const endDate = String(currentDate);
+      const authidAccounts = await this.authidRepositoryService.findAllByRange(startDate, endDate);
+      if (authidAccounts.length > 0) {
+        authidAccounts.forEach(authidAccount => {
+          let resultStatus = null;
+          while(!resultStatus.success){
+             this.verifyStatusTransaction(authidAccount);
+          }                  
+        });
       } else {
         return {
           success: false,
           statusCode: "-1",
-          messageCode: "token not found",
+          messageCode: "transaction status check not found ",
           data: null,
         } as unknown as AuthIdResponse;
       }
@@ -451,68 +448,93 @@ export class AuthIdService {
     }
   }
 
-  async create(createAuthIdAccount: CreateAuthIdAccount): Promise < AuthIdAccount > {
-  const result = await this.authIdAccountModel.findOne(createAuthIdAccount).exec();
-  if(!result) {
-    log(createAuthIdAccount);
-    return this.authIdAccountModel.create(createAuthIdAccount);
-  }else {
-    throw new NotFoundException(`authid Account exists`);
-  }
-}
-
-  async updateById(id: ObjectId, updateAuthIdAccount: CreateAuthIdAccount): Promise < AuthIdAccount > {
-  try {
-    const result = await this.findOne(id);
-    if(!result) {
-      throw new NotFoundException(`AuthID Account does not exist`);
-    }
-      Object.keys(updateAuthIdAccount).forEach((key) => {
-      log(`Updating ${key} from ${result[key]} to ${updateAuthIdAccount[key]}`);
-      result[key] = updateAuthIdAccount[key];
-    });
-
-    // Log the updated account data before saving
-    log("Updated account before save =>", result);
-
-      // Step 3: Save the updated account
-      const updatedUser = await result.save();
-
-    // Log the final updated account data
-    log("Updated account after save =>", updatedUser);
+  private async verifyStatusTransaction(authidAccount: AuthIdAccount): Promise<AuthIdResponse> {
+    const accessToken = await this.authIdTokenService.getAccessToken();
+    if (isNotNullAndNotEmpty(accessToken)) {
+      const config = {
+        headers: {
+          'Authorization': `Bearer ${accessToken}`
+        }
+      }
+      const url = `${AUTH_ID_OPERATION_ENROLL_URL}/${authidAccount.operationId}/status`;
+      const response = await this.externalRequestService.getDataFromExternalApi(url, config).toPromise();
+      if (isNotNullAndNotEmpty(response) && isNotNullAndNotEmpty(response["Status"])) {
+        if (response["Status"] === "1") { 
+          // this.authid_complete_enrollment({email:authidAccount.email});         
+          return {
+            success: true,
+            statusCode: "0",
+            messageCode: "transaction status check successful",
+            data: response,
+          } as unknown as AuthIdResponse;
+        }else{
+          return {
+            success: false,
+            statusCode: "-1",
+            messageCode: "transaction is pending",
+            data: null,
+          } as unknown as AuthIdResponse;
+        }
+      } else {
+        return {
+          success: false,
+          statusCode: "-1",
+          messageCode: "transaction status check failed",
+          data: null,
+        } as unknown as AuthIdResponse;
+      }
+    } else {
       return {
-      success: true,
-      statusCode: "200",
-      messageCode: "user updated successfully",
-      data: updatedUser,
-    } as unknown as AuthIdAccount;
-  } catch(error) {
-    log(`Error updating user: ${error}`);
-    throw new BadRequestException('Error updating account');
+        success: false,
+        statusCode: "-1",
+        messageCode: "token not found",
+        data: null,
+      } as unknown as AuthIdResponse;
+    }
   }
-}
 
-  async findOne(id: ObjectId): Promise < AuthIdAccount > {
-  try {
-    const account = await this.authIdAccountModel.findById(id).exec()
-      if(!account) throw new NotFoundException('User not found');
-    return account;
-  } catch(error) {
-    log(`Error finding user: ${error}`);
-    throw new NotFoundException('User not found');
-  }
-}
-  async findEmail(email: String): Promise < AuthIdAccount > {
-  try {
-    const account = await this.authIdAccountModel.findOne({ email: email }).exec()
-      if(!account) return null;
-    return account;
-  } catch(error) {
-    log(`Error finding user: ${error}`);
-    throw new NotFoundException('User not found');
-  }
-}
-
-
-
+  async resultAuthIdTransactionStatus(authidAccount: AuthIdAccount): Promise<AuthIdResponse> {
+    const accessToken = await this.authIdTokenService.getAccessToken();
+    if (isNotNullAndNotEmpty(accessToken)) {
+      const config = {
+        headers: {
+          'Authorization': `Bearer ${accessToken}`
+        }
+      }
+      const url = `${AUTH_ID_OPERATION_ENROLL_URL}/${authidAccount.operationId}/result`;
+      const response = await this.externalRequestService.getDataFromExternalApi(url, config).toPromise();
+      if (isNotNullAndNotEmpty(response) && isNotNullAndNotEmpty(response["OperationId"])) {
+        if (response["OperationId"] === authidAccount.operationId) { 
+           //this.authid_complete_enrollment({email:authidAccount.email});         
+          return {
+            success: true,
+            statusCode: "0",
+            messageCode: "transaction result successful",
+            data: response,
+          } as unknown as AuthIdResponse;
+        }else{
+          return {
+            success: false,
+            statusCode: "-1",
+            messageCode: "transaction is pending",
+            data: null,
+          } as unknown as AuthIdResponse;
+        }
+      } else {
+        return {
+          success: false,
+          statusCode: "-1",
+          messageCode: "transaction status check failed",
+          data: null,
+        } as unknown as AuthIdResponse;
+      }
+    } else {
+      return {
+        success: false,
+        statusCode: "-1",
+        messageCode: "token not found",
+        data: null,
+      } as unknown as AuthIdResponse;
+    }
+  }  
 }

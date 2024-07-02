@@ -20,8 +20,8 @@ export  const AuthIdAccountSchema = new Schema({
         required: true,
     },
     documentType: {
-        type: Number,
-        enum: Object.values(DocumentTypeEnum),
+        type: String,
+        enum: Object.keys(DocumentTypeEnum),
         required: false, 
     },  
     phone: {type: String, trim: true },
@@ -30,7 +30,7 @@ export  const AuthIdAccountSchema = new Schema({
     operationId: {type: String, trim: true },
     operationURL: {type: String, trim: true },
     qrcodeUrl: {type: String, trim: true },
-    codeword : {type: String, trim: true },   
+    codeword : {type: String, trim: true },       
     created_at: { type: Date, required: false, default: Date.now() },
     updated_at:{ type: Date },
 });
