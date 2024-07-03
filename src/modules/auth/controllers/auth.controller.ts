@@ -40,8 +40,10 @@ export class AuthController {
     @UseGuards(JwtAuthGuard)
     @ApiBearerAuth()
     @Get('profile')
-    profile(@User() user: CreateUserDto) {
-        return this.userService.myProfile(user);
+    profile(@User() email: String) {
+        log('email')
+        log(email);
+        return this.userService.myProfile(email);
     }
 
     @ApiOperation({ summary: 'Registry new user' })
