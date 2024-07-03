@@ -22,6 +22,9 @@ export class UserController {
         return this.userService.findAll();
     }
 
+    @HasRoles(Role.Admin, Role.User)
+    @UseGuards(JwtAuthGuard, RolesGuard)
+    @ApiBearerAuth()
     @ApiOperation({ summary: 'Find user by email' })
     @Get('find/:email')
     findById(@Param('email') email: string): Promise<User> {
