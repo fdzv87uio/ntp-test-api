@@ -12,30 +12,27 @@ export class UserService {
 
   async findAll(): Promise<User[]> {
     return this.userModel.find().exec();
-  }  
+  }
 
-  async findOne(email: String): Promise<User> {        
-    const user = await this.userModel.findOne({email: email}).exec()    
-    if(!user) return null;
-    return user; 
-  }  
+  async findOne(email: String): Promise<User> {
+    const user = await this.userModel.findOne({ email: email }).exec()
+    if (!user) return null;
+    return user;
+  }
 
   async create(createUserDto: CreateUserDto): Promise<User> {
     const createdUser = new this.userModel(createUserDto);
-     createdUser.user_status = "enabled";
+    createdUser.user_status = "enabled";
     return createdUser.save();
   }
-   
-  async myProfile (email: String, needPassword: boolean = true)  {
+
+  async myProfile(email: String, needPassword: boolean = true) {
     const select: any = ['email']
-    if (needPassword) select.push('password')      
-    const profile = await this.findOne(email);  
-    log(profile);
-    if (!profile)
-      throw new BadRequestException('Your account not found');      
-    if (!profile.user_status.includes('enabled'))
-        throw new BadRequestException('Your account is not active');   
-    return profile; 
- }
+    if (needPassword) select.push('password')
+    const profile = await this.findOne(email);
+    if (!profile) throw new NotFoundException('User not found');
+    if (!profile.user_status.includes('enabled')) throw new BadRequestException('Your account is not active');
+    return profile;
+  }
 
 }

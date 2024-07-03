@@ -2,7 +2,7 @@ import { Controller, Get, Post, UseGuards, Body, Req } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { ApiBearerAuth, ApiOperation, ApiTags  } from '@nestjs/swagger';
 import { UserService } from '../../user/services/user.service';
-import { User } from '../../common/decorators';
+import { User,Email } from '../../common/decorators';
 import { AuthService } from '../services/auth.service';
 import { JwtAuthGuard } from '../guard'
 import { LoginDTO } from '../dtos/login.dto'
@@ -40,7 +40,7 @@ export class AuthController {
     @UseGuards(JwtAuthGuard)
     @ApiBearerAuth()
     @Get('profile')
-    profile(@User() email: String) {
+    profile(@Email() email: String) {
         log('email')
         log(email);
         return this.userService.myProfile(email);
