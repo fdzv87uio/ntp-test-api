@@ -13,6 +13,9 @@ export class Event {
     description: string;
 
     @Prop()
+    url: string;
+
+    @Prop()
     eventType: string;
 
     @Prop()
