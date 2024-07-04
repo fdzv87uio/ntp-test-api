@@ -2,6 +2,7 @@
 export interface EventType {
     title: string;
     description: string;
+    url: string;
     eventType: string;
     date: string;
     location: string;

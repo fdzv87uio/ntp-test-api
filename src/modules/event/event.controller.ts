@@ -14,8 +14,6 @@ export class EventController {
     ) {}
 
     // Get All Existing Events
-    @UseGuards(JwtAuthGuard)
-    @ApiBearerAuth()
     @ApiOperation({ summary: 'Get All Events' })
     @Get()
     async getAllEvents(): Promise<EventType[]> {
@@ -23,8 +21,6 @@ export class EventController {
     }
 
     // Get All Existing Events by UserID
-    @UseGuards(JwtAuthGuard)
-    @ApiBearerAuth()
     @ApiOperation({ summary: 'Get All Events by User ID' })
     @Get('getAllByUserId/:id')
     async getAllEventsByUserId(@Param('id') userId: string): Promise<EventType[]> {
@@ -42,8 +38,6 @@ export class EventController {
     }
 
     // Get Event By ID
-    @UseGuards(JwtAuthGuard)
-    @ApiBearerAuth()
     @ApiOperation({ summary: 'Get Event By ID' })
     @Get(':id')
     async getEvent(

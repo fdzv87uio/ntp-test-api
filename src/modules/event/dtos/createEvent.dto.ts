@@ -16,6 +16,11 @@ export class CreateEventDTO {
     @ApiProperty()
     @IsNotEmpty()
     @IsString()
+    url: string
+
+    @ApiProperty()
+    @IsNotEmpty()
+    @IsString()
     eventType: string
 
     @ApiProperty()
