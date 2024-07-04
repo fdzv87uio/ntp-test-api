@@ -21,6 +21,8 @@ export class EventController {
     }
 
     // Get All Existing Events by UserID
+    @UseGuards(JwtAuthGuard)
+    @ApiBearerAuth()
     @ApiOperation({ summary: 'Get All Events by User ID' })
     @Get('getAllByUserId/:id')
     async getAllEventsByUserId(@Param('id') userId: string): Promise<EventType[]> {
