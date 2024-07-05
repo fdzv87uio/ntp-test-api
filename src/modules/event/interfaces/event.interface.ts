@@ -6,6 +6,8 @@ export interface EventType {
     eventType: string;
     date: string;
     location: string;
+    city: string;
+    country: string;
     author: string;
     userId: string;
     categoryList: string[];
