@@ -5,7 +5,7 @@ import { ExternalRequestService } from '../../external-request/services/external
 import { AUTH_ID_CREATE_ACCOUNT_URL, AUTH_ID_FOREING_OPERATIONS_URL, AUTH_ID_OPERATION_ENROLL_URL, AUTH_ID_OPERATION_VERIFY_URL, AUTH_ID_URL } from '../../common/constants/constants'
 import { log } from 'console';
 import { AuthIdAccountDto } from '../dtos/auth-id_dto.dto';
-import { getEnumKeyByEnumValue, isNotNullAndNotEmpty } from 'src/modules/common/utils/utils';
+import { areAllTrueOrNull, delay, getEnumKeyByEnumValue, isNotNull, isNotNullAndNotEmpty } from 'src/modules/common/utils/utils';
 import { AuthIdResponse } from '../interfaces/auth-id.interface';
 import { AuthIdTokenService } from './auth-id-token.service';
 import { CreateAuthIdAccount } from '../dtos/create-auth-id-account.dto';
@@ -17,6 +17,8 @@ import moment from 'moment';
 import { AuthIdRepositoryService } from './auth-id-respository.service';
 import { AuthIdResponses } from '../dtos/respose-auth-id-response.dto';
 import { DocumentTypeEnum } from '../enums/document-types.enum';
+import { catchError } from 'rxjs';
+import { AuthidResultResponse } from '../interfaces/authid-transaction-result.interface';
 
 const { v4: uuidv4 } = require('uuid');
 
@@ -57,7 +59,7 @@ export class AuthIdService {
             "TransportType": 0,
             "Tag": "",
             "Payload": payload
-          }          
+          }
           const resultOperation = await this.externalRequestService.postDataToExternalApi(AUTH_ID_OPERATION_ENROLL_URL, dataOperation, config).toPromise();
           if (isNotNullAndNotEmpty(resultOperation) && isNotNullAndNotEmpty(resultOperation['OneTimeSecret'])) {
             const oneTimeSecret = isNotNullAndNotEmpty(resultOperation['OneTimeSecret']) ? resultOperation['OneTimeSecret'] : "";
@@ -80,20 +82,20 @@ export class AuthIdService {
             }
             const authIdAccountCreated = await this.authidRepositoryService.create(data);
             if (isNotNullAndNotEmpty(authIdAccountCreated)) {
-            return {
-              success: true,
-              statusCode: "0",
-              messageCode: "transaction enroll created",
-              data: data
-            } as unknown as AuthIdResponse;
-          }else{
-            return {
-              success: false,
-              statusCode: "-1",
-              messageCode: "user account not saved",
-              data: null
-            } as unknown as AuthIdResponse;
-          }
+              return {
+                success: true,
+                statusCode: "0",
+                messageCode: "transaction enroll created",
+                data: data
+              } as unknown as AuthIdResponse;
+            } else {
+              return {
+                success: false,
+                statusCode: "-1",
+                messageCode: "user account not saved",
+                data: null
+              } as unknown as AuthIdResponse;
+            }
           } else {
             return {
               success: false,
@@ -211,7 +213,7 @@ export class AuthIdService {
 
 
 
-  async authid_complete_enrollment(completeEnroll: AuthIdCompleteEnrollDto): Promise<AuthIdResponse> {
+  async authid_finished_enrollment(completeEnroll: AuthIdCompleteEnrollDto): Promise<AuthIdResponse> {
     try {
       const accessToken = await this.authIdTokenService.getAccessToken();
       if (isNotNullAndNotEmpty(accessToken)) {
@@ -237,14 +239,12 @@ export class AuthIdService {
             const biometricUrl = `${AUTH_ID_CREATE_ACCOUNT_URL}/${account.accountNumber}/proofedBioCredential`;
             log(`biometricurl ${biometricUrl}`);
             await this.externalRequestService.postDataToExternalApi(biometricUrl, data, config).toPromise();
-
             return {
               success: false,
               statusCode: "0",
               messageCode: "Operation complete",
               data: undefined
             } as unknown as AuthIdResponse;
-
           } else {
             return {
               success: false,
@@ -420,27 +420,43 @@ export class AuthIdService {
     }
   }
 
-  async checkAuthidTransactionStatus(): Promise<AuthIdResponse> {
+  async checkAuthidTransactionStatus(email: String): Promise<AuthIdResponse> {
     try {
-      const currentDate = new Date();
-      const oneHourAgo = new Date(currentDate.getTime() - 60 * 60 * 1000);
-      const startDate = String(oneHourAgo);
-      const endDate = String(currentDate);
-      const authidAccounts = await this.authidRepositoryService.findAllByRange(startDate, endDate);
-      if (authidAccounts.length > 0) {
-        authidAccounts.forEach(authidAccount => {
-          let resultStatus = null;
-          while(!resultStatus.success){
-             this.verifyStatusTransaction(authidAccount);
-          }                  
-        });
-      } else {
-        return {
-          success: false,
-          statusCode: "-1",
-          messageCode: "transaction status check not found ",
-          data: null,
-        } as unknown as AuthIdResponse;
+      const authidAccount = await this.authidRepositoryService.findEmail(email);
+      log(authidAccount)
+      let resultStatus;
+      do {
+        resultStatus = (await this.verifyStatusTransaction(authidAccount)).success;
+        log(resultStatus)
+        await delay(5000);
+      } while (resultStatus.success === false);
+
+      const result = await this.resultAuthIdTransactionStatus(authidAccount);
+      if (result.success) {
+        const dataValidation = result.data as AuthidResultResponse;
+        if (isNotNull(dataValidation.Payload) && isNotNull(dataValidation.Payload.Data)) {
+          const data = dataValidation.Payload.Data;
+          let validation: boolean = areAllTrueOrNull(data);
+          if (validation) {
+            let resultComplete = null;
+            if (isNotNull(data.VerificationSteps.DocumentVerified)){
+              do {
+                resultComplete = this.authid_finished_enrollment({ email: authidAccount.email } as unknown as AuthIdCompleteEnrollDto);
+              } while (resultComplete.success === false);
+            }
+            return {
+              success: true,
+              statusCode: "0",
+              messageCode: "user created successfully",
+            } as unknown as AuthIdResponse;
+          } else {
+            return {
+              success: false,
+              statusCode: "-1",
+              messageCode: "user created failed",
+            } as unknown as AuthIdResponse;
+          }
+        }
       }
     } catch (error) {
       log("error checking transaction status", error);
@@ -449,29 +465,42 @@ export class AuthIdService {
   }
 
   private async verifyStatusTransaction(authidAccount: AuthIdAccount): Promise<AuthIdResponse> {
-    const accessToken = await this.authIdTokenService.getAccessToken();
-    if (isNotNullAndNotEmpty(accessToken)) {
-      const config = {
-        headers: {
-          'Authorization': `Bearer ${accessToken}`
+    try {
+      const accessToken = await this.authIdTokenService.getAccessToken();
+      if (isNotNullAndNotEmpty(accessToken)) {
+        const config = {
+          headers: {
+            'Authorization': `Bearer ${accessToken}`,
+            'Accept': 'application/json',
+            'Accept-Encoding': 'gzip, deflate, br',
+          }
         }
-      }
-      const url = `${AUTH_ID_OPERATION_ENROLL_URL}/${authidAccount.operationId}/status`;
-      const response = await this.externalRequestService.getDataFromExternalApi(url, config).toPromise();
-      if (isNotNullAndNotEmpty(response) && isNotNullAndNotEmpty(response["Status"])) {
-        if (response["Status"] === "1") { 
-          // this.authid_complete_enrollment({email:authidAccount.email});         
-          return {
-            success: true,
-            statusCode: "0",
-            messageCode: "transaction status check successful",
-            data: response,
-          } as unknown as AuthIdResponse;
-        }else{
+        const urlStatus = `${AUTH_ID_OPERATION_ENROLL_URL}/${authidAccount.operationId}/status`;
+        const responseStatus = await this.externalRequestService.getDataFromExternalApi(urlStatus, config).toPromise();
+        log('response status');
+        log(responseStatus);
+        if (isNotNullAndNotEmpty(responseStatus) && isNotNull(responseStatus['Status'])) {
+          if (responseStatus['Status'] === 1) {
+            log('success true ')
+            return {
+              success: true,
+              statusCode: "0",
+              messageCode: "transaction status check successful",
+              data: responseStatus,
+            } as unknown as AuthIdResponse;
+          } else {
+            return {
+              success: false,
+              statusCode: "-1",
+              messageCode: "transaction is pending",
+              data: null,
+            } as unknown as AuthIdResponse;
+          }
+        } else {
           return {
             success: false,
             statusCode: "-1",
-            messageCode: "transaction is pending",
+            messageCode: "transaction status check failed",
             data: null,
           } as unknown as AuthIdResponse;
         }
@@ -479,15 +508,16 @@ export class AuthIdService {
         return {
           success: false,
           statusCode: "-1",
-          messageCode: "transaction status check failed",
+          messageCode: "token not found",
           data: null,
         } as unknown as AuthIdResponse;
       }
-    } else {
+    } catch (error) {
+      log(`Error in status transaction authId with error = >${error}`);
       return {
         success: false,
         statusCode: "-1",
-        messageCode: "token not found",
+        messageCode: "token not found fail",
         data: null,
       } as unknown as AuthIdResponse;
     }
@@ -498,21 +528,24 @@ export class AuthIdService {
     if (isNotNullAndNotEmpty(accessToken)) {
       const config = {
         headers: {
-          'Authorization': `Bearer ${accessToken}`
+          'Authorization': `Bearer ${accessToken}`,
+          'Accept': 'application/json',
+          'Accept-Encoding': 'gzip, deflate, br',
         }
       }
       const url = `${AUTH_ID_OPERATION_ENROLL_URL}/${authidAccount.operationId}/result`;
-      const response = await this.externalRequestService.getDataFromExternalApi(url, config).toPromise();
+      const response: AuthidResultResponse = await this.externalRequestService.getDataFromExternalApi(url, config).toPromise();
+      log('response result status');
+      log(response);
       if (isNotNullAndNotEmpty(response) && isNotNullAndNotEmpty(response["OperationId"])) {
-        if (response["OperationId"] === authidAccount.operationId) { 
-           //this.authid_complete_enrollment({email:authidAccount.email});         
+        if (response["OperationId"] === authidAccount.operationId) {
           return {
             success: true,
             statusCode: "0",
             messageCode: "transaction result successful",
             data: response,
           } as unknown as AuthIdResponse;
-        }else{
+        } else {
           return {
             success: false,
             statusCode: "-1",
@@ -536,5 +569,5 @@ export class AuthIdService {
         data: null,
       } as unknown as AuthIdResponse;
     }
-  }  
+  }
 }

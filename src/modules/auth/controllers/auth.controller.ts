@@ -40,9 +40,7 @@ export class AuthController {
     @UseGuards(JwtAuthGuard)
     @ApiBearerAuth()
     @Get('profile')
-    profile(@Email() email: String) {
-        log('email')
-        log(email);
+    profile(@Email() email: String) {       
         return this.userService.myProfile(email);
     }
 

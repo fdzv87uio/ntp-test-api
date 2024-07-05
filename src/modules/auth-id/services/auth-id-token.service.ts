@@ -22,6 +22,7 @@ export class AuthIdTokenService {
     async getAccessToken ()  {
       let authidToken = await this.find();     
       if (isNotNullAndNotEmpty(authidToken)){
+        log('refresh token');
         const url = AUTH_ID_REFRESH_TOKEN_URL;
         const config = {
           headers: {
@@ -72,8 +73,7 @@ export class AuthIdTokenService {
              authidToken.expiresIn = isNotNullAndNotEmpty(response["ExpiresIn"])?response["ExpiresIn"]:'';
              authidToken.refreshToken = isNotNullAndNotEmpty(response["RefreshToken"])?response["RefreshToken"]:'';
              authidToken.userExternalId = isNotNullAndNotEmpty(response["UserExternalId"])?response["UserExternalId"]:'';
-            log(authidToken);
-            this.create(authidToken);
+           await this.create(authidToken);
             return authidToken.accessToken;             
           } catch (error) {            
             log("Failed to parse JSON string:", error);
