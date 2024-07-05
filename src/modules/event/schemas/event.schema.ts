@@ -25,6 +25,12 @@ export class Event {
     location: string;
 
     @Prop()
+    city: string;
+
+    @Prop()
+    country: string;
+
+    @Prop()
     author: string;
 
     @Prop()

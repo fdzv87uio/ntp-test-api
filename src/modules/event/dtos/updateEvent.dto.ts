@@ -36,6 +36,16 @@ export class UpdateEventDTO {
     @ApiProperty()
     @IsNotEmpty()
     @IsString()
+    city: string
+
+    @ApiProperty()
+    @IsNotEmpty()
+    @IsString()
+    country: string
+
+    @ApiProperty()
+    @IsNotEmpty()
+    @IsString()
     author: string
 
     @ApiProperty()
