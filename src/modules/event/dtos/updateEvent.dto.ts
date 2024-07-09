@@ -67,4 +67,8 @@ export class UpdateEventDTO {
     @IsNotEmpty()
     @IsArray()
     uploads: string[]
+
+    @ApiProperty()
+    eventImage: Buffer
+
 }

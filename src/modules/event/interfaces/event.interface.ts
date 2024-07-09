@@ -13,4 +13,5 @@ export interface EventType {
     categoryList: string[];
     guestList: string[];
     uploads: string[];
+    eventImage: Buffer;
 }

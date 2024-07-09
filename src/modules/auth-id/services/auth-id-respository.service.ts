@@ -1,26 +1,16 @@
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, ObjectId } from 'mongoose';
-import { ExternalRequestService } from '../../external-request/services/external-request.service';
-import { AUTH_ID_CREATE_ACCOUNT_URL, AUTH_ID_FOREING_OPERATIONS_URL, AUTH_ID_OPERATION_ENROLL_URL, AUTH_ID_OPERATION_VERIFY_URL, AUTH_ID_URL } from '../../common/constants/constants'
 import { log } from 'console';
-import { AuthIdAccountDto } from '../dtos/auth-id_dto.dto';
-import { isNotNullAndNotEmpty } from 'src/modules/common/utils/utils';
-import { AuthIdResponse } from '../interfaces/auth-id.interface';
-import { AuthIdTokenService } from './auth-id-token.service';
 import { CreateAuthIdAccount } from '../dtos/create-auth-id-account.dto';
 import { AuthIdAccount } from '../interfaces/auth-id-account.interface';
-import * as QRCode from 'qrcode';
-import { AuthIdCompleteEnrollDto } from '../dtos/auth-id-complete-enroll.dto';
-import { AuthIdCheckOperationDto } from '../dtos/auth-id-check-operation.dto';
-import moment from 'moment';
 @Injectable()
 export class AuthIdRepositoryService {
 
   constructor(
     @InjectModel('AuthIdAccount') private readonly authIdAccountModel: Model<AuthIdAccount>  ) {}
 
-  async create(createAuthIdAccount: CreateAuthIdAccount): Promise < AuthIdAccount > {
+  async create(createAuthIdAccount: CreateAuthIdAccount): Promise <AuthIdAccount> {
     const result = await this.authIdAccountModel.findOne(createAuthIdAccount).exec();
     if(!result) {
       log(createAuthIdAccount);

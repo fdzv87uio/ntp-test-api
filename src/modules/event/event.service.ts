@@ -2,11 +2,14 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Event } from './schemas/event.schema';
+import { UploadService } from './../upload/services/upload.service'
 
 @Injectable()
 export class EventService {
     constructor(
-        @InjectModel(Event.name) private eventModel: Model<Event>
+        @InjectModel(Event.name) private eventModel: Model<Event>,
+        private uploadService: UploadService
+
     ) {}
 
     async findAllEvents(): Promise<Event[]> {
@@ -21,6 +24,7 @@ export class EventService {
 
     async createEvent(event: Event): Promise<Event> {
         const res = await this.eventModel.create(event);
+         await this.uploadService.uploadFile(event.eventImage,res.id);
         return res;
     }
 
