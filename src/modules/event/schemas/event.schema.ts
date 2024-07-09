@@ -35,6 +35,11 @@ export class Event {
 
     @Prop()
     uploads: string[];
+
+    @Prop()
+    eventImage: Buffer;
+
+
 }
 
 export const EventSchema = SchemaFactory.createForClass(Event);

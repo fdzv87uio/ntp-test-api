@@ -10,6 +10,7 @@ import { AuthIdModule } from './modules/auth-id/auth-id.module';
 import { ExternalRequestModule } from './modules/external-request/external-request.module';
 import { EventModule } from './modules/event/event.module';
 import { TransactionModule } from './modules/transaction/transaction.module';
+import { UploadModule } from './modules/upload/upload.module';
 
 @Module({
   imports: [
@@ -23,7 +24,9 @@ import { TransactionModule } from './modules/transaction/transaction.module';
     PreferenceModule,
     AuthIdModule,
     ExternalRequestModule,   
-    EventModule, TransactionModule,
+    EventModule, 
+    TransactionModule, 
+    UploadModule, 
   ],
   controllers: [AppController],
   providers: [AppService],
