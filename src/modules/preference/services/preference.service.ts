@@ -1,54 +1,69 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { Preference } from '../interfaces/Preference.interface';
-import { PreferenceExtra } from '../interfaces/PreferenceExtra.interfaces';
 import { CreatePreferenceDto } from '../dtos/create-preference.dto';
+import { Preference, PreferenceDocument } from '../schemas/preference.schema';
+import { UpdatePreferenceDto } from '../dtos/update-preference.dto';
 
 @Injectable()
 export class PreferenceService {
   constructor(
     @InjectModel('Preference') private readonly preferenceModel: Model<Preference>,
-    @InjectModel('PreferenceExtra') private readonly preferenceExtraModel: Model<PreferenceExtra>,
+    @InjectModel(Preference.name) private preferenceDocumentModel: Model<PreferenceDocument>
   ) {}
 
-  async create(createPreferenceDto: CreatePreferenceDto): Promise<Preference> {
-    const createdPreference = new this.preferenceModel(createPreferenceDto);
-    return createdPreference.save();
-  }
-
-  async addPreference(id: string, value: string): Promise<Preference> {
-    const preference = await this.preferenceModel.findById(id);
-
-    if (!preference) {
-      throw new Error('preference not found');
-    }
-
-    if (preference.preferenceList.length < 10) { // Adjust limit as needed
-        preference.preferenceList.push(value);
-    } else {
-      const preferenceExtra = new this.preferenceExtraModel({
-        value,
-        documentId: preference._id,
-      });
-      await preferenceExtra.save();
-      preference.preferenceExtraIds.push(preferenceExtra._id);
-    }
-
-    return preference.save();
-  }
-
-  async findOne(id: string): Promise<Preference> {
-    return this.preferenceModel
-      .findById(id)
-      .populate('PreferenceExtra')
-      .exec();
+  async create(preference: CreatePreferenceDto): Promise<Preference> {
+    const createdPreference = this.preferenceDocumentModel.create(preference);
+    return createdPreference;
   }
 
   async findAll(): Promise<Preference[]> {
-    return this.preferenceModel
-      .find()
-      .populate('PreferenceExtra')
-      .exec();
+    const categories = await this.preferenceModel.find().populate('category').exec();
+    return categories;
+  }
+
+  async findAllWithCategories(): Promise<any> {
+    const preferences = await this.preferenceDocumentModel.find().populate('category').exec();
+    const result = {};
+    preferences.forEach(preference => {
+      const categoryName = preference.category.name;
+      if (!result[categoryName]) {
+        result[categoryName] = [];
+      }
+      result[categoryName].push({
+        name: preference.name,
+        description: preference.description
+      });
+    });
+    return result;
+  }
+
+  async findById(id: string): Promise<Preference> {
+    const res = await this.preferenceModel.findById(id).populate('category').exec();
+    if (!res) {
+      throw new NotFoundException('Preference Not Found');
+    }
+    return res;
+  }
+
+  async findByName(name: string): Promise<Preference> {
+    const res = await this.preferenceModel.findOne({ name: name }).populate('category').exec();
+    if (!res) {
+      throw new NotFoundException('Peference Not Found');
+    }
+    return res;
+  }
+
+  async updateById(id: string, preference: UpdatePreferenceDto): Promise<Preference> {
+    const res = await this.preferenceModel.findByIdAndUpdate(id, preference, {
+      new: true,
+      runValidators: true
+    });
+    return res;
+  }
+
+  async deleteById(id: string): Promise<Preference> {
+    const res = await this.preferenceModel.findByIdAndDelete(id);
+    return res;
   }
 }

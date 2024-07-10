@@ -30,6 +30,4 @@ export class UserController {
     findById(@Param('email') email: string): Promise<User> {
         return this.userService.findOne(email);
     }
-
-    
 }

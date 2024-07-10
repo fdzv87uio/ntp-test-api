@@ -11,6 +11,7 @@ import { ExternalRequestModule } from './modules/external-request/external-reque
 import { EventModule } from './modules/event/event.module';
 import { TransactionModule } from './modules/transaction/transaction.module';
 import { UploadModule } from './modules/upload/upload.module';
+import { CategoryModule } from './modules/category/category.module';
 
 @Module({
   imports: [
@@ -26,7 +27,7 @@ import { UploadModule } from './modules/upload/upload.module';
     ExternalRequestModule,   
     EventModule, 
     TransactionModule, 
-    UploadModule, 
+    UploadModule, CategoryModule,  
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -2,7 +2,7 @@ import { ApiProperty } from '@nestjs/swagger';
 import { IsString, IsEmail, IsOptional, IsPhoneNumber, IsNumber, Min, Max, IsEnum, IsDate } from 'class-validator';
 import { DocumentTypeEnum } from '../enums/document-type.enum';
 
-export class CreateUserDto {
+export class UpdateUserDto {
     @ApiProperty()
     @IsString() 
     name?: String;
