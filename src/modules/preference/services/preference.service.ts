@@ -31,6 +31,7 @@ export class PreferenceService {
         result[categoryName] = [];
       }
       result[categoryName].push({
+        id: preference.id,
         name: preference.name,
         description: preference.description
       });
