@@ -1,33 +1,36 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsString, IsEmail, IsOptional, IsPhoneNumber, IsNumber, Min, Max, IsEnum, IsDate } from 'class-validator';
-import { DocumentTypeEnum } from '../enums/document-type.enum';
+import { IsString, IsDate } from 'class-validator';
 
 export class UpdateUserDto {
     @ApiProperty()
     @IsString() 
     name?: String;
 
-    @ApiProperty()
-    @IsString() 
-    lastname?: String;
+  @ApiProperty()
+  @IsString()
+  lastname?: string;
 
-    @ApiProperty()
-    @IsString() 
-    password?: String;
+  @ApiProperty()
+  @IsString()
+  password?: string;
 
-    @ApiProperty()
-    @IsString() 
-    address?: String;
+  @ApiProperty()
+  @IsString()
+  address?: string;
 
-    @ApiProperty()
-    @IsDate()
-    birthDate?: Date;
+  @ApiProperty()
+  @IsDate()
+  birthDate?: Date;
 
-    @ApiProperty()
-    @IsString()
-    user_status?: String;
+  @ApiProperty()
+  @IsString()
+  preferences: string;
 
-    @ApiProperty()
-    @IsString()
-    roles?: String;
-  }
+  @ApiProperty()
+  @IsString()
+  user_status?: string;
+
+  @ApiProperty()
+  @IsString()
+  roles?: string;
+}

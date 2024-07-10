@@ -1,8 +1,9 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Controller, Get, Post, UseGuards, Body, Req } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
-import { ApiBearerAuth, ApiOperation, ApiTags  } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { UserService } from '../../user/services/user.service';
-import { User,Email } from '../../common/decorators';
+import { Email } from '../../common/decorators';
 import { AuthService } from '../services/auth.service';
 import { JwtAuthGuard } from '../guard'
 import { LoginDTO } from '../dtos/login.dto'
@@ -16,31 +17,30 @@ export class AuthController {
     constructor(
         private readonly authService: AuthService,
         private readonly userService: UserService
-    ){}
+    ) {}
 
     @UseGuards(AuthGuard('local'))
     @Post('login')
-   async login(@Body() user: LoginDTO){
-        const dataAuth =  await this.authService.login(user);
-        log("dataauth");
+    async login(@Body() user: LoginDTO) {
+        const dataAuth = await this.authService.login(user);
         log(dataAuth)
         return {
             message: 'Login success',
-            dataAuth : dataAuth
+            dataAuth: dataAuth
         }
     }
 
     @UseGuards(JwtAuthGuard)
     @ApiBearerAuth()
     @Get('test')
-    test(@Req() req){
+    test(@Req() req) {
         return 'Test Token service';
     }
 
     @UseGuards(JwtAuthGuard)
     @ApiBearerAuth()
     @Get('profile')
-    profile(@Email() email: String) {       
+    profile(@Email() email: string) {
         return this.userService.myProfile(email);
     }
 

@@ -1,34 +1,37 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
-import { IsString, IsEmail, IsOptional, IsPhoneNumber, IsNumber, Min, Max, IsEnum, IsDate, IsNotEmpty } from 'class-validator';
-import { DocumentTypeEnum } from '../enums/document-type.enum';
+import { IsString, IsEmail, IsDate, IsNotEmpty } from 'class-validator';
 
 export class CreateUserDto {
-    @ApiProperty()
-    @IsString() 
-    name: String;
+  @ApiProperty()
+  @IsString()
+  name: string;
 
-    @ApiProperty()
-    @IsString() 
-    lastname: String;
+  @ApiProperty()
+  @IsString()
+  lastname: string;
 
-    @ApiProperty()
-    @IsEmail()
-    @IsString() 
-    email: String;
+  @ApiProperty()
+  @IsEmail()
+  @IsString()
+  email: string;
 
-    @ApiProperty()
-    @IsString() 
-    password: String;
+  @ApiProperty()
+  @IsString()
+  password: string;
 
-    @ApiProperty()
-    @IsString() 
-    address: String;
+  @ApiProperty()
+  @IsString()
+  address: string;
 
-    @ApiProperty()
-    @IsNotEmpty()
-    @Type(() => Date)
-    @IsDate({ message: 'birthDate must be a valid date' })
-    birthDate: Date;    
-    
-  }
+  @ApiProperty()
+  @IsNotEmpty()
+  @Type(() => Date)
+  @IsDate({ message: 'birthDate must be a valid date' })
+  birthDate: Date;
+
+  @ApiProperty()
+  @IsString()
+  preferences: string;
+
+}
