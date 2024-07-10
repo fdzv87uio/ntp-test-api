@@ -3,6 +3,11 @@ import { ApiOperation, ApiTags, ApiBearerAuth } from '@nestjs/swagger';
 import { PreferenceService } from '../services/preference.service';
 import { CreatePreferenceDto } from '../dtos/create-preference.dto';
 import { JwtAuthGuard } from 'src/modules/auth/guard';
+import { HasRoles } from 'src/modules/auth/decorators/has-role.decorator';
+import { Role } from 'src/modules/auth/models/role.enum';
+import { RolesGuard } from 'src/modules/auth/guard/roles.guard';
+import { UpdatePreferenceDto } from '../dtos/update-preference.dto';
+import { Preference } from '../schemas/preference.schema';
 
 
 @ApiTags('Preference')
@@ -10,33 +15,50 @@ import { JwtAuthGuard } from 'src/modules/auth/guard';
 export class PreferenceController {
   constructor(private readonly preferenceService: PreferenceService) {}
 
-  @UseGuards(JwtAuthGuard)
-  @ApiBearerAuth()
-  @ApiOperation({ summary: 'Create Preference' })  
-  @Post()
-  async create(@Body() createExampleDto: CreatePreferenceDto) {
-    return this.preferenceService.create(createExampleDto);
+
+  @ApiOperation({ summary: 'Get all preferences by categories' })
+  @Get('findAllByCategories')
+  async findAllByCategories() {
+    return this.preferenceService.findAllWithCategories();
   }
 
-  @UseGuards(JwtAuthGuard)
-  @ApiBearerAuth()
-  @ApiOperation({ summary: 'Add Preference' })
-  @Put(':id/add-preference')
-  async addPreference(@Param('id') id: string, @Body('value') value: string) {
-    return this.preferenceService.addPreference(id, value);
+  @ApiOperation({ summary: 'Get all preferences' })
+  @Get('findAll')
+  async findAll() {
+    return this.preferenceService.findAll();
   }
 
-  @UseGuards(JwtAuthGuard)
-  @ApiBearerAuth()
   @ApiOperation({ summary: 'Get Preference by id' })
   @Get(':id')
   async findOne(@Param('id') id: string) {
-    return this.preferenceService.findOne(id);
+    return this.preferenceService.findById(id);
   }
 
-  @ApiOperation({summary: 'Get all preferences'})
-  @Get()
-  async findAll(){
-    return this.preferenceService.findAll();
+  //@HasRoles(Role.Admin)
+  //@UseGuards(JwtAuthGuard, RolesGuard)
+  //@ApiBearerAuth()
+  @ApiOperation({ summary: 'Create Preference' })
+  @Post()
+  async create(@Body() preferenceDto: CreatePreferenceDto) {
+    return this.preferenceService.create(preferenceDto);
   }
+
+  /*@HasRoles(Role.Admin)
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @ApiBearerAuth()*/
+  @ApiOperation({ summary: 'Update preference' })
+  @Put(':id')
+  async update(@Param('id') id: string, @Body() preference: UpdatePreferenceDto): Promise<Preference> {
+    return this.preferenceService.updateById(id, preference);
+  }
+
+ /* @HasRoles(Role.Admin)
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @ApiBearerAuth()*/
+  @ApiOperation({ summary: 'Update preference' })
+  @Put(':id')
+  async deleteById(@Param('id') id: string): Promise<Preference> {
+    return this.preferenceService.deleteById(id);
+  }
+
 }
