@@ -15,8 +15,9 @@ export const UserSchema = new Schema({
   lastname: { type: String, trim: true, required: true },
   email: { type: String, trim: true, required: true, index: { unique: true } },
   password: { type: String, trim: true, hide: true },
-  address:{type: String, trim: true, require: true },
-  birthDate: { type: Date, trim: true, required: true},  
+  address: { type: String, trim: true, require: true },
+  birthDate: { type: Date, trim: true, required: true },
+  preferences: { type: String, trim: true, require: true },
   user_status: {
     type: [String],
     enum: ["enabled", "disabled", "deleted"],
@@ -32,7 +33,7 @@ export const UserSchema = new Schema({
     type: [String],
     default: "user",
     required: true,
-  },    
+  },
   created_at: { type: Date, required: false, default: Date.now() },
   updated_at: { type: Date },
 });

@@ -1,5 +1,4 @@
 import { Document } from 'mongoose';
-import { DocumentTypeEnum } from '../enums/document-type.enum';
 export interface User extends Document {
   name: string;
   lastname: string;
@@ -7,7 +6,8 @@ export interface User extends Document {
   password: string;
   address: string;
   birthDate: Date;
-  user_status: string; 
+  preferences: string;
+  user_status: string;
   created_at: Date;
   updated_at?: Date;
   roles: string[];
