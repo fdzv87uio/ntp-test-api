@@ -17,7 +17,7 @@ export const UserSchema = new Schema({
   password: { type: String, trim: true, hide: true },
   address: { type: String, trim: true, require: true },
   birthDate: { type: Date, trim: true, required: true },
-  preferences: { type: String, trim: true, require: true },
+  preferences:{ type: [String], trim: true, required: true }, 
   user_status: {
     type: [String],
     enum: ["enabled", "disabled", "deleted"],

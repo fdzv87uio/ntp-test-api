@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsString, IsDate } from 'class-validator';
+import { IsString, IsDate, IsArray } from 'class-validator';
 
 export class UpdateUserDto {
     @ApiProperty()
@@ -23,8 +23,8 @@ export class UpdateUserDto {
   birthDate?: Date;
 
   @ApiProperty()
-  @IsString()
-  preferences: string;
+  @IsArray()
+  preferences: string[];
 
   @ApiProperty()
   @IsString()

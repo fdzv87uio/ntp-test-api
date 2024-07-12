@@ -41,7 +41,7 @@ export class CreateEventDTO {
     @ApiProperty()
     @IsNotEmpty()
     @IsString()
-    country: string
+    address: string
 
     @ApiProperty()
     @IsNotEmpty()
@@ -56,7 +56,7 @@ export class CreateEventDTO {
     @ApiProperty()
     @IsNotEmpty()
     @IsArray()
-    categoryList: string[]
+    preferenceListIds: string[]
 
     @ApiProperty()
     @IsNotEmpty()
@@ -67,7 +67,4 @@ export class CreateEventDTO {
     @IsNotEmpty()
     @IsArray()
     uploads: string[]
-    
-    @ApiProperty()
-    eventImage: Buffer
 }

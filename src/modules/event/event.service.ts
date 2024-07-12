@@ -3,6 +3,8 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Event } from './schemas/event.schema';
 import { UploadService } from './../upload/services/upload.service'
+import { CreateEventDTO } from './dtos/createEvent.dto';
+import { log } from 'console';
 
 @Injectable()
 export class EventService {
@@ -23,9 +25,13 @@ export class EventService {
     }
 
     async createEvent(event: Event): Promise<Event> {
-        const res = await this.eventModel.create(event);
-         await this.uploadService.uploadFile(event.eventImage,res.id);
-        return res;
+        try {
+            const res = await this.eventModel.create(event);
+            return res;
+        } catch (err) {
+            log("error creating event " + err);
+            throw new NotFoundException('Error creating event');
+        }
     }
 
     async findEventById(id: string): Promise<Event> {
