@@ -6,7 +6,7 @@ export interface User extends Document {
   password: string;
   address: string;
   birthDate: Date;
-  preferences: string;
+  preferences: string[];
   user_status: string;
   created_at: Date;
   updated_at?: Date;
