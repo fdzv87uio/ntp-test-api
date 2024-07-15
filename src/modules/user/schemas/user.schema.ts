@@ -1,4 +1,4 @@
-import { Schema } from 'mongoose';
+import { Schema, Types } from 'mongoose';
 import { DocumentTypeEnum } from '../enums/document-type.enum';
 const uniqueValidator = require('mongoose-unique-validator');
 const mongooseHidden = require('mongoose-hidden');
@@ -16,8 +16,12 @@ export const UserSchema = new Schema({
   email: { type: String, trim: true, required: true, index: { unique: true } },
   password: { type: String, trim: true, hide: true },
   address: { type: String, trim: true, require: true },
-  birthDate: { type: Date, trim: true, required: true },
-  preferences:{ type: [String], trim: true, required: true }, 
+  birthDate: { type: Date, trim: true, required: true }, 
+  preferences:{ 
+    type:  [{ type: Types.ObjectId, ref: 'Preference' }],
+    trim: true,
+    required: true
+  },
   user_status: {
     type: [String],
     enum: ["enabled", "disabled", "deleted"],
