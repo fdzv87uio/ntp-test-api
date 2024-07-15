@@ -15,7 +15,7 @@ export class UserService {
   }
 
   async findOne(email: String): Promise<User> {
-    const user = await this.userModel.findOne({ email: email }).exec()
+    const user = await this.userModel.findOne({ email: email }).populate("preferences").exec()
     if (!user) return null;
     return user;
   }
