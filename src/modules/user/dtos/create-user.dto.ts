@@ -25,10 +25,26 @@ export class CreateUserDto {
   address: string;
 
   @ApiProperty()
+  @IsString()
+  addressDetails: string;
+
+  @ApiProperty()
+  @IsString()
+  postalCode: string;
+
+  @ApiProperty()
+  @IsString()
+  city: string;
+
+  @ApiProperty()
   @IsNotEmpty()
   @Type(() => Date)
   @IsDate({ message: 'birthDate must be a valid date' })
   birthDate: Date;
+
+  @ApiProperty()
+  @IsString()
+  idNumber: string;
 
   @ApiProperty()
   @IsArray()

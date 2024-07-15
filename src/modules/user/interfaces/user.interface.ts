@@ -5,7 +5,11 @@ export interface User extends Document {
   email: string;
   password: string;
   address: string;
+  addressDetails: string;
+  postalCode: string;
+  city: string;
   birthDate: Date;
+  idNumber: string;
   preferences: string[];
   user_status: string;
   created_at: Date;
