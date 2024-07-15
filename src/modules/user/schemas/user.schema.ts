@@ -16,9 +16,13 @@ export const UserSchema = new Schema({
   email: { type: String, trim: true, required: true, index: { unique: true } },
   password: { type: String, trim: true, hide: true },
   address: { type: String, trim: true, require: true },
-  birthDate: { type: Date, trim: true, required: true }, 
-  preferences:{ 
-    type:  [{ type: Types.ObjectId, ref: 'Preference' }],
+  addressDetails: { type: String, trim: true, require: false },
+  postalCode: { type: String, trim: true, require: true },
+  city: { type: String, trim: true, require: true },
+  birthDate: { type: Date, trim: true, required: true },
+  idNumber: { type: String, trim: true, require: true },
+  preferences: {
+    type: [{ type: Types.ObjectId, ref: 'Preference' }],
     trim: true,
     required: true
   },

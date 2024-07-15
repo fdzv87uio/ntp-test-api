@@ -1,14 +1,19 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsString, IsDate, IsArray } from 'class-validator';
+import { IsString, IsDate, IsArray, IsEmail } from 'class-validator';
 
 export class UpdateUserDto {
-    @ApiProperty()
-    @IsString() 
-    name?: String;
+  @ApiProperty()
+  @IsString()
+  name?: string;
 
   @ApiProperty()
   @IsString()
   lastname?: string;
+
+  @ApiProperty()
+  @IsEmail()
+  @IsString()
+  email: string;
 
   @ApiProperty()
   @IsString()
@@ -19,8 +24,24 @@ export class UpdateUserDto {
   address?: string;
 
   @ApiProperty()
+  @IsString()
+  addressDetails?: string;
+
+  @ApiProperty()
+  @IsString()
+  postalCode: string;
+
+  @ApiProperty()
+  @IsString()
+  city: string;
+
+  @ApiProperty()
   @IsDate()
   birthDate?: Date;
+
+  @ApiProperty()
+  @IsString()
+  idNumber: string;
 
   @ApiProperty()
   @IsArray()
@@ -32,5 +53,5 @@ export class UpdateUserDto {
 
   @ApiProperty()
   @IsString()
-  roles?: string;
+  roles?: string[];
 }
