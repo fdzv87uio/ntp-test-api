@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger'
-import { IsArray, IsNotEmpty, IsString } from 'class-validator'
+import { IsArray, IsNotEmpty, IsOptional, IsString } from 'class-validator'
 
 export class UpdateEventDTO {
 
@@ -13,10 +13,10 @@ export class UpdateEventDTO {
     @IsString()
     description: string
 
-    @ApiProperty()
-    @IsNotEmpty()
+    @ApiProperty({ required: false })
+    @IsOptional()
     @IsString()
-    url: string
+    url?: string
 
     @ApiProperty()
     @IsNotEmpty()
@@ -28,25 +28,25 @@ export class UpdateEventDTO {
     @IsString()
     date: string
 
-    @ApiProperty()
-    @IsNotEmpty()
+    @ApiProperty({ required: false })
+    @IsOptional()
     @IsString()
-    location: string
+    location?: string
 
-    @ApiProperty()
-    @IsNotEmpty()
+    @ApiProperty({ required: false })
+    @IsOptional()
     @IsString()
-    city: string
+    city?: string
 
     @ApiProperty()
     @IsNotEmpty()
     @IsString()
     address: string
 
-    @ApiProperty()
-    @IsNotEmpty()
+    @ApiProperty({ required: false })
+    @IsOptional()
     @IsString()
-    author: string
+    author?: string
 
     @ApiProperty()
     @IsNotEmpty()
@@ -58,13 +58,13 @@ export class UpdateEventDTO {
     @IsArray()
     preferenceListIds: string[]
 
-    @ApiProperty()
-    @IsNotEmpty()
+    @ApiProperty({ required: false })
+    @IsOptional()
     @IsArray()
-    guestList: string[]
+    guestList?: string[]
 
-    @ApiProperty()
-    @IsNotEmpty()
+    @ApiProperty({ required: false })
+    @IsOptional()
     @IsArray()
-    uploads: string[]
+    uploads?: string[]
 }
