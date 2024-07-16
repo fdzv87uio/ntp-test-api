@@ -13,7 +13,7 @@ export class Event {
     description: string;
 
     @Prop()
-    url: string;
+    url?: string;
 
     @Prop({type: [String],
         enum: ["Presencial", "Virtual"],
@@ -25,16 +25,16 @@ export class Event {
     date: string;
 
     @Prop()
-    location: string;
+    location?: string;
 
     @Prop()
-    address: string;
+    address?: string;
 
     @Prop()
-    city: string;
+    city?: string;
 
     @Prop()
-    author: string;
+    author?: string;
 
     @Prop()
     userId: string;
@@ -43,10 +43,10 @@ export class Event {
     preferenceListIds: string[];
 
     @Prop()
-    guestList: string[];
+    guestList?: string[];
 
     @Prop()
-    uploads: string[];
+    uploads?: string[];
 }
 
 export const EventSchema = SchemaFactory.createForClass(Event);
