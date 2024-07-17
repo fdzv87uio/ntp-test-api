@@ -1,8 +1,9 @@
 import { Injectable } from '@nestjs/common';
-import { S3Client, PutObjectCommand, PutObjectCommandInput } from '@aws-sdk/client-s3';
+import { S3Client, PutObjectCommand, PutObjectCommandInput, DeleteObjectCommand, DeleteObjectCommandInput } from '@aws-sdk/client-s3';
 import * as multer from 'multer';
 import { v4 as uuidv4 } from 'uuid';
 import { log } from 'console';
+import { catchError } from 'rxjs';
 
 @Injectable()
 export class UploadService {
@@ -24,28 +25,26 @@ export class UploadService {
     });
   }
 
-  async uploadFile(file: Buffer): Promise<any> {
+  async uploadFile(file: Express.MulterFile, eventId: string): Promise<any> {
     try {
-       const loadId =  uuidv4();      
-      const key = `${loadId}-${Date.now().toString()}`
+      const key = `${eventId}/${Date.now().toString()}-${file.originalname}`
       const params: PutObjectCommandInput = {
         Bucket: process.env.AWS_IMAGE_BUCKET_NAME,
         Key: key,
-        Body: file,
-        ContentType: 'image/jpeg',
-        ContentDisposition: 'inline',
+        Body: file.buffer,
+        ContentType: file.mimetype
         // ACL: 'public-read',
       };
 
       try {
         const command = new PutObjectCommand(params);
-        const data = await this.s3Client.send(command);       
+        await this.s3Client.send(command);
         return {
           success: true,
           statusCode: 'success upload',
           data: {
             url: `https://${params.Bucket}.s3.${process.env.AWS_REGION}.amazonaws.com/${params.Key}`
-          }          
+          }
         };
       } catch (error) {
         console.error('Error uploading file:', JSON.stringify(error, null, 2));
@@ -53,6 +52,29 @@ export class UploadService {
       }
     } catch (error) {
       console.error('Error uploading file:', JSON.stringify(error, null, 2));
+      throw new Error(`File upload failed. ${error.message}`);
+    }
+  }
+
+  async deleteUpload(url:string) {
+    try {
+      const delparams: DeleteObjectCommandInput = {
+        Bucket: process.env.AWS_IMAGE_BUCKET_NAME,
+        Key: url, 
+      };
+      try {
+        const command = new DeleteObjectCommand(delparams);
+        const data =  await this.s3Client.send(command);
+        return {
+          success: true,
+          statusCode: 'success delete',
+          data: data
+        };
+      } catch (error) {
+        console.error('Error uploading file:', JSON.stringify(error, null, 2));
+        throw new Error(`File upload failed. ${error.message}`)
+     }
+    }catch(error){
       throw new Error(`File upload failed. ${error.message}`);
     }
   }

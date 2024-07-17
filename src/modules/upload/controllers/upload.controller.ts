@@ -1,4 +1,4 @@
-import { Body, Controller, Post, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common';
+import { Body, Controller, Delete, Param, Post, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common';
 import { ApiBearerAuth, ApiBody, ApiConsumes, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { UploadService} from '../services/upload.service'
 import * as multer from 'multer';
@@ -31,13 +31,29 @@ export class UploadController {
             file: {
               type: 'string',
               format: 'binary',
+            },
+            eventId:{
+              type: 'string'
             }            
           },
         },
       })
     @UseInterceptors(MulterS3Interceptor)
-    async uploadFile(@UploadedFile() file: Express.MulterFile) {
-      const result = await this.uploadService.uploadFile(file.buffer);
+    async uploadFile(@UploadedFile() file: Express.MulterFile,@Body() body: any) {
+      console.log(body.eventId);
+      const result = await this.uploadService.uploadFile(file,body.eventId);
       return result;
     }
+
+    @HasRoles(Role.Admin, Role.User)
+    @UseGuards(JwtAuthGuard, RolesGuard)
+    @ApiBearerAuth()
+    @ApiOperation({ summary: 'delete upload' })
+    @Delete('file/:url')    
+    async deleteUpload(@Param('url') url: string) {      
+      const result = await this.uploadService.deleteUpload(url);
+      return result;
+    }
+
+
 }

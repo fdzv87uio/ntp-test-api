@@ -25,7 +25,22 @@ export class CreateEventDTO {
   @ApiProperty()
   @IsNotEmpty()
   @IsString()
-  date: string;
+  startDate: Date;
+
+  @ApiProperty({ required: false })
+  @IsOptional()
+  @IsString()
+  endDate?: Date;
+
+  @ApiProperty({ required: false })
+  @IsOptional()
+  @IsString()
+  isFrecuency?: boolean;
+
+  @ApiProperty({ required: false })
+  @IsOptional()
+  @IsString()
+  frecuency?: string;
 
   @ApiProperty({ required: false })
   @IsOptional()
