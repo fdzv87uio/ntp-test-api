@@ -4,7 +4,10 @@ export interface EventType {
     description: string;
     url?: string;
     eventType: string;
-    date: string;
+    startDate: Date;
+    endDate?: Date;
+    isFrecuency?:boolean;
+    frecuency?:string;
     location?: string;
     city?: string; 
     address?: string;   

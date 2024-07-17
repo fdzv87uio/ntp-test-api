@@ -1,6 +1,7 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 
 
+
 @Schema({
     timestamps: true
 })
@@ -16,13 +17,25 @@ export class Event {
     url?: string;
 
     @Prop({type: [String],
-        enum: ["presential", "virtual"],
-        default: "presential",
+        enum: ["in-person", "online"],
+        default: "in-person",
         required: false})    
     eventType: string;
 
     @Prop()
-    date: string;
+    startDate: Date;
+
+    @Prop()
+    endDate?: Date;
+    
+    @Prop()
+    isFrecuency?:boolean;
+
+    @Prop({type: [String],
+     enum: ["Weekle", "Monthly"],
+     default: "Weekle",
+     required: false})
+    frecuency?: string;
 
     @Prop()
     location?: string;
