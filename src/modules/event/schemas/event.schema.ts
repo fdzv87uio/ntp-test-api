@@ -32,8 +32,8 @@ export class Event {
     isFrecuency?:boolean;
 
     @Prop({type: [String],
-     enum: ["Weekle", "Monthly"],
-     default: "Weekle",
+     enum: ["None","Weekle", "Monthly"],
+     default: "None",
      required: false})
     frecuency?: string;
 
