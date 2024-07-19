@@ -20,7 +20,12 @@ export const UserSchema = new Schema({
   postalCode: { type: String, trim: true, require: true },
   city: { type: String, trim: true, require: true },
   birthDate: { type: Date, trim: true, required: true },
-  idNumber: { type: String, trim: true, require: true },
+  idNumber: { type: String, trim: true, require: false },
+  idType:{
+      type: String,
+      enum: DocumentTypeEnum,
+      required: false      
+  },
   preferences: {
     type: [{ type: Types.ObjectId, ref: 'Preference' }],
     trim: true,

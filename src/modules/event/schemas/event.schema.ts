@@ -16,10 +16,12 @@ export class Event {
     @Prop()
     url?: string;
 
-    @Prop({type: [String],
+    @Prop({
+        type: [String],
         enum: ["in-person", "online"],
         default: "in-person",
-        required: false})    
+        required: false
+    })
     eventType: string;
 
     @Prop()
@@ -27,15 +29,25 @@ export class Event {
 
     @Prop()
     endDate?: Date;
-    
-    @Prop()
-    isFrecuency?:boolean;
 
-    @Prop({type: [String],
-     enum: ["None","Weekle", "Monthly"],
-     default: "None",
-     required: false})
+    @Prop()
+    isFrecuency?: boolean;
+
+    @Prop({
+        type: [String],
+        enum: ["None", "Weekle", "Monthly"],
+        default: "None",
+        required: false
+    })
     frecuency?: string;
+
+    @Prop({
+        type: [String],
+        enum: ["None", "Pending", "Executed"],
+        default: "None",
+        required: false
+    })
+    frecuencyStatus?: string;
 
     @Prop()
     location?: string;
