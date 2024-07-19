@@ -18,7 +18,7 @@ export class LocationService {
 
   async searchPlaceIndexForText(searchTerm: string) {
     const params = {
-        IndexName: "Place-Index-PH",
+        IndexName: "Place-Index-curcleup",
         Text: searchTerm,
         MaxResults: 25,
         FilterCountries: ["USA"]
@@ -28,7 +28,10 @@ export class LocationService {
 
     try {
       const response = await this.client.send(command);
-      return response;
+      return{
+        status: true,
+        data: response.Results,
+        };     
     } catch (error) {
       this.logger.error(`Failed to search place index for text: ${error.message}`);
       throw error;

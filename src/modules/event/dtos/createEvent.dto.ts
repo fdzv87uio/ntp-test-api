@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsArray, IsNotEmpty, IsOptional, IsString } from 'class-validator';
+import { IsArray, IsBoolean, IsNotEmpty, IsOptional, IsString } from 'class-validator';
 
 export class CreateEventDTO {
   @ApiProperty()
@@ -34,7 +34,7 @@ export class CreateEventDTO {
 
   @ApiProperty({ required: false })
   @IsOptional()
-  @IsString()
+  @IsBoolean()
   isFrecuency?: boolean;
 
   @ApiProperty({ required: false })

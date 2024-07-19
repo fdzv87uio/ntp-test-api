@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger'
-import { IsArray, IsNotEmpty, IsOptional, IsString } from 'class-validator'
+import { IsArray, IsBoolean, IsNotEmpty, IsOptional, IsString } from 'class-validator'
 
 export class UpdateEventDTO {
 
@@ -35,7 +35,7 @@ export class UpdateEventDTO {
 
     @ApiProperty({ required: false })
     @IsOptional()
-    @IsString()
+    @IsBoolean()
     isFrecuency?: boolean;
 
     @ApiProperty({ required: false })

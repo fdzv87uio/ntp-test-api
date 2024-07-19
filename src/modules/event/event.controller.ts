@@ -34,7 +34,7 @@ export class EventController {
     @ApiBearerAuth()
     @ApiOperation({ summary: 'Create New Event' })
     @Post('new')
-    async createEvent(@Body() event: CreateEventDTO): Promise<EventType> {
+    async createEvent(@Body() event: CreateEventDTO): Promise<EventType> {        
         return this.eventService.createEvent(event)
     }
 

@@ -5,12 +5,14 @@ import { Event } from './schemas/event.schema';
 import { UploadService } from './../upload/services/upload.service'
 import { CreateEventDTO } from './dtos/createEvent.dto';
 import { log } from 'console';
+import { EventResolverService } from './resolverservice/event.resolverservice';
 
 @Injectable()
 export class EventService {
     constructor(
         @InjectModel(Event.name) private eventModel: Model<Event>,
-        private uploadService: UploadService
+        private uploadService: UploadService,
+        private eventResolverService: EventResolverService
 
     ) {}
 
@@ -26,8 +28,28 @@ export class EventService {
 
     async createEvent(event: Event): Promise<Event> {
         try {
+            if (event.isFrecuency != null && event.isFrecuency) {
+                event.frecuencyStatus = "Pending";
+            }
             const res = await this.eventModel.create(event);
             return res;
+        } catch (err) {
+            log("error creating event " + err);
+            throw new NotFoundException('Error creating event');
+        }
+    }
+
+    async createEventsByProcess(): Promise<Event[]> {
+        try {
+            const events = await this.eventModel.find({ frecuencyStatus: "Pending" });
+            for (const event of events) {
+                if (event.isFrecuency && !event.frecuency.includes("None")) {
+                    this.eventResolverService.createEventsByEvent(event);
+                    event.frecuencyStatus = "Executed";
+                    await this.eventModel.updateOne({ _id: event._id }, event);
+                }
+            }
+            return events;
         } catch (err) {
             log("error creating event " + err);
             throw new NotFoundException('Error creating event');
