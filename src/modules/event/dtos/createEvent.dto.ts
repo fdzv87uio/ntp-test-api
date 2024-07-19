@@ -1,5 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsArray, IsBoolean, IsNotEmpty, IsOptional, IsString } from 'class-validator';
+import { IsArray, IsBoolean, IsIn, IsNotEmpty, IsOptional, IsString } from 'class-validator';
+import { Transform } from 'class-transformer';
 
 export class CreateEventDTO {
   @ApiProperty()
@@ -20,6 +21,7 @@ export class CreateEventDTO {
   @ApiProperty()
   @IsNotEmpty()
   @IsString()
+  @IsIn(['in-person', 'online'])
   eventType: string;
 
   @ApiProperty()
@@ -32,14 +34,16 @@ export class CreateEventDTO {
   @IsString()
   endDate?: Date;
 
-  @ApiProperty({ required: false })
+  @ApiProperty({ required: false, default: false})
   @IsOptional()
   @IsBoolean()
-  isFrecuency?: boolean;
+  @Transform(({ value }) => value !== undefined ? value : false)
+  isFrecuency?: boolean = false;
 
-  @ApiProperty({ required: false })
+  @ApiProperty({ required: false, default: 'None' })
   @IsOptional()
   @IsString()
+  @IsIn(['None', 'Weekle', 'Monthly'])
   frecuency?: string;
 
   @ApiProperty({ required: false })

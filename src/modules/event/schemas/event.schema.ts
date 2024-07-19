@@ -17,10 +17,9 @@ export class Event {
     url?: string;
 
     @Prop({
-        type: [String],
+        type: String,
         enum: ["in-person", "online"],
-        default: "in-person",
-        required: false
+        default: "in-person"
     })
     eventType: string;
 
