@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger'
 import { Transform } from 'class-transformer'
-import { IsArray, IsBoolean, IsIn, IsNotEmpty, IsOptional, IsString } from 'class-validator'
+import { IsArray, IsBoolean, IsIn, IsNotEmpty, IsNumber, IsOptional, IsString } from 'class-validator'
 
 export class UpdateEventDTO {
 
@@ -30,10 +30,32 @@ export class UpdateEventDTO {
     @IsString()
     startDate: Date;
 
+    @ApiProperty()
+    @IsNotEmpty()
+    @IsString()
+    startTime: string;
+
+    @ApiProperty({ required: false, default: true })
+    @IsOptional()
+    @IsBoolean()
+    @Transform(({ value }) => value !== undefined ? value : true)
+    eventEnds?: boolean = true;
+
     @ApiProperty({ required: false })
     @IsOptional()
     @IsString()
     endDate?: Date;
+
+    @ApiProperty()
+    @IsOptional()
+    @IsString()
+    endTime?: string;
+
+    @ApiProperty({ required: false, default: 1 })
+    @IsOptional()
+    @IsNumber()
+    @Transform(({ value }) => value !== undefined ? value : 1)
+    occurrenceCount?: number;
 
     @ApiProperty({ required: false, default: false })
     @IsOptional()
@@ -44,23 +66,29 @@ export class UpdateEventDTO {
     @ApiProperty({ required: false, default: 'None' })
     @IsOptional()
     @IsString()
-    @IsIn(['None', 'Weekle', 'Monthly'])
+    @IsIn(["None", "Daily", "Weekly", "Monthly", "Anually"])
     frecuency?: string;
+
+    @ApiProperty({ required: false, default: 'None' })
+    @IsOptional()
+    @IsString()
+    @IsIn(["None", "Pending", "Executed"])
+    frecuencyStatus?: string;
 
     @ApiProperty({ required: false })
     @IsOptional()
     @IsString()
     location?: string
 
-    @ApiProperty({ required: false })
-    @IsOptional()
-    @IsString()
-    city?: string
-
     @ApiProperty()
     @IsNotEmpty()
     @IsString()
     address: string
+
+    @ApiProperty({ required: false })
+    @IsOptional()
+    @IsString()
+    city?: string
 
     @ApiProperty({ required: false })
     @IsOptional()
@@ -85,5 +113,10 @@ export class UpdateEventDTO {
     @ApiProperty({ required: false })
     @IsOptional()
     @IsArray()
-    uploads?: string[]
+    images?: string[];
+
+    @ApiProperty({ required: false })
+    @IsOptional()
+    @IsArray()
+    videos?: string[];
 }
