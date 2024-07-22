@@ -27,14 +27,34 @@ export class Event {
     startDate: Date;
 
     @Prop()
+    startTime: string;
+
+    @Prop({
+        type: Boolean,
+        default: true,
+        required: false
+    })
+    eventEnds?: boolean;
+
+    @Prop()
     endDate?: Date;
+
+    @Prop()
+    endTime: string;
+
+    @Prop({
+        type: Number,
+        default: 1,
+        required: false
+    })
+    occurenceCount?: boolean;
 
     @Prop()
     isFrecuency?: boolean;
 
     @Prop({
         type: [String],
-        enum: ["None", "Weekle", "Monthly"],
+        enum: ["None", "Daily", "Weekly", "Monthly", "Anually"],
         default: "None",
         required: false
     })
@@ -70,7 +90,10 @@ export class Event {
     guestList?: string[];
 
     @Prop()
-    uploads?: string[];
+    images?: string[];
+
+    @Prop()
+    videos?: string[];
 }
 
 export const EventSchema = SchemaFactory.createForClass(Event);
