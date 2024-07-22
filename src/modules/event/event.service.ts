@@ -6,6 +6,7 @@ import { UploadService } from './../upload/services/upload.service'
 import { CreateEventDTO } from './dtos/createEvent.dto';
 import { log } from 'console';
 import { EventResolverService } from './resolverservice/event.resolverservice';
+import { UpdateEventDTO } from './dtos/updateEvent.dto';
 
 @Injectable()
 export class EventService {
@@ -26,7 +27,7 @@ export class EventService {
         return events;
     }
 
-    async createEvent(event: Event): Promise<Event> {
+    async createEvent(event: CreateEventDTO): Promise<Event> {
         try {
             if (event.isFrecuency != null && event.isFrecuency) {
                 event.frecuencyStatus = "Pending";
@@ -64,7 +65,7 @@ export class EventService {
         return res;
     }
 
-    async updateEventById(id: string, event: Event): Promise<Event> {
+    async updateEventById(id: string, event: UpdateEventDTO): Promise<Event> {
         const res = await this.eventModel.findByIdAndUpdate(id, event, {
             new: true,
             runValidators: true

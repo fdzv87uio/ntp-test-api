@@ -47,7 +47,7 @@ export class Event {
         default: 1,
         required: false
     })
-    occurenceCount?: boolean;
+    occurenceCount?: number;
 
     @Prop()
     isFrecuency?: boolean;

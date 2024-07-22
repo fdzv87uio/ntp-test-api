@@ -68,6 +68,12 @@ export class CreateEventDTO {
   @IsIn(["None", "Daily", "Weekly", "Monthly", "Anually"])
   frecuency?: string;
 
+  @ApiProperty({ required: false, default: 'None' })
+  @IsOptional()
+  @IsString()
+  @IsIn(["None", "Pending", "Executed"])
+  frecuencyStatus?: string;
+
   @ApiProperty({ required: false })
   @IsOptional()
   @IsString()
