@@ -59,9 +59,7 @@ export class EventService {
 
     async findEventById(id: string): Promise<Event> {
         const res = await this.eventModel.findById(id);
-        if (!res) {
-            throw new NotFoundException('Event Not Found');
-        }
+        if (!res) { throw new NotFoundException('Event Not Found'); }
         return res;
     }
 
@@ -69,7 +67,8 @@ export class EventService {
         const res = await this.eventModel.findByIdAndUpdate(id, event, {
             new: true,
             runValidators: true
-        });
+        }).exec();
+        if (!res) {throw new NotFoundException('Event Not Found');}            
         return res;
     }
 

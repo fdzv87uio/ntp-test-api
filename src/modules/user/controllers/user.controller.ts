@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Put, UseGuards } from '@nestjs/common';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { JwtAuthGuard } from '../../auth/guard';
 import { UserService } from '../services/user.service';
@@ -7,6 +7,7 @@ import { User } from '../interfaces/user.interface';
 import { HasRoles } from 'src/modules/auth/decorators/has-role.decorator';
 import { Role } from 'src/modules/auth/models/role.enum';
 import { RolesGuard } from 'src/modules/auth/guard/roles.guard';
+import { UpdateUserDto } from '../dtos/update-user.dto';
 
 @ApiTags('User')
 @Controller('user')
@@ -29,5 +30,14 @@ export class UserController {
     @Get('find/:email')
     findById(@Param('email') email: string): Promise<User> {
         return this.userService.findOne(email);
+    }
+
+    @HasRoles(Role.Admin, Role.User)
+    @UseGuards(JwtAuthGuard, RolesGuard)
+    @ApiBearerAuth()
+    @ApiOperation({ summary: 'Update user by email' })
+    @Put(':email')
+    updateByEmail(@Param('email') email: string, @Body() updateUser: UpdateUserDto): Promise<User> {
+        return this.userService.updateByEmail(email,updateUser);
     }
 }
