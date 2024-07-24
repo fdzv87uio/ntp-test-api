@@ -27,7 +27,7 @@ export class UserService {
       createdUser.user_status = "enabled";
       createdUser.email = createdUser.email.toLowerCase();
       await createdUser.save();
-      return this.findOne(createdUser.email);
+      return await this.findOne(createdUser.email);
     } catch (err) {
       log("create User " + err.message)
       throw new BadRequestException("user not registed");
