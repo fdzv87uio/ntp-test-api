@@ -29,6 +29,7 @@ export class Event {
     })
     eventType: string;
 
+    // new Prop
     @Prop({
         type: String,
         enum: ["in-person", "online"],
