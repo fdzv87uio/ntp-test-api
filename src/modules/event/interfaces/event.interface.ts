@@ -5,6 +5,7 @@ export interface EventType {
     description: string;
     url?: string;
     eventType: string;
+    eventMode: string;
     startDate: Date;
     startTime: string; // timestamp as a string
     eventEnds?: boolean; // boolean to detect if event is set to conclude
@@ -19,7 +20,7 @@ export interface EventType {
     city?: string; // missing in figma
     author?: string;
     userId: string;
-    preferenceListIds: string[];
+    preferenceListIds?: string[];
     guestList?: string[]; // missing in Figma
     images?: string[]; // string array for images
     videos?: string[]; // string array for videos
