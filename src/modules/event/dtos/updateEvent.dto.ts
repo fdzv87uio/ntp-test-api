@@ -10,6 +10,11 @@ export class UpdateEventDTO {
     title: string
 
     @ApiProperty()
+    @IsOptional()
+    @IsString()
+    slug?: string;
+
+    @ApiProperty()
     @IsNotEmpty()
     @IsString()
     description: string
