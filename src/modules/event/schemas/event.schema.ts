@@ -10,6 +10,12 @@ export class Event {
     @Prop()
     title: string;
 
+    @Prop({
+        type: String,
+        default: "none"
+    })
+    slug?: string;
+
     @Prop()
     description: string;
 

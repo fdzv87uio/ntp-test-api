@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Event } from './schemas/event.schema';
@@ -32,11 +32,36 @@ export class EventService {
             if (event.isFrecuency != null && event.isFrecuency) {
                 event.frecuencyStatus = "Pending";
             }
-            const res = await this.eventModel.create(event);
-            return res;
+            // Check if event title exists
+            const existingEvent = await this.eventModel.findOne({ title: event.title });
+            if (existingEvent) {
+                throw new UnauthorizedException("Event Title Already Exists");
+            } else {
+                // Generate slug using name and city
+                const titleArray = event.title ? event.title.toLowerCase().split(" ") : ["a", "b"];
+                const formattedTítuloArray: any[] = [];
+                titleArray.forEach((x) => {
+                    // clean the string
+                    const currentString = x.replaceAll("á", "a").replaceAll("é", "e").replaceAll("í", "i").replaceAll("ó", "o").replaceAll("ú", "u").replaceAll("ñ", "n").replaceAll("ñ", "n");
+                    const encoded = encodeURIComponent(currentString);
+                    const formatted = encoded.replace(/%[0-9A-F]{2}/ig, '').trim();
+                    formattedTítuloArray.push(formatted);
+                })
+                let newSlug = formattedTítuloArray.join("-");
+                const cityFormatted = event.city.toLowerCase();
+                newSlug = newSlug + "-" + cityFormatted;
+                console.log("new slug:");
+                console.log(newSlug);
+                event.slug = newSlug;
+                // adding url
+                const uri = process.env.CURCLE_APP_URI;
+                event.url = uri + `/event/${newSlug}`;
+                const res = await this.eventModel.create(event);
+                return res;
+            }
         } catch (err) {
-            log("error creating event " + err);
-            throw new NotFoundException('Error creating event');
+            log("error creating event " + err.message);
+            throw new NotFoundException(`Error creating event: ${err.message}`);
         }
     }
 
@@ -68,7 +93,7 @@ export class EventService {
             new: true,
             runValidators: true
         }).exec();
-        if (!res) {throw new NotFoundException('Event Not Found');}            
+        if (!res) { throw new NotFoundException('Event Not Found'); }
         return res;
     }
 
