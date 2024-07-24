@@ -5,6 +5,7 @@ import { User } from '../interfaces/user.interface';
 import { CreateUserDto } from '../dtos/create-user.dto';
 import { AuthService } from '../../auth/services/auth.service';
 import { log } from 'console';
+import { UpdateUserDto } from '../dtos/update-user.dto';
 
 @Injectable()
 export class UserService {
@@ -21,9 +22,25 @@ export class UserService {
   }
 
   async create(createUserDto: CreateUserDto): Promise<User> {
-    const createdUser = new this.userModel(createUserDto);
-    createdUser.user_status = "enabled";
-    return createdUser.save();
+    try {
+      const createdUser = new this.userModel(createUserDto);
+      createdUser.user_status = "enabled";
+      createdUser.email = createdUser.email.toLowerCase();
+      await createdUser.save();
+      return await this.findOne(createdUser.email);
+    } catch (err) {
+      log("create User " + err.message)
+      throw new BadRequestException("user not registed");
+    }
+  }
+
+  async updateByEmail(email: string, user: UpdateUserDto): Promise<User> {
+    const res = await this.userModel.findOneAndUpdate({ email: email }, user, {
+      new: true,
+      runValidators: true
+    });
+    if (!res) throw new NotFoundException('User not found');
+    return res;
   }
 
   async myProfile(email: String, needPassword: boolean = true) {
@@ -34,5 +51,4 @@ export class UserService {
     if (!profile.user_status.includes('enabled')) throw new BadRequestException('Your account is not active');
     return profile;
   }
-
 }
