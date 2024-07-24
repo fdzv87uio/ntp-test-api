@@ -24,10 +24,17 @@ export class Event {
 
     @Prop({
         type: String,
+        enum: ["public", "private"],
+        default: "private"
+    })
+    eventType: string;
+
+    @Prop({
+        type: String,
         enum: ["in-person", "online"],
         default: "in-person"
     })
-    eventType: string;
+    eventMode: string;
 
     @Prop()
     startDate: Date;
@@ -89,8 +96,11 @@ export class Event {
     @Prop()
     userId: string;
 
-    @Prop()
-    preferenceListIds: string[];
+    @Prop({
+        type: [String],
+        required: false
+    })
+    preferenceListIds?: string[];
 
     @Prop()
     guestList?: string[];
