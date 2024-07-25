@@ -30,8 +30,8 @@ export class EventController {
     }
 
     // Create New Event
-    @UseGuards(JwtAuthGuard)
-    @ApiBearerAuth()
+    // @UseGuards(JwtAuthGuard)
+    // @ApiBearerAuth()
     @ApiOperation({ summary: 'Create New Event' })
     @Post('new')
     async createEvent(@Body() event: CreateEventDTO): Promise<EventType> {

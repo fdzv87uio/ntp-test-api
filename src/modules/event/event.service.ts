@@ -48,7 +48,7 @@ export class EventService {
                     formattedTítuloArray.push(formatted);
                 })
                 let newSlug = formattedTítuloArray.join("-");
-                const cityFormatted = event.city.toLowerCase();
+                const cityFormatted = event.city ? event.city.toLowerCase(): "";
                 newSlug = newSlug + "-" + cityFormatted;
                 console.log("new slug:");
                 console.log(newSlug);
@@ -60,7 +60,7 @@ export class EventService {
                 return res;
             }
         } catch (err) {
-            log("error creating event " + err.message);
+            log("error creating event " + err);
             throw new NotFoundException(`Error creating event: ${err.message}`);
         }
     }
