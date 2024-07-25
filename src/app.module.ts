@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { ConfigModule } from '@nestjs/config';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { AuthModule } from './modules/auth/auth.module';
 import { UserModule } from './modules/user/user.module';
 import { PreferenceModule } from './modules/preference/preference.module';
@@ -28,9 +28,10 @@ import { LocationModule } from './modules/location/location.module';
     ExternalRequestModule,   
     EventModule, 
     TransactionModule, 
-    UploadModule, CategoryModule, LocationModule,  
+    UploadModule, CategoryModule, LocationModule, ConfigModule,  
   ],
   controllers: [AppController],
   providers: [AppService],
 })
 export class AppModule {}
+

@@ -20,8 +20,8 @@ export class UploadController {
     @HasRoles(Role.Admin, Role.User)
     @UseGuards(JwtAuthGuard, RolesGuard)
     @ApiBearerAuth()
-    @ApiOperation({ summary: 'Upload a file' })
-    @Post()
+    @ApiOperation({ summary: 'Upload a image file' })
+    @Post('/image')
     @ApiConsumes('multipart/form-data')
     @ApiBody({
         description: 'Image File',
@@ -48,12 +48,40 @@ export class UploadController {
     @HasRoles(Role.Admin, Role.User)
     @UseGuards(JwtAuthGuard, RolesGuard)
     @ApiBearerAuth()
-    @ApiOperation({ summary: 'delete upload' })
-    @Delete('file/:url')    
-    async deleteUpload(@Param('url') url: string) {      
-      const result = await this.uploadService.deleteUpload(url);
+    @ApiOperation({ summary: 'Upload a video file' })
+    @Post('/video')
+    @ApiConsumes('multipart/form-data')
+    @ApiBody({
+        description: 'Video File',
+        schema: {
+          type: 'object',
+          properties: {
+            file: {
+              type: 'string',
+              format: 'binary',
+            },
+            eventId:{
+              type: 'string'
+            }            
+          },
+        },
+      })
+    @UseInterceptors(MulterS3Interceptor)
+    async uploadVideoFile(@UploadedFile() file: Express.MulterFile,@Body() body: any) { 
+      console.log(body.eventId);
+      const result = await this.uploadService.uploadVideoFile(file,body.eventId);
       return result;
     }
+
+    // @HasRoles(Role.Admin, Role.User)
+    // @UseGuards(JwtAuthGuard, RolesGuard)
+    // @ApiBearerAuth()
+    // @ApiOperation({ summary: 'delete upload' })
+    // @Delete('file/:url')    
+    // async deleteUpload(@Param('url') url: string) {      
+    //   const result = await this.uploadService.deleteUpload(url);
+    //   return result;
+    // }
 
 
 }
