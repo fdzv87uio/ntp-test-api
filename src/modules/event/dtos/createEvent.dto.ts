@@ -95,10 +95,10 @@ export class CreateEventDTO {
   @IsString()
   address: string;
 
-  @ApiProperty({ required: false })
-  @IsOptional()
+  @ApiProperty()
+  @IsNotEmpty()
   @IsString()
-  city?: string;
+  city: string;
 
 
   @ApiProperty({ required: false })

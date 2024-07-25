@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { S3Client, PutObjectCommand, PutObjectCommandInput, DeleteObjectCommand, DeleteObjectCommandInput, CreateMultipartUploadCommand, CompletedPart, UploadPartCommand, CompleteMultipartUploadCommand } from '@aws-sdk/client-s3';
 import * as multer from 'multer';
 import { Readable } from 'stream';
@@ -6,9 +6,9 @@ import { log } from 'console';
 
 @Injectable()
 export class UploadService {
-  private  bucketName: string;
-  private  region: string;
-  private s3Client: S3Client;  
+  private bucketName: string;
+  private region: string;
+  private s3Client: S3Client;
 
   constructor() {
     this.s3Client = new S3Client({
@@ -17,9 +17,9 @@ export class UploadService {
         accessKeyId: process.env.AWS_ACCESS_KEY_ID,
         secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
       },
-      });
-      this.bucketName = process.env.AWS_IMAGE_BUCKET_NAME;      
-      this.region = process.env.AWS_REGION;    
+    });
+    this.bucketName = process.env.AWS_IMAGE_BUCKET_NAME;
+    this.region = process.env.AWS_REGION;
   }
 
   getMulterS3Uploader() {
@@ -28,11 +28,11 @@ export class UploadService {
     });
   }
 
-  async uploadFile(file: Express.MulterFile, eventId: string): Promise<any> {   
+  async uploadFile(file: Express.MulterFile, eventId: string): Promise<any> {    
     const key_ = `${eventId}/image/${Date.now().toString()}-${file.originalname}`;
-    try {      
+    try {
       const params: PutObjectCommandInput = {
-        Bucket: process.env.AWS_BUCKET_NAME,
+        Bucket: this.bucketName,
         Key: key_,
         Body: file.buffer,
         ContentType: file.mimetype
@@ -46,7 +46,7 @@ export class UploadService {
           success: true,
           statusCode: 'success upload',
           data: {
-            url: `https://${params.Bucket}.s3.${process.env.AWS_REGION}.amazonaws.com/${params.Key}`
+            url: `https://${params.Bucket}.s3.${this.region}.amazonaws.com/${params.Key}`
           }
         };
       } catch (error) {
@@ -59,8 +59,8 @@ export class UploadService {
     }
   }
 
-  async uploadVideoFile(file: Express.MulterFile, eventId: string): Promise<any> {    
-    const _key = `${eventId}/video/${Date.now().toString()}-${file.originalname}`;    
+  async uploadVideoFile(file: Express.MulterFile, eventId: string): Promise<any> {
+    const _key = `${eventId}/video/${Date.now().toString()}-${file.originalname}`;
 
     try {
       const createMultipartUploadCommand = new CreateMultipartUploadCommand({
@@ -123,7 +123,7 @@ export class UploadService {
         success: true,
         statusCode: 'success upload',
         data: {
-          url: `https://${process.env.AWS_BUCKET_NAME}.s3.${process.env.AWS_REGION}.amazonaws.com/${_key}`,
+          url: `https://${this.bucketName}.s3.${this.region}.amazonaws.com/${_key}`,
         },
       };
     } catch (error) {
