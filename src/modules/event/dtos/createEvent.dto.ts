@@ -26,8 +26,14 @@ export class CreateEventDTO {
   @ApiProperty()
   @IsNotEmpty()
   @IsString()
-  @IsIn(['in-person', 'online'])
+  @IsIn(['public', 'private'])
   eventType: string;
+
+  @ApiProperty()
+  @IsNotEmpty()
+  @IsString()
+  @IsIn(['in-person', 'online'])
+  eventMode: string;
 
   @ApiProperty()
   @IsNotEmpty()
@@ -106,7 +112,7 @@ export class CreateEventDTO {
   userId: string;
 
   @ApiProperty()
-  @IsNotEmpty()
+  @IsOptional()
   @IsArray()
   preferenceListIds: string[];
 
