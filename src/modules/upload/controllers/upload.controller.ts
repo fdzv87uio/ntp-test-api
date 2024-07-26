@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Param, Post, UploadedFile, UseGuards, UseInterceptors, ValidationPipe } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, UploadedFile, UseGuards, UseInterceptors, ValidationPipe } from '@nestjs/common';
 import { ApiBearerAuth, ApiBody, ApiConsumes, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { UploadService} from '../services/upload.service'
 import * as multer from 'multer';
@@ -49,6 +49,17 @@ export class UploadController {
       const result = await this.uploadService.uploadVideoFile(file,body.eventId);
       return result;
     }
+
+    @HasRoles(Role.Admin, Role.User)
+    @UseGuards(JwtAuthGuard, RolesGuard)
+    @ApiBearerAuth()
+    @ApiOperation({ summary: 'Get url signed' })
+    @Get(':url')
+    findById(@Param('url') url: string): Promise<string> {
+        return this.uploadService.createPresignedUrl(url);
+    }
+
+
 
     // @HasRoles(Role.Admin, Role.User)
     // @UseGuards(JwtAuthGuard, RolesGuard)

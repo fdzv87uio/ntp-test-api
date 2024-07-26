@@ -1,7 +1,13 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { S3Client, PutObjectCommand, PutObjectCommandInput, DeleteObjectCommand, DeleteObjectCommandInput, CreateMultipartUploadCommand, CompletedPart, UploadPartCommand, CompleteMultipartUploadCommand } from '@aws-sdk/client-s3';
 import * as multer from 'multer';
 import { Readable } from 'stream';
+import { S3RequestPresigner } from '@aws-sdk/s3-request-presigner';
+import * as crypto from 'crypto';
+import { Hash } from "@smithy/hash-node";
+import { HttpRequest } from '@smithy/protocol-http';
+import { parseUrl } from "@smithy/url-parser";
+import { formatUrl } from "@aws-sdk/util-format-url";
 import { log } from 'console';
 
 @Injectable()
@@ -9,6 +15,7 @@ export class UploadService {
   private bucketName: string;
   private region: string;
   private s3Client: S3Client;
+  private presigner: S3RequestPresigner;
 
   constructor() {
     this.s3Client = new S3Client({
@@ -17,6 +24,14 @@ export class UploadService {
         accessKeyId: process.env.AWS_ACCESS_KEY_ID,
         secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
       },
+    });
+    this.presigner = new S3RequestPresigner({
+      credentials: {
+        accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+        secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+      },
+      region: process.env.AWS_REGION,
+      sha256: Hash.bind(null, "sha256"),
     });
     this.bucketName = process.env.AWS_IMAGE_BUCKET_NAME;
     this.region = process.env.AWS_REGION;
@@ -28,7 +43,7 @@ export class UploadService {
     });
   }
 
-  async uploadFile(file: Express.MulterFile, eventId: string): Promise<any> {    
+  async uploadFile(file: Express.MulterFile, eventId: string): Promise<any> {
     const key_ = `${eventId}/image/${Date.now().toString()}-${file.originalname}`;
     try {
       const params: PutObjectCommandInput = {
@@ -42,11 +57,14 @@ export class UploadService {
       try {
         const command = new PutObjectCommand(params);
         await this.s3Client.send(command);
+        const url_ = `https://${params.Bucket}.s3.${this.region}.amazonaws.com/${params.Key}`
+        const signedUrl_ = await this.createPresignedUrl(url_);
         return {
           success: true,
           statusCode: 'success upload',
           data: {
-            url: `https://${params.Bucket}.s3.${this.region}.amazonaws.com/${params.Key}`
+            url: url_,
+            signedurl: signedUrl_
           }
         };
       } catch (error) {
@@ -119,11 +137,14 @@ export class UploadService {
       });
       await this.s3Client.send(completeMultipartUploadCommand);
 
+      const url_ = `https://${this.bucketName}.s3.${this.region}.amazonaws.com/${_key}`
+      const signedUrl_ = await this.createPresignedUrl(url_);
       return {
         success: true,
         statusCode: 'success upload',
         data: {
-          url: `https://${this.bucketName}.s3.${this.region}.amazonaws.com/${_key}`,
+          url: url_,
+          signedurl: signedUrl_
         },
       };
     } catch (error) {
@@ -154,4 +175,13 @@ export class UploadService {
       throw new Error(`File upload failed. ${error.message}`);
     }
   }
+
+  async createPresignedUrl(urlsimple: string): Promise<string> {
+    const url = parseUrl(urlsimple)
+    const expiresIn : number = 31536000
+    const signedUrlObject = await this.presigner.presign(new HttpRequest(url),{ expiresIn });
+    const response = formatUrl(signedUrlObject)    
+    return response;
+  }
+
 }
