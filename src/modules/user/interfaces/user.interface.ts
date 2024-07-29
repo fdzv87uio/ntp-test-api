@@ -3,7 +3,7 @@ export interface User extends Document {
   name: string;
   lastname: string;
   email: string;
-  password: string;
+  password?: string;
   address: string;
   addressDetails: string;
   postalCode: string;
