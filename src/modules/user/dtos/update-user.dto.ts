@@ -1,4 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { Type } from 'class-transformer';
 import { IsString, IsDate, IsArray, IsEmail } from 'class-validator';
 
 export class UpdateUserDto {
@@ -36,7 +37,8 @@ export class UpdateUserDto {
   city: string;
 
   @ApiProperty()
-  @IsDate()
+  @Type(() => Date)
+  @IsDate({ message: 'birthDate must be a valid date' })
   birthDate?: Date;
 
   @ApiProperty()
