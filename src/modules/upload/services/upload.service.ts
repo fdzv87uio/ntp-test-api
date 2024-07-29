@@ -178,10 +178,9 @@ export class UploadService {
 
   async createPresignedUrl(urlsimple: string): Promise<string> {
     const url = parseUrl(urlsimple)
-    const expiresIn : number = 31536000
-    const signedUrlObject = await this.presigner.presign(new HttpRequest(url));
+    const expiresIn : number = 604800
+    const signedUrlObject = await this.presigner.presign(new HttpRequest(url),{expiresIn});
     const response = formatUrl(signedUrlObject)    
     return response;
   }
-
 }

@@ -11,6 +11,7 @@ import { JwtAuthGuard } from 'src/modules/auth/guard';
 import { UploadFileDto } from '../dtos/upload-file.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { UploadVideoFileDto } from '../dtos/Upload-video.dto';
+import { uploadUrlDto } from '../dtos/upload-url.dto';
 
 @ApiTags('Upload')
 @Controller('upload')
@@ -50,13 +51,17 @@ export class UploadController {
       return result;
     }
 
-    @HasRoles(Role.Admin, Role.User)
-    @UseGuards(JwtAuthGuard, RolesGuard)
-    @ApiBearerAuth()
-    @ApiOperation({ summary: 'Get url signed' })
-    @Get(':url')
-    findById(@Param('url') url: string): Promise<string> {
-        return this.uploadService.createPresignedUrl(url);
+    // @HasRoles(Role.Admin, Role.User)
+    // @UseGuards(JwtAuthGuard, RolesGuard)
+    // @ApiBearerAuth()
+    @ApiOperation({ summary: 'Post url signed' })
+    @Post('/url')
+    async signedUrl(@Body() body: uploadUrlDto): Promise<any> {
+      const data =  await this.uploadService.createPresignedUrl(body.url);
+      return{
+        success: true,
+        signedUrl: data,
+      }
     }
 
 
