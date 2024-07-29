@@ -44,7 +44,7 @@ export class CreateUserDto {
 
   @ApiProperty()
   @IsString()
-  idNumber: string;
+  idNumber?: string;
 
   @ApiProperty()
   @IsArray()

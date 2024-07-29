@@ -43,7 +43,7 @@ export class UpdateUserDto {
 
   @ApiProperty()
   @IsString()
-  idNumber: string;
+  idNumber?: string;
 
   @ApiProperty()
   @IsArray()
