@@ -40,6 +40,16 @@ export class EventController {
 
     // Get Event By ID
     @ApiOperation({ summary: 'Get Event By ID' })
+    @Get('getEventBySlug/:slug')
+    async getEventBySlug(
+        @Param('slug')
+        slug: string
+    ): Promise<EventType> {
+        return this.eventService.findEventBySlug(slug);
+    }
+
+    // Get Event By ID
+    @ApiOperation({ summary: 'Get Event By ID' })
     @Get(':id')
     async getEvent(
         @Param('id')
