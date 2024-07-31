@@ -38,7 +38,8 @@ export class EventService {
                 throw new UnauthorizedException("Event Title Already Exists");
             } else {
                 // Generate slug using name and city
-                const titleArray = event.title ? event.title.toLowerCase().split(" ") : ["a", "b"];
+                const initialTitleArr = event.title.toLowerCase().split(" ");
+                const titleArray = initialTitleArr.length > 1 ? initialTitleArr : [initialTitleArr[0], "event"];
                 const formattedTítuloArray: any[] = [];
                 titleArray.forEach((x) => {
                     // clean the string
@@ -48,7 +49,7 @@ export class EventService {
                     formattedTítuloArray.push(formatted);
                 })
                 let newSlug = formattedTítuloArray.join("-");
-                const cityFormatted = event.city ? event.city.toLowerCase(): "";
+                const cityFormatted = event.city ? event.city.toLowerCase() : "";
                 newSlug = newSlug + "-" + cityFormatted;
                 console.log("new slug:");
                 console.log(newSlug);
@@ -84,6 +85,12 @@ export class EventService {
 
     async findEventById(id: string): Promise<Event> {
         const res = await this.eventModel.findById(id);
+        if (!res) { throw new NotFoundException('Event Not Found'); }
+        return res;
+    }
+
+    async findEventBySlug(slug: string): Promise<Event> {
+        const res = await this.eventModel.findOne({ slug: slug });
         if (!res) { throw new NotFoundException('Event Not Found'); }
         return res;
     }
