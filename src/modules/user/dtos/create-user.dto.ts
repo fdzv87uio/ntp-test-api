@@ -42,7 +42,7 @@ export class CreateUserDto {
   @IsDate({ message: 'birthDate must be a valid date' })
   birthDate: Date;
 
-  @ApiProperty()
+  @ApiProperty({required: false})
   @IsString()
   idNumber?: string;
 

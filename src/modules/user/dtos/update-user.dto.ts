@@ -16,15 +16,15 @@ export class UpdateUserDto {
   @IsString()
   email: string;
 
-  @ApiProperty()
+  @ApiProperty({required: false})
   @IsString()
   password?: string;
 
-  @ApiProperty()
+  @ApiProperty({required: false})
   @IsString()
   address?: string;
 
-  @ApiProperty()
+  @ApiProperty({required: false})
   @IsString()
   addressDetails?: string;
 
@@ -41,7 +41,7 @@ export class UpdateUserDto {
   @IsDate({ message: 'birthDate must be a valid date' })
   birthDate?: Date;
 
-  @ApiProperty()
+  @ApiProperty({required: false})
   @IsString()
   idNumber?: string;
 
