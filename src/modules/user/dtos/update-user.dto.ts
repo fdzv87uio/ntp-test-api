@@ -3,11 +3,13 @@ import { Type } from 'class-transformer';
 import { IsString, IsDate, IsArray, IsEmail, IsOptional } from 'class-validator';
 
 export class UpdateUserDto {
-  @ApiProperty()
+  @ApiProperty({required: false})
+  @IsOptional()
   @IsString()
   name?: string;
 
-  @ApiProperty()
+  @ApiProperty({required: false})
+  @IsOptional()
   @IsString()
   lastname?: string;
 
@@ -27,18 +29,21 @@ export class UpdateUserDto {
   address?: string;
 
   @ApiProperty({required: false})
+  @IsOptional()
   @IsString()
   addressDetails?: string;
 
-  @ApiProperty()
+  @ApiProperty({required: false})
+  @IsOptional()
   @IsString()
-  postalCode: string;
+  postalCode?: string;
 
-  @ApiProperty()
+  @ApiProperty({required: false})
+  @IsOptional()
   @IsString()
-  city: string;
+  city?: string;
 
-  @ApiProperty()
+  @ApiProperty({required: false})
   @Type(() => Date)
   @IsDate({ message: 'birthDate must be a valid date' })
   @IsOptional()
@@ -49,9 +54,10 @@ export class UpdateUserDto {
   @IsOptional()
   idNumber?: string;
 
-  @ApiProperty()
+  @ApiProperty({required: false})
+  @IsOptional()
   @IsArray()
-  preferences: string[];
+  preferences?: string[];
 
   @ApiProperty({required: false})
   @IsString()
