@@ -13,10 +13,10 @@ export class UpdateUserDto {
   @IsString()
   lastname?: string;
 
-  @ApiProperty()
+  @ApiProperty({required: false})
   @IsEmail()
   @IsString()
-  email: string;
+  email?: string;
 
   @ApiProperty({required: false})
   @IsOptional()
