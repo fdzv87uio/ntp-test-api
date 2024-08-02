@@ -7,6 +7,7 @@ import { CreateEventDTO } from './dtos/createEvent.dto';
 import { log } from 'console';
 import { EventResolverService } from './resolverservice/event.resolverservice';
 import { UpdateEventDTO } from './dtos/updateEvent.dto';
+import { isNotNull } from '../common/utils/utils';
 
 @Injectable()
 export class EventService {
@@ -29,8 +30,8 @@ export class EventService {
 
     async createEvent(event: CreateEventDTO): Promise<Event> {
         try {
-            if (event.isFrecuency != null && event.isFrecuency) {
-                event.frecuencyStatus = "Pending";
+            if (isNotNull(event.isFrecuency) &&  event.isFrecuency) {
+                event.frecuencyStatus='Pending';
             }
             // Check if event title exists
             const existingEvent = await this.eventModel.findOne({ title: event.title });
@@ -72,7 +73,7 @@ export class EventService {
             for (const event of events) {
                 if (event.isFrecuency && !event.frecuency.includes("None")) {
                     this.eventResolverService.createEventsByEvent(event);
-                    event.frecuencyStatus = "Executed";
+                    event.frecuencyStatus = 'Executed';
                     await this.eventModel.updateOne({ _id: event._id }, event);
                 }
             }
