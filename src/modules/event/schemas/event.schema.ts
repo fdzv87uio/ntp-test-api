@@ -37,6 +37,12 @@ export class Event {
     })
     eventMode: string;
 
+    @Prop({
+        type: String,
+        enum: ["sunday", "monday","tuesday","wednesday","thursday","friday","saturday"]        
+    })
+    repeatOn?: string;
+
     @Prop()
     startDate: Date;
 

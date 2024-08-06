@@ -36,6 +36,12 @@ export class CreateEventDTO {
   eventMode: string;
 
   @ApiProperty()
+  @IsOptional()
+  @IsString()
+  @IsIn(['sunday', 'monday','tuesday','wednesday','thursday','friday','saturday'])
+  repeatOn?: string;
+
+  @ApiProperty()
   @IsNotEmpty()
   @IsString()
   startDate: Date;
