@@ -72,7 +72,7 @@ export class EventService {
             const events = await this.eventModel.find({ frecuencyStatus: "Pending" });
             for (const event of events) {
                 if (event.isFrecuency && !event.frecuency.includes("None")) {
-                    this.eventResolverService.createEventsByEvent(event);
+                    this.eventResolverService.createDateEvents(event);
                     event.frecuencyStatus = 'Executed';
                     await this.eventModel.updateOne({ _id: event._id }, event);
                 }
