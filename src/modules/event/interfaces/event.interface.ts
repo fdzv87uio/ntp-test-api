@@ -8,6 +8,7 @@ export interface EventType {
     eventMode: string;
     startDate: Date;
     startTime: string; // timestamp as a string
+    repeatOn?: string;
     eventEnds?: boolean; // boolean to detect if event is set to conclude
     endDate?: Date;
     endTime?: string; // timestamp as a string (missing in figma)
