@@ -35,11 +35,17 @@ export class CreateEventDTO {
   @IsIn(['in-person', 'online'])
   eventMode: string;
 
-  @ApiProperty()
+  @ApiProperty({
+    example: 'monday',
+    description: 'Day of the week',
+    enum: ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'],
+    required: false
+  })
   @IsOptional()
   @IsString()
   @IsIn(['sunday', 'monday','tuesday','wednesday','thursday','friday','saturday'])
   repeatOn?: string;
+  
 
   @ApiProperty()
   @IsNotEmpty()
