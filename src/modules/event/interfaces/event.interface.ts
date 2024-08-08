@@ -13,6 +13,7 @@ export interface EventType {
     endDate?: Date;
     endTime?: string; // timestamp as a string (missing in figma)
     occurenceCount?: number; // number of event occurrences
+    repeatEveryCount?: number; // number of repeat every time
     isFrecuency?: boolean;
     frecuency?: string; // new Enum values added
     frecuencyStatus?: string; // status enum

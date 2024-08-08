@@ -79,6 +79,12 @@ export class CreateEventDTO {
   @Transform(({ value }) => value !== undefined ? value : 1)
   occurrenceCount?: number;
 
+  @ApiProperty({ required: false, default: 0 })
+  @IsOptional()
+  @IsNumber()
+  @Transform(({ value }) => value !== undefined ? value : 0)
+  repeatEveryCount?: number;
+
   @ApiProperty({ required: false, default: false })
   @IsOptional()
   @IsBoolean()
