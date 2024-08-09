@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsArray, IsBoolean, IsIn, IsNotEmpty, IsNumber, IsOptional, IsString } from 'class-validator';
+import { ArrayNotEmpty, IsArray, IsBoolean, IsIn, IsNotEmpty, IsNumber, IsOptional, IsString } from 'class-validator';
 import { Transform } from 'class-transformer';
 
 export class CreateEventDTO {
@@ -36,16 +36,18 @@ export class CreateEventDTO {
   eventMode: string;
 
   @ApiProperty({
-    example: 'monday',
-    description: 'Day of the week',
+    example: ['monday', 'wednesday'],
+    description: 'Days of the week to repeat on',
     enum: ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'],
-    required: false
+    isArray: true,
+    required: true,  // Set to true if you want this field to be required
   })
-  @IsOptional()
+  @IsOptional() // Optional if the whole field is optional; remove if it's required
   @IsArray()
-  @IsIn(['sunday', 'monday','tuesday','wednesday','thursday','friday','saturday'])
+  @IsString({ each: true }) // Ensures each element in the array is a string
+  @IsIn(['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'], { each: true }) // Validates that each element is in the allowed values
   repeatOn?: string[];
-  
+
 
   @ApiProperty()
   @IsNotEmpty()
@@ -149,3 +151,7 @@ export class CreateEventDTO {
   @IsArray()
   videos?: string[];
 }
+function IsOn(arg0: string[]): (target: CreateEventDTO, propertyKey: "repeatOn") => void {
+  throw new Error('Function not implemented.');
+}
+
