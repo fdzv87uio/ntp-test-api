@@ -41,11 +41,11 @@ export class UpdateEventDTO {
         description: 'Day of the week',
         enum: ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'],
         required: false
-    })
-    @IsOptional()
-    @IsString()
-    @IsIn(['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'])
-    repeatOn?: string;
+      })
+      @IsOptional()
+      @IsArray()
+      @IsIn(['sunday', 'monday','tuesday','wednesday','thursday','friday','saturday'])
+      repeatOn?: string[];
 
     @ApiProperty()
     @IsNotEmpty()
@@ -94,7 +94,7 @@ export class UpdateEventDTO {
     @ApiProperty({ required: false, default: 'None' })
     @IsOptional()
     @IsString()
-    @IsIn(["None", "Daily", "Weekly", "Monthly", "Anually"])
+    @IsIn(["None", "Day", "Week", "Month", "Year"])
     frecuency?: string;
 
     @ApiProperty({ required: false, default: 'None' })
