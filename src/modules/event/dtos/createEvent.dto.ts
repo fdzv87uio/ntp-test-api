@@ -42,9 +42,9 @@ export class CreateEventDTO {
     required: false
   })
   @IsOptional()
-  @IsString()
+  @IsArray()
   @IsIn(['sunday', 'monday','tuesday','wednesday','thursday','friday','saturday'])
-  repeatOn?: string;
+  repeatOn?: string[];
   
 
   @ApiProperty()
@@ -94,7 +94,7 @@ export class CreateEventDTO {
   @ApiProperty({ required: false, default: 'None' })
   @IsOptional()
   @IsString()
-  @IsIn(["None", "Daily", "Weekly", "Monthly", "Anually"])
+  @IsIn(["None", "Day", "Week", "Month", "Year"])
   frecuency?: string;
 
   @ApiProperty({ required: false, default: 'None' })
