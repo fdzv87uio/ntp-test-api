@@ -66,6 +66,7 @@
     "reflect-metadata": "^0.2.0",
     "rimraf": "^5.0.7",
     "rxjs": "^7.8.1",
+    "string-width": "^7.2.0",
     "uuid": "^10.0.0"
   },
   "devDependencies": {
