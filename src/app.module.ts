@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { ConfigModule, ConfigService } from '@nestjs/config';
+import { ConfigModule } from '@nestjs/config';
 import { AuthModule } from './modules/auth/auth.module';
 import { UserModule } from './modules/user/user.module';
 import { PreferenceModule } from './modules/preference/preference.module';
@@ -13,6 +13,9 @@ import { TransactionModule } from './modules/transaction/transaction.module';
 import { UploadModule } from './modules/upload/upload.module';
 import { CategoryModule } from './modules/category/category.module';
 import { LocationModule } from './modules/location/location.module';
+import { MailController } from './modules/mail/mail.controller';
+import { MailService } from './modules/mail/mail.service';
+import { MailModule } from './modules/mail/mail.module';
 
 @Module({
   imports: [
@@ -25,13 +28,13 @@ import { LocationModule } from './modules/location/location.module';
     UserModule,
     PreferenceModule,
     AuthIdModule,
-    ExternalRequestModule,   
-    EventModule, 
-    TransactionModule, 
-    UploadModule, CategoryModule, LocationModule, ConfigModule,  
+    ExternalRequestModule,
+    EventModule,
+    TransactionModule,
+    UploadModule, CategoryModule, LocationModule, ConfigModule, MailModule,
   ],
-  controllers: [AppController],
-  providers: [AppService],
+  controllers: [AppController, MailController],
+  providers: [AppService, MailService],
 })
 export class AppModule {}
 
