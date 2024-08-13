@@ -41,7 +41,7 @@ export class Event {
         type: String,
         enum: ["sunday", "monday","tuesday","wednesday","thursday","friday","saturday"]        
     })
-    repeatOn?: string;
+    repeatOn?: string[];
 
     @Prop()
     startDate: Date;
@@ -74,7 +74,7 @@ export class Event {
 
     @Prop({
         type: [String],
-        enum: ["None", "Daily", "Weekly", "Monthly", "Anually"],
+        enum: ["None", "Day", "Week", "Month", "Year"],
         default: "None",
         required: false
     })
