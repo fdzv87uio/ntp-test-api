@@ -1,26 +1,29 @@
 import { Injectable } from '@nestjs/common';
-import { MailerService } from '@nestjs-modules/mailer';
+import { MailDataRequired } from '@sendgrid/mail';
+import { SendGridClient } from './sendgrid-client';
 
 @Injectable()
 export class MailService {
-    constructor(private readonly mailerService: MailerService) {}
+    constructor(private readonly sendGridClient: SendGridClient) {}
 
-    async sendInvite(email: string, message: string) {
-        try {
-            await this.mailerService.sendMail({
-                to: email,
-                from: 'PENDING', // sender address
-                subject: 'Curcleup is inviting you to an Event', // Subject line
-                text: message, // plaintext body
-                // html: '<p>How many programmers does it take to change a light bulb? None, that’s a hardware problem.</p>',
-            });
-            return {
-                success: true,
-            };
-        } catch (error) {
-            return {
-                success: false,
-            };
-        }
+    async sendSimpleEmail(recipient: string, body: string): Promise<void> {
+        const mail: MailDataRequired = {
+            to: recipient,
+            from: 'fausto.zambrano@tekbees.com', //Approved sender ID in Sendgrid
+            subject: 'Curcle App',
+            text: body
+        };
+        await this.sendGridClient.send(mail);
+    }
+
+    async sendEmailWithTemplate(recipient: string, body: string): Promise<void> {
+        const mail: MailDataRequired = {
+            to: recipient,
+            cc: 'example@mail.com', //Assuming you want to send a copy to this email
+            from: 'noreply@domain.com', //Approved sender ID in Sendgrid
+            templateId: 'Sendgrid_template_ID', //Retrieve from config service or environment variable
+            dynamicTemplateData: { body, subject: 'Send Email with template' }, //The data to be used in the template
+        };
+        await this.sendGridClient.send(mail);
     }
 }

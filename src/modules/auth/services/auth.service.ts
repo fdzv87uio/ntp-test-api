@@ -5,13 +5,16 @@ import { compare } from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
 import { CreateUserDto } from 'src/modules/user/dtos/create-user.dto';
 import { aesDecrypt, aesEncrypt } from '../utils/aes';
+import { MailService } from 'src/modules/mail/mail.service';
+
 
 @Injectable()
 export class AuthService {
 
     constructor(
         private readonly userService: UserService,
-        private readonly jwtService: JwtService
+        private readonly jwtService: JwtService,
+        private readonly mailService: MailService
     ) {}
 
     async validateUser(email: string, password: string): Promise<any> {
@@ -64,6 +67,26 @@ export class AuthService {
             user
         }
 
+    }
+
+    async resetPasswordEmail(email: string) {
+        const user = await this.userService.findOne(email);
+        if (!user)
+            throw new NotFoundException("user doesn't exist");
+        const payload = { id: user.id, email: user.email };
+        const token = this.createToken(payload, user);
+        const link = `${process.env.CURCLE_APP_URI}/passwordRecovery/${user.email}/${token}`;
+        const message = `Hello ${user.email}, Please, follow the following link to rest your password: ${link}`
+        await this.mailService.sendSimpleEmail(user.email, message);
+    }
+
+    createToken(payload: object, user: any) {
+        return this.jwtService.sign(payload, {
+            secret: JSON.stringify({
+                secret: process.env.JWT_SECRET,
+                updatedAt: user.updatedAt,
+            }),
+        });
     }
 }
 
