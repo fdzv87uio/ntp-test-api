@@ -37,15 +37,17 @@ export class UpdateEventDTO {
     eventMode: string;
 
     @ApiProperty({
-        example: 'monday',
-        description: 'Day of the week',
+        example: ['monday', 'wednesday'],
+        description: 'Days of the week to repeat on',
         enum: ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'],
-        required: false
+        isArray: true,
+        required: true,  // Set to true if you want this field to be required
     })
-    @IsOptional()
-    @IsString()
-    @IsIn(['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'])
-    repeatOn?: string;
+    @IsOptional() // Optional if the whole field is optional; remove if it's required
+    @IsArray()
+    @IsString({ each: true }) // Ensures each element in the array is a string
+    @IsIn(['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'], { each: true }) // Validates that each element is in the allowed values
+    repeatOn?: string[];
 
     @ApiProperty()
     @IsNotEmpty()
@@ -94,7 +96,7 @@ export class UpdateEventDTO {
     @ApiProperty({ required: false, default: 'None' })
     @IsOptional()
     @IsString()
-    @IsIn(["None", "Daily", "Weekly", "Monthly", "Anually"])
+    @IsIn(["None", "Day", "Week", "Month", "Year"])
     frecuency?: string;
 
     @ApiProperty({ required: false, default: 'None' })
@@ -147,4 +149,8 @@ export class UpdateEventDTO {
     @IsOptional()
     @IsArray()
     videos?: string[];
+}
+
+function IsOn(arg0: string[]): (target: UpdateEventDTO, propertyKey: "repeatOn") => void {
+    throw new Error('Function not implemented.');
 }
