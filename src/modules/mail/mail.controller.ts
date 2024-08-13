@@ -1,7 +1,9 @@
 import { Body, Controller, Post } from '@nestjs/common';
 import { MailService } from './mail.service';
-import { InviteDTO } from './dtos/invite.dto';
+import { ApiTags } from '@nestjs/swagger';
+import { TestDTO } from './dtos/test.dto';
 
+@ApiTags('Mail')
 @Controller('mail')
 export class MailController {
 
@@ -9,12 +11,13 @@ export class MailController {
         private readonly mailService: MailService
     ) {}
 
-    @Post('sendInvite')
-    async login(@Body() invite: InviteDTO) {
-        const dataAuth = await this.mailService.sendInvite(invite.email, invite.message);
-        return {
-            message: 'Invite Sent',
-            dataAuth: dataAuth
-        }
+    @Post('sendSimpleEmail')
+    async sendEmail(
+        @Body() testEmail: TestDTO,
+    ): Promise<void> {
+        await this.mailService.sendSimpleEmail(
+            testEmail.email,
+            testEmail.message,
+        );
     }
 }

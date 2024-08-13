@@ -3,7 +3,6 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { User } from '../interfaces/user.interface';
 import { CreateUserDto } from '../dtos/create-user.dto';
-import { AuthService } from '../../auth/services/auth.service';
 import { log } from 'console';
 import { UpdateUserDto } from '../dtos/update-user.dto';
 
@@ -15,7 +14,7 @@ export class UserService {
     return this.userModel.find().exec();
   }
 
-  async findOne(email: String): Promise<User> {
+  async findOne(email: string): Promise<User> {
     const user = await this.userModel.findOne({ email: email }).populate("preferences").exec()
     if (!user) return null;
     return user;
@@ -34,7 +33,7 @@ export class UserService {
     }
   }
 
-  async updateByEmail(email: string, user: UpdateUserDto): Promise<User> {    
+  async updateByEmail(email: string, user: UpdateUserDto): Promise<User> {
     const res = await this.userModel.findOneAndUpdate({ email: email }, user, {
       new: true,
       runValidators: false
@@ -43,7 +42,7 @@ export class UserService {
     return res;
   }
 
-  async myProfile(email: String, needPassword: boolean = true) {
+  async myProfile(email: string, needPassword: boolean = true) {
     const select: any = ['email']
     if (needPassword) select.push('password')
     const profile = await this.findOne(email);

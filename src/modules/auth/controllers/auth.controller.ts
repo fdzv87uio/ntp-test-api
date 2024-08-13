@@ -9,6 +9,7 @@ import { JwtAuthGuard } from '../guard'
 import { LoginDTO } from '../dtos/login.dto'
 import { CreateUserDto } from '../../user/dtos/create-user.dto';
 import { log } from 'console';
+import { ForgotPasswordDTO } from '../dtos/forgotPassword.dto';
 
 @ApiTags('Auth')
 @Controller('auth')
@@ -51,6 +52,15 @@ export class AuthController {
         return {
             message: 'register success',
             dataAuthRegister
+        }
+    }
+
+    @ApiOperation({ summary: 'Create Password Reset email' })
+    @Post('forgotPassword')
+    async forgotPassword(@Body() forgotPasswordDTO: ForgotPasswordDTO) {
+        await this.authService.resetPasswordEmail(forgotPasswordDTO.email);
+        return {
+            message: 'password reset email sent',
         }
     }
 }
