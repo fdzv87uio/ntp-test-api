@@ -1,11 +1,12 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { BadRequestException, Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
+import { BadRequestException, ConflictException, ForbiddenException, Injectable, NotFoundException, ServiceUnavailableException, UnauthorizedException } from '@nestjs/common';
 import { UserService } from '../../user/services/user.service';
 import { compare } from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
 import { CreateUserDto } from 'src/modules/user/dtos/create-user.dto';
 import { aesDecrypt, aesEncrypt } from '../utils/aes';
 import { MailService } from 'src/modules/mail/mail.service';
+import { ResetPasswordDTO } from '../dtos/resetPassword.dto';
 
 
 @Injectable()
@@ -78,6 +79,35 @@ export class AuthService {
         const link = `${process.env.CURCLE_APP_URI}/passwordRecovery/${user.email}/${token}`;
         const message = `Hello ${user.email}, Please, follow the following link to rest your password: ${link}`
         await this.mailService.sendSimpleEmail(user.email, message);
+    }
+
+    async resetPassword(resetPassword: ResetPasswordDTO) {
+        const email = resetPassword.email;
+        const token = resetPassword.token;
+        const user: any = await this.userService.findOne(email);
+
+        try {
+            const secret = JSON.stringify({
+                secret: process.env.JWT_SECRET,
+                updatedAt: user.updatedAt,
+            });
+            this.jwtService.verify(token, {
+                secret,
+            });
+        } catch (err) {
+            throw new ForbiddenException('expired or invalid token');
+        }
+        if (!user)
+            throw new NotFoundException("user doesn't exist");
+        if (resetPassword.password !== resetPassword.confirmPassword)
+            throw new ConflictException("passwords don't match");
+        const password = aesEncrypt(resetPassword.password);
+        if (!(await this.userService.updateByEmail(email, { password: password })))
+            throw new ServiceUnavailableException('something went wrong, please try again later');
+        return {
+            status: "success",
+            message: 'password reset successfully',
+        };
     }
 
     createToken(payload: object, user: any) {
