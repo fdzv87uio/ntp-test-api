@@ -42,6 +42,7 @@ export class CreateEventDTO {
   })
   @IsOptional() // Optional if the whole field is optional; remove if it's required
   @IsArray()
+  @IsIn(['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'], { each: true }) // Validates that each element is in the allowed values
   repeatOn?: string[];
 
 
