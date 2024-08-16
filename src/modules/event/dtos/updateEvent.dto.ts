@@ -151,6 +151,3 @@ export class UpdateEventDTO {
     videos?: string[];
 }
 
-function IsOn(arg0: string[]): (target: UpdateEventDTO, propertyKey: "repeatOn") => void {
-    throw new Error('Function not implemented.');
-}
