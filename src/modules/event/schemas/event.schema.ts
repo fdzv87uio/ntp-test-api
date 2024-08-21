@@ -38,8 +38,8 @@ export class Event {
     eventMode: string;
 
     @Prop({
-        type: String,
-        enum: ["sunday", "monday","tuesday","wednesday","thursday","friday","saturday"]        
+        type: [String],
+        required: false
     })
     repeatOn?: string[];
 
