@@ -5,14 +5,9 @@ import { AppService } from './app.service';
 import { ConfigModule } from '@nestjs/config';
 import { AuthModule } from './modules/auth/auth.module';
 import { UserModule } from './modules/user/user.module';
-import { PreferenceModule } from './modules/preference/preference.module';
-import { AuthIdModule } from './modules/auth-id/auth-id.module';
-import { ExternalRequestModule } from './modules/external-request/external-request.module';
 import { EventModule } from './modules/event/event.module';
 import { TransactionModule } from './modules/transaction/transaction.module';
 import { UploadModule } from './modules/upload/upload.module';
-import { CategoryModule } from './modules/category/category.module';
-import { LocationModule } from './modules/location/location.module';
 import { MailController } from './modules/mail/mail.controller';
 import { MailService } from './modules/mail/mail.service';
 import { MailModule } from './modules/mail/mail.module';
@@ -26,12 +21,9 @@ import { MailModule } from './modules/mail/mail.module';
     MongooseModule.forRoot(process.env.MONGO),
     AuthModule,
     UserModule,
-    PreferenceModule,
-    AuthIdModule,
-    ExternalRequestModule,
     EventModule,
     TransactionModule,
-    UploadModule, CategoryModule, LocationModule, ConfigModule, MailModule,
+    UploadModule, ConfigModule, MailModule,
   ],
   controllers: [AppController, MailController],
   providers: [AppService, MailService],

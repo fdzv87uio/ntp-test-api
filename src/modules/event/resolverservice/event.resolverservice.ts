@@ -2,7 +2,6 @@ import { InjectModel } from "@nestjs/mongoose";
 import { Model } from "mongoose";
 import { Event } from '../schemas/event.schema';
 import { isNotNullAndNotEmpty } from "src/modules/common/utils/utils";
-import { eventNames } from "process";
 
 export class EventResolverService {
     constructor(
@@ -10,11 +9,11 @@ export class EventResolverService {
 
     ) {}
 
-    async getNextDate(frecuency: String, date: Date): Promise<Date>{
+    async getNextDate(frecuency: string, date: Date): Promise<Date> {
 
         switch (frecuency) {
             case "Weekly":
-              return await this.convertWeekleDate(date);                
+                return await this.convertWeekleDate(date);
             case "Daily":
                 break;
             case "Monthly":
@@ -24,40 +23,40 @@ export class EventResolverService {
             case "None":
             default:
                 break;
-        }       
+        }
     }
 
     async createDateEvents(event: Event): Promise<Event[]> {
-        const events: Event[] = [];        
+        const events: Event[] = [];
         if (isNotNullAndNotEmpty(event.occurenceCount)) {
             for (let index = 0; index < event.occurenceCount; index++) {
-                let eventToCreate: Event = null;  
-                if(events.length > 0){
-                  eventToCreate = await this.parsingEvent(events[events.length-1])
-                }else{
-                  eventToCreate = await this.parsingEvent(event);
+                let eventToCreate: Event = null;
+                if (events.length > 0) {
+                    eventToCreate = await this.parsingEvent(events[events.length - 1])
+                } else {
+                    eventToCreate = await this.parsingEvent(event);
                 }
                 events.push(eventToCreate);
-            }            
+            }
         }
         return events;
     }
 
-    async convertWeekleDate(date:Date):Promise<Date>{
+    async convertWeekleDate(date: Date): Promise<Date> {
         const newDate = new Date(date);
         // Add 7 days to the new date
         newDate.setDate(newDate.getDate() + 7);
         return newDate;
     }
 
-    async convertMonthlyDate(date:Date):Promise<Date>{
+    async convertMonthlyDate(date: Date): Promise<Date> {
         const newDate = new Date(date);
         // Add 1 month to the new date
         newDate.setMonth(newDate.getMonth() + 1);
         return newDate;
     }
 
-    async convertYearlyDate(date:Date):Promise<Date>{
+    async convertYearlyDate(date: Date): Promise<Date> {
         const newDate = new Date(date);
         // Add 1 year to the new date
         newDate.setFullYear(newDate.getFullYear() + 1);
@@ -70,7 +69,7 @@ export class EventResolverService {
         eventToCreate.author = event.author;
         eventToCreate.city = event.city;
         eventToCreate.description = event.description;
-        eventToCreate.endDate = await this.getNextDate(event.frecuency,event.endDate);
+        eventToCreate.endDate = await this.getNextDate(event.frecuency, event.endDate);
         eventToCreate.endTime = event.endTime;
         eventToCreate.eventEnds = true;
         eventToCreate.eventMode = event.eventMode;
@@ -84,7 +83,7 @@ export class EventResolverService {
         eventToCreate.occurenceCount = 0;
         eventToCreate.preferenceListIds = event.preferenceListIds;
         eventToCreate.slug = event.slug;
-        eventToCreate.startDate = await this.getNextDate(event.frecuency,event.startDate);
+        eventToCreate.startDate = await this.getNextDate(event.frecuency, event.startDate);
         eventToCreate.startTime = event.startTime;
         eventToCreate.title = event.title;
         eventToCreate.url = event.url;
