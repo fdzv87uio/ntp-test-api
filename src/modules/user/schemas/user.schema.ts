@@ -1,4 +1,4 @@
-import { Schema, Types } from 'mongoose';
+import { Schema } from 'mongoose';
 import { DocumentTypeEnum } from '../enums/document-type.enum';
 const uniqueValidator = require('mongoose-unique-validator');
 const mongooseHidden = require('mongoose-hidden');
@@ -11,25 +11,19 @@ if (!mongooseHidden) {
 }
 
 export const UserSchema = new Schema({
-  name: { type: String, trim: true, required: true },
-  lastname: { type: String, trim: true, required: true },
+  name: { type: String, trim: true, required: false },
+  lastname: { type: String, trim: true, required: false },
   email: { type: String, trim: true, required: true, index: { unique: true } },
   password: { type: String, trim: true, hide: true },
-  address: { type: String, trim: true, require: true },
-  addressDetails: { type: String, trim: true, require: false },
-  postalCode: { type: String, trim: true, require: true },
-  city: { type: String, trim: true, require: true },
-  birthDate: { type: Date, trim: true, required: true },
+  address: { type: String, trim: true, require: false },
+  city: { type: String, trim: true, require: false },
+  country: { type: String, trim: true, require: false },
+  birthDate: { type: Date, trim: true, required: false },
   idNumber: { type: String, trim: true, require: false },
-  idType:{
-      type: String,
-      enum: DocumentTypeEnum,
-      required: false      
-  },
-  preferences: {
-    type: [{ type: Types.ObjectId, ref: 'Preference' }],
-    trim: true,
-    required: true
+  idType: {
+    type: String,
+    enum: DocumentTypeEnum,
+    required: false
   },
   user_status: {
     type: [String],
@@ -37,15 +31,16 @@ export const UserSchema = new Schema({
     default: "enabled",
     required: true,
   },
-  documentType: {
-    type: String,
-    enum: Object.values(DocumentTypeEnum),
-    required: false,
-  },
   roles: {
     type: [String],
     default: "user",
     required: true,
+  },
+  tasks: {
+    type: [String],
+  },
+  asnwers: {
+    type: [String],
   },
   created_at: { type: Date, required: false, default: Date.now() },
   updated_at: { type: Date },

@@ -8,8 +8,8 @@ import { EventResolverService } from './resolverservice/event.resolverservice';
 
 @Module({
   imports: [MongooseModule.forFeature([{ name: 'Event', schema: EventSchema }]),
-  UploadModule],
+    UploadModule],
   controllers: [EventController],
-  providers: [EventService,EventResolverService]
+  providers: [EventService, EventResolverService]
 })
 export class EventModule {} 
