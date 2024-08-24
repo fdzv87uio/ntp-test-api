@@ -12,10 +12,10 @@ async function bootstrap() {
   const globalPrefix = 'v1';
   app.setGlobalPrefix(globalPrefix);
   const options = new DocumentBuilder()
-    .setTitle('Events-CurcleUp')
+    .setTitle('Savy Worker Backend')
     .addBearerAuth()
     .setDescription(
-      'Document Service Events CurcleUp, endpoints GET, POST, PUT, DELETE',
+      'A Nest.js REST API Service for the SAVY WORKER System',
     )
     .setVersion('1.0')
     .build();

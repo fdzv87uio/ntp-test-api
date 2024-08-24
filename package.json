@@ -1,5 +1,5 @@
 {
-  "name": "curcleup-backend",
+  "name": "savy-worker-backend",
   "version": "0.0.1",
   "description": "",
   "author": "",
@@ -71,6 +71,7 @@
     "reflect-metadata": "^0.2.0",
     "rimraf": "^5.0.7",
     "rxjs": "^7.8.1",
+    "savy-worker-backend": "file:",
     "string-width": "4.2.3",
     "uuid": "^10.0.0"
   },
