@@ -14,6 +14,7 @@ export interface User extends Document {
   created_at: Date;
   updated_at?: Date;
   roles: string[];
-  tasks?: string[];
-  answers?: string[];
+  tasks?: any[];
+  answers?: any[];
+  accountBalance?: string;
 }

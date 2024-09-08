@@ -11,7 +11,8 @@ import { UploadModule } from './modules/upload/upload.module';
 import { MailController } from './modules/mail/mail.controller';
 import { MailService } from './modules/mail/mail.service';
 import { MailModule } from './modules/mail/mail.module';
-
+import { TaskModule } from './modules/task/task.module';
+import { AnswerModule } from './modules/answer/answer.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -23,7 +24,7 @@ import { MailModule } from './modules/mail/mail.module';
     UserModule,
     EventModule,
     TransactionModule,
-    UploadModule, ConfigModule, MailModule,
+    UploadModule, ConfigModule, MailModule, TaskModule, AnswerModule, TaskModule
   ],
   controllers: [AppController, MailController],
   providers: [AppService, MailService],

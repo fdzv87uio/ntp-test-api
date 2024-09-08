@@ -10,6 +10,7 @@ if (!mongooseHidden) {
   throw new Error('Error: mongoose-hidden no está definido');
 }
 
+
 export const UserSchema = new Schema({
   name: { type: String, trim: true, required: false },
   lastname: { type: String, trim: true, required: false },
@@ -37,10 +38,16 @@ export const UserSchema = new Schema({
     required: true,
   },
   tasks: {
-    type: [String],
+    type: [{ type: Schema.Types.Mixed }],
+    required: false,
   },
-  asnwers: {
-    type: [String],
+  answers: {
+    type: [{ type: Schema.Types.Mixed }],
+    required: false,
+  },
+  account_balance: {
+    type: [Number],
+    default: 0,
   },
   created_at: { type: Date, required: false, default: Date.now() },
   updated_at: { type: Date },
