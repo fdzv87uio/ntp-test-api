@@ -67,12 +67,10 @@ export class UpdateUserDto {
   roles?: string[];
 
   @ApiProperty({ required: false })
-  @IsString()
   @IsOptional()
   tasks?: any[];
 
   @ApiProperty({ required: false })
-  @IsString()
   @IsOptional()
   answers?: any[];
 

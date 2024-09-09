@@ -2,7 +2,7 @@ SAVY SYSTEM TODOS
 
 Savy Worker BE:
 
-0. Fix Models and DTOS
+0. Fix Models and DTOS for USER TASK ANSWER
 1. Create CRUD endpoints for TASK and ANSWER
 2. Create CRUD endpoint for Email Notifications
 3. Update File Upload to use BBIMG
@@ -17,5 +17,3 @@ Savy Worker FE:
 6. Create Answer submission View 3 - Review and Submission
 7. Create Email notification services for Answer Results and Payment
 8. Adding Demo Tutorial View
-
-6.  
