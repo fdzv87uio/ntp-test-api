@@ -1,6 +1,6 @@
 import { CallHandler, ExecutionContext, Injectable, NestInterceptor } from '@nestjs/common';
 import { Observable, switchMap } from 'rxjs';
-import { UploadService  } from '../services/upload.service';
+import { UploadService } from '../services/upload.service';
 import * as multer from 'multer';
 import { Request, Response } from 'express';
 
@@ -26,7 +26,7 @@ export class MulterS3Interceptor implements NestInterceptor {
         }
       });
     }).pipe(
-        switchMap(() => next.handle()),
+      switchMap(() => next.handle()),
     );
   }
 }

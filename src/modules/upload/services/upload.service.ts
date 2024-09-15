@@ -3,12 +3,11 @@ import { S3Client, PutObjectCommand, PutObjectCommandInput, DeleteObjectCommand,
 import * as multer from 'multer';
 import { Readable } from 'stream';
 import { S3RequestPresigner } from '@aws-sdk/s3-request-presigner';
-import * as crypto from 'crypto';
 import { Hash } from "@smithy/hash-node";
 import { HttpRequest } from '@smithy/protocol-http';
 import { parseUrl } from "@smithy/url-parser";
 import { formatUrl } from "@aws-sdk/util-format-url";
-import { log } from 'console';
+import axios from "axios";
 
 @Injectable()
 export class UploadService {
@@ -76,6 +75,35 @@ export class UploadService {
       throw new Error(`File upload failed. ${error.message}`);
     }
   }
+
+
+
+  async uploadImage(img: any, id: string) {
+    try {
+
+      const myApiKey = process.env.IMGBB_KEY;
+      const formData = new FormData();
+      formData.append('image', img);
+      formData.append('type', 'event');
+      formData.append('id', id);
+      const { data } = await axios.post(`https://api.imgbb.com/1/upload?key=${myApiKey}`, formData)
+      console.log('data');
+      console.log(data);
+      const imageUrl = data.data.url;
+      return {
+        success: true,
+        statusCode: 'Upload Successful',
+        data: {
+          url: imageUrl,
+          signedurl: imageUrl
+        }
+      };
+    } catch (error: any) {
+      console.log(error);
+      throw new Error(`Image upload failed. ${error.message}`);
+    }
+  };
+
 
   async uploadVideoFile(file: Express.MulterFile, eventId: string): Promise<any> {
     const _key = `${eventId}/video/${Date.now().toString()}-${file.originalname}`;
@@ -178,9 +206,9 @@ export class UploadService {
 
   async createPresignedUrl(urlsimple: string): Promise<string> {
     const url = parseUrl(urlsimple)
-    const expiresIn : number = 604800
-    const signedUrlObject = await this.presigner.presign(new HttpRequest(url),{expiresIn});
-    const response = formatUrl(signedUrlObject)    
+    const expiresIn: number = 604800
+    const signedUrlObject = await this.presigner.presign(new HttpRequest(url), { expiresIn });
+    const response = formatUrl(signedUrlObject)
     return response;
   }
 }
