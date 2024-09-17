@@ -10,9 +10,7 @@
     {
       "src": "/(.*)",
       "dest": "dist/main.js",
-      "headers": {
-        "Content-Type": "application/javascript"
-      }
+      "methods": ["GET", "POST", "PUT", "PATCH", "DELETE", "HEAD", "OPTIONS"]
     }
   ]
 }
