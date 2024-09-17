@@ -1,4 +1,4 @@
-import { IsString, IsEmpty } from 'class-validator';
+import { IsString } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
 export class UploadFileDto {
@@ -6,13 +6,13 @@ export class UploadFileDto {
     type: 'string',
     format: 'binary',
     description: 'Image File',
-  })  
+  })
   file: any;
 
   @ApiProperty({
     type: 'string',
-    description: 'Event ID',
-  })  
+    description: 'id',
+  })
   @IsString()
-  eventId: string;
+  id: string;
 }

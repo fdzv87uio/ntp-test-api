@@ -31,8 +31,8 @@ export class UploadController {
     @UploadedFile() file: Express.MulterFile,
     @Body(new ValidationPipe()) body: UploadFileDto
   ) {
-    console.log(body.eventId);
-    const result = await this.uploadService.uploadImage(file, body.eventId);
+    console.log(body.id);
+    const result = await this.uploadService.uploadImage(file, body.id);
     return result;
   }
 

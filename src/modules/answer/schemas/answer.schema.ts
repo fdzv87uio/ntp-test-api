@@ -13,7 +13,10 @@ export class Answer {
     taskId: string;
 
     @Prop()
-    submissionDatetime: Date;
+    taskTitle: string;
+
+    @Prop()
+    captureDatetime: Date;
 
     @Prop()
     latitude: string;

@@ -13,8 +13,8 @@ export class TaskService {
         return tasks;
     }
 
-    async findAllTasksByUserId(userId: string): Promise<Task[]> {
-        const tasks = await this.taskModel.find({ authorId: userId });
+    async findAllAvailableTasksByUserEmail(userEmail: string): Promise<Task[]> {
+        const tasks = await this.taskModel.find({ participants: userEmail });
         return tasks;
     }
 

@@ -17,7 +17,12 @@ export class UpdateAnswerDTO {
     @ApiProperty()
     @IsNotEmpty()
     @IsString()
-    submissionDatetime: Date;
+    taskTitle: string;
+
+    @ApiProperty()
+    @IsNotEmpty()
+    @IsString()
+    captureDatetime: Date;
 
     @ApiProperty()
     @IsNotEmpty()
@@ -33,12 +38,6 @@ export class UpdateAnswerDTO {
     @IsNotEmpty()
     @IsString()
     status: string;
-
-    @ApiProperty()
-    @IsNotEmpty()
-    @IsString()
-    startDate: Date;
-
 
     @ApiProperty({ required: false })
     @IsOptional()

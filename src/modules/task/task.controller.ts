@@ -21,10 +21,10 @@ export class TaskController {
     // Get All Existing Tasks by UserID
     @UseGuards(JwtAuthGuard)
     @ApiBearerAuth()
-    @ApiOperation({ summary: 'Get All Tasks by User ID' })
-    @Get('getAllByUserId/:id')
-    async getAllTasksByUserId(@Param('id') userId: string): Promise<any[]> {
-        return this.taskService.findAllTasksByUserId(userId);
+    @ApiOperation({ summary: 'Get All Available Tasks by User Email' })
+    @Get('getAllAvaliableByUserEmail/:email')
+    async getAllTasksByUserId(@Param('email') userEmail: string): Promise<any[]> {
+        return this.taskService.findAllAvailableTasksByUserEmail(userEmail);
     }
 
     //Create New Task

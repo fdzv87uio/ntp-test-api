@@ -14,7 +14,7 @@ export class AnswerService {
     }
 
     async findAllAnswersByUserId(userId: string): Promise<Answer[]> {
-        const answers = await this.answerModel.find({ authorId: userId });
+        const answers = await this.answerModel.find({ userId: userId });
         return answers;
     }
 
