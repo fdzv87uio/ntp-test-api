@@ -8,8 +8,6 @@ import { Role } from 'src/modules/auth/models/role.enum';
 import { RolesGuard } from 'src/modules/auth/guard/roles.guard';
 import { JwtAuthGuard } from 'src/modules/auth/guard';
 import { UploadFileDto } from '../dtos/upload-file.dto';
-import { UploadVideoFileDto } from '../dtos/Upload-video.dto';
-import { uploadUrlDto } from '../dtos/upload-url.dto';
 
 @ApiTags('Upload')
 @Controller('upload')
@@ -35,44 +33,6 @@ export class UploadController {
     const result = await this.uploadService.uploadImage(file, body.id);
     return result;
   }
-
-  @HasRoles(Role.Admin, Role.User)
-  @UseGuards(JwtAuthGuard, RolesGuard)
-  @ApiBearerAuth()
-  @ApiOperation({ summary: 'Upload a video file' })
-  @Post('/video')
-  @ApiConsumes('multipart/form-data')
-  @ApiBody({ type: UploadVideoFileDto })
-  @UseInterceptors(MulterS3Interceptor)
-  async uploadVideoFile(@UploadedFile() file: Express.MulterFile, @Body() body: any) {
-    const result = await this.uploadService.uploadVideoFile(file, body.eventId);
-    return result;
-  }
-
-  // @HasRoles(Role.Admin, Role.User)
-  // @UseGuards(JwtAuthGuard, RolesGuard)
-  // @ApiBearerAuth()
-  @ApiOperation({ summary: 'Post url signed' })
-  @Post('/url')
-  async signedUrl(@Body() body: uploadUrlDto): Promise<any> {
-    const data = await this.uploadService.createPresignedUrl(body.url);
-    return {
-      success: true,
-      signedUrl: data,
-    }
-  }
-
-
-
-  // @HasRoles(Role.Admin, Role.User)
-  // @UseGuards(JwtAuthGuard, RolesGuard)
-  // @ApiBearerAuth()
-  // @ApiOperation({ summary: 'delete upload' })
-  // @Delete('file/:url')    
-  // async deleteUpload(@Param('url') url: string) {      
-  //   const result = await this.uploadService.deleteUpload(url);
-  //   return result;
-  // }
 
 
 }
