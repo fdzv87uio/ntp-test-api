@@ -76,6 +76,11 @@ export class UpdateAnswerDTO {
     @IsArray()
     annotations?: string[];
 
+    @ApiProperty({ required: false })
+    @IsOptional()
+    @IsArray()
+    classes?: string[];
+
 
 }
 

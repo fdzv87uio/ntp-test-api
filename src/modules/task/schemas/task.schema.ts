@@ -76,6 +76,9 @@ export class Task {
 
     @Prop()
     blacklist?: string[];
+
+    @Prop()
+    classes?: string[];
 }
 
 export const TaskSchema = SchemaFactory.createForClass(Task);

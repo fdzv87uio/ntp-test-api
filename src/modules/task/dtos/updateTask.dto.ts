@@ -59,6 +59,9 @@ export class UpdateTaskDTO {
     @ApiProperty()
     blacklist?: string[];
 
+    @ApiProperty()
+    classes?: string[];
+
 
 }
 

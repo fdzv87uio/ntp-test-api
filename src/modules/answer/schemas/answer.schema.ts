@@ -52,6 +52,9 @@ export class Answer {
 
     @Prop()
     annotations?: any[];
+
+    @Prop()
+    classes?: string[];
 }
 
 export const AnswerSchema = SchemaFactory.createForClass(Answer);

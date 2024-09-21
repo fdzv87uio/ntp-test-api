@@ -89,6 +89,10 @@ export class CreateTaskDTO {
     @IsArray()
     blacklist?: string[];
 
+    @ApiProperty({ required: false })
+    @IsOptional()
+    @IsArray()
+    classes?: string[];
 
 }
 
