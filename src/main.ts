@@ -6,7 +6,9 @@ import helmet from 'helmet';
 import * as cookieParser from 'cookie-parser';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create(AppModule, {
+    cors: true,
+  });
   const logger = new Logger();
 
   const globalPrefix = 'v1';
