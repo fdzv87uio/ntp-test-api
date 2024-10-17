@@ -42,6 +42,7 @@ exports.UserSchema = new mongoose_1.Schema({
         type: [String],
         enum: ["user", "admin"],
         required: true,
+        default: "user",
     },
     tasks: {
         type: [{ type: mongoose_1.Schema.Types.Mixed }],

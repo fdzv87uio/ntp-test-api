@@ -42,6 +42,7 @@ export const UserSchema = new Schema({
     type: [String],
     enum: ["user", "admin"],
     required: true,
+    default: "user",
   },
   tasks: {
     type: [{ type: Schema.Types.Mixed }],
