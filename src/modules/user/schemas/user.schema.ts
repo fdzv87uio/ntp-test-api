@@ -33,8 +33,7 @@ export const UserSchema = new Schema({
     required: true,
   },
   plan: {
-    type: [String],
-    enum: ["none", "weekly", "monthly", "premium"],
+    type: String,
     default: "none",
     required: true,
   },

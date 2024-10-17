@@ -68,8 +68,8 @@ export class UpdateUserDto {
 
   @ApiProperty({ required: false })
   @IsOptional()
-  @IsArray()
-  plan?: string[];
+  @IsString()
+  plan?: string;
 
   @ApiProperty({ required: false })
   @IsOptional()
