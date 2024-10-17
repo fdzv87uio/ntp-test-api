@@ -3,10 +3,11 @@ export declare const UserSchema: Schema<any, import("mongoose").Model<any, any, 
     email: string;
     user_status: string[];
     roles: string[];
+    plan: string[];
     account_balance: number[];
-    password?: string;
     name?: string;
     lastname?: string;
+    password?: string;
     address?: string;
     city?: string;
     country?: string;
@@ -21,10 +22,11 @@ export declare const UserSchema: Schema<any, import("mongoose").Model<any, any, 
     email: string;
     user_status: string[];
     roles: string[];
+    plan: string[];
     account_balance: number[];
-    password?: string;
     name?: string;
     lastname?: string;
+    password?: string;
     address?: string;
     city?: string;
     country?: string;
@@ -39,10 +41,11 @@ export declare const UserSchema: Schema<any, import("mongoose").Model<any, any, 
     email: string;
     user_status: string[];
     roles: string[];
+    plan: string[];
     account_balance: number[];
-    password?: string;
     name?: string;
     lastname?: string;
+    password?: string;
     address?: string;
     city?: string;
     country?: string;

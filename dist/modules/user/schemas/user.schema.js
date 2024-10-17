@@ -32,9 +32,15 @@ exports.UserSchema = new mongoose_1.Schema({
         default: "enabled",
         required: true,
     },
+    plan: {
+        type: [String],
+        enum: ["none", "weekly", "monthly", "premium"],
+        default: "none",
+        required: true,
+    },
     roles: {
         type: [String],
-        default: "user",
+        enum: ["user", "admin"],
         required: true,
     },
     tasks: {

@@ -11,7 +11,8 @@ export declare class UpdateUserDto {
     idType?: string;
     user_status?: string;
     roles?: string[];
+    plan?: string;
     tasks?: any[];
     answers?: any[];
-    accountBalance?: number;
+    account_balance?: number[];
 }

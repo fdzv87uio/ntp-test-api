@@ -93,6 +93,12 @@ __decorate([
 __decorate([
     (0, swagger_1.ApiProperty)({ required: false }),
     (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
+], UpdateUserDto.prototype, "plan", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ required: false }),
+    (0, class_validator_1.IsOptional)(),
     __metadata("design:type", Array)
 ], UpdateUserDto.prototype, "tasks", void 0);
 __decorate([
@@ -102,8 +108,8 @@ __decorate([
 ], UpdateUserDto.prototype, "answers", void 0);
 __decorate([
     (0, swagger_1.ApiProperty)({ required: false }),
-    (0, class_validator_1.IsNumber)(),
+    (0, class_validator_1.IsArray)(),
     (0, class_validator_1.IsOptional)(),
-    __metadata("design:type", Number)
-], UpdateUserDto.prototype, "accountBalance", void 0);
+    __metadata("design:type", Array)
+], UpdateUserDto.prototype, "account_balance", void 0);
 //# sourceMappingURL=update-user.dto.js.map
