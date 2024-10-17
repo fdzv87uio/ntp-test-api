@@ -16,5 +16,5 @@ export interface User extends Document {
   roles: string[];
   tasks?: any[];
   answers?: any[];
-  accountBalance?: string;
+  account_balance?: [number];
 }
