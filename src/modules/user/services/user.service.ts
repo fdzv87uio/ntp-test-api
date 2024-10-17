@@ -2,7 +2,6 @@ import { Injectable, NotFoundException, BadRequestException } from '@nestjs/comm
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { User } from '../interfaces/user.interface';
-import { CreateUserDto } from '../dtos/create-user.dto';
 import { log } from 'console';
 import { UpdateUserDto } from '../dtos/update-user.dto';
 
