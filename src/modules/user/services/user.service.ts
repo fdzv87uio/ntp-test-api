@@ -24,8 +24,8 @@ export class UserService {
     try {
       const createdUser = new this.userModel(createUserDto);
       createdUser.user_status = "enabled";
-      createdUser.plan = "none",
-        createdUser.email = createdUser.email.toLowerCase();
+      createdUser.plan = "none";
+      createdUser.email = createdUser.email.toLowerCase();
       await createdUser.save();
       return await this.findOne(createdUser.email);
     } catch (err) {
