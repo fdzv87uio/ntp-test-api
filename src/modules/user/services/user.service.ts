@@ -20,9 +20,9 @@ export class UserService {
     return user;
   }
 
-  async create(createUserDto: CreateUserDto): Promise<User> {
+  async create(createUserDto: any): Promise<User> {
     try {
-      const createdUser = new this.userModel(createUserDto);
+      const createdUser: any = new this.userModel(createUserDto);
       createdUser.user_status = "enabled";
       createdUser.plan = "none";
       createdUser.email = createdUser.email.toLowerCase();
@@ -30,7 +30,7 @@ export class UserService {
       return await this.findOne(createdUser.email);
     } catch (err) {
       log("create User " + err.message)
-      throw new BadRequestException("user not registed");
+      throw new BadRequestException("user not registered");
     }
   }
 
