@@ -19,13 +19,22 @@ export class ElementController {
         return this.elementService.findAllElements();
     }
 
-    // Get All Existing Elements by UserID
+    // Get All Existing Elements by User Email
     @UseGuards(JwtAuthGuard)
     @ApiBearerAuth()
     @ApiOperation({ summary: 'Get All Available Elements by User Email' })
     @Get('getAllAvaliableByUserEmail/:email')
-    async getAllElementsByUserId(@Param('email') userEmail: string): Promise<any[]> {
+    async getAllElementsByUserEmail(@Param('email') userEmail: string): Promise<any[]> {
         return this.elementService.findAllAvailableElementsByUserEmail(userEmail);
+    }
+
+    // Get All Existing Elements by UserID
+    @UseGuards(JwtAuthGuard)
+    @ApiBearerAuth()
+    @ApiOperation({ summary: 'Get All Available Elements by User Id' })
+    @Get('getAllAvaliableByUserId/:email')
+    async getAllElementsByUserId(@Param('email') id: string): Promise<any[]> {
+        return this.elementService.findAllAvailableElementsByUserId(id);
     }
 
     //Create New Element

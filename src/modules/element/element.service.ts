@@ -18,6 +18,11 @@ export class ElementService {
         return elements;
     }
 
+    async findAllAvailableElementsByUserId(id: string): Promise<Element[]> {
+        const elements = await this.elementModel.find({ id: id });
+        return elements;
+    }
+
     async createElement(element: UpdateElementDTO): Promise<Element> {
         try {
 
