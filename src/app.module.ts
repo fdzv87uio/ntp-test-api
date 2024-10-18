@@ -13,6 +13,7 @@ import { MailService } from './modules/mail/mail.service';
 import { MailModule } from './modules/mail/mail.module';
 import { TaskModule } from './modules/task/task.module';
 import { AnswerModule } from './modules/answer/answer.module';
+import { ElementModule } from './modules/element/element.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -24,7 +25,7 @@ import { AnswerModule } from './modules/answer/answer.module';
     UserModule,
     EventModule,
     TransactionModule,
-    UploadModule, ConfigModule, MailModule, TaskModule, AnswerModule, TaskModule
+    UploadModule, ConfigModule, MailModule, TaskModule, AnswerModule, TaskModule, ElementModule
   ],
   controllers: [AppController, MailController],
   providers: [AppService, MailService],

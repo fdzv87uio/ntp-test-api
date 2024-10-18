@@ -22,6 +22,7 @@ const mail_service_1 = require("./modules/mail/mail.service");
 const mail_module_1 = require("./modules/mail/mail.module");
 const task_module_1 = require("./modules/task/task.module");
 const answer_module_1 = require("./modules/answer/answer.module");
+const element_module_1 = require("./modules/element/element.module");
 let AppModule = class AppModule {
 };
 exports.AppModule = AppModule;
@@ -37,7 +38,7 @@ exports.AppModule = AppModule = __decorate([
             user_module_1.UserModule,
             event_module_1.EventModule,
             transaction_module_1.TransactionModule,
-            upload_module_1.UploadModule, config_1.ConfigModule, mail_module_1.MailModule, task_module_1.TaskModule, answer_module_1.AnswerModule, task_module_1.TaskModule
+            upload_module_1.UploadModule, config_1.ConfigModule, mail_module_1.MailModule, task_module_1.TaskModule, answer_module_1.AnswerModule, task_module_1.TaskModule, element_module_1.ElementModule
         ],
         controllers: [app_controller_1.AppController, mail_controller_1.MailController],
         providers: [app_service_1.AppService, mail_service_1.MailService],

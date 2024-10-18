@@ -2,8 +2,8 @@ import { Schema } from 'mongoose';
 export declare const UserSchema: Schema<any, import("mongoose").Model<any, any, any, any, any, any>, {}, {}, {}, {}, import("mongoose").DefaultSchemaOptions, {
     email: string;
     user_status: string[];
-    plan: string[];
     roles: string[];
+    plan: string[];
     account_balance: number[];
     name?: string;
     lastname?: string;
@@ -21,8 +21,8 @@ export declare const UserSchema: Schema<any, import("mongoose").Model<any, any, 
 }, import("mongoose").Document<unknown, {}, import("mongoose").FlatRecord<{
     email: string;
     user_status: string[];
-    plan: string[];
     roles: string[];
+    plan: string[];
     account_balance: number[];
     name?: string;
     lastname?: string;
@@ -40,8 +40,8 @@ export declare const UserSchema: Schema<any, import("mongoose").Model<any, any, 
 }>> & import("mongoose").FlatRecord<{
     email: string;
     user_status: string[];
-    plan: string[];
     roles: string[];
+    plan: string[];
     account_balance: number[];
     name?: string;
     lastname?: string;
