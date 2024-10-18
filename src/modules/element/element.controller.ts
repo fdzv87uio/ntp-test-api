@@ -32,8 +32,8 @@ export class ElementController {
     @UseGuards(JwtAuthGuard)
     @ApiBearerAuth()
     @ApiOperation({ summary: 'Get All Available Elements by User Id' })
-    @Get('getAllAvaliableByUserId/:email')
-    async getAllElementsByUserId(@Param('email') id: string): Promise<any[]> {
+    @Get('getAllAvaliableByUserId/:id')
+    async getAllElementsByUserId(@Param('id') id: string): Promise<any[]> {
         return this.elementService.findAllAvailableElementsByUserId(id);
     }
 
