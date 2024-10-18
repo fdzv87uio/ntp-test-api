@@ -3,6 +3,11 @@ import { IsArray, IsNotEmpty, IsOptional, IsString } from 'class-validator';
 
 export class CreateElementDTO {
 
+    @ApiProperty()
+    @IsNotEmpty()
+    @IsString()
+    userId: string;
+
 
     @ApiProperty()
     @IsNotEmpty()

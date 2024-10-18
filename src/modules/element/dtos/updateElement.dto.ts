@@ -3,6 +3,10 @@ import { IsArray, IsNotEmpty, IsOptional, IsString } from 'class-validator';
 
 export class UpdateElementDTO {
 
+    @ApiProperty()
+    @IsNotEmpty()
+    @IsString()
+    userId: string;
 
     @ApiProperty()
     @IsNotEmpty()
