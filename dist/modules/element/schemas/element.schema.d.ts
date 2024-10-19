@@ -1,4 +1,5 @@
 export declare class Element {
+    userId: string;
     title: string;
     slug?: string;
     description: string;

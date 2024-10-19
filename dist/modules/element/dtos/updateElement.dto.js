@@ -20,6 +20,12 @@ __decorate([
     (0, class_validator_1.IsNotEmpty)(),
     (0, class_validator_1.IsString)(),
     __metadata("design:type", String)
+], UpdateElementDTO.prototype, "userId", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)(),
+    (0, class_validator_1.IsNotEmpty)(),
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
 ], UpdateElementDTO.prototype, "title", void 0);
 __decorate([
     (0, swagger_1.ApiProperty)(),

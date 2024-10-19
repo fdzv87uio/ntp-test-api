@@ -1,4 +1,5 @@
 export declare class UpdateElementDTO {
+    userId: string;
     title: string;
     slug?: string;
     description: string;

@@ -5,7 +5,8 @@ export declare class ElementController {
     private elementService;
     constructor(elementService: ElementService);
     getAllElements(): Promise<any[]>;
-    getAllElementsByUserId(userEmail: string): Promise<any[]>;
+    getAllElementsByUserEmail(userEmail: string): Promise<any[]>;
+    getAllElementsByUserId(id: string): Promise<any[]>;
     createElement(element: CreateElementDTO): Promise<any>;
     getElementBySlug(slug: string): Promise<any>;
     getElement(id: string): Promise<any>;

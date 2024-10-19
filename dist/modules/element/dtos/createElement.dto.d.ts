@@ -1,4 +1,5 @@
 export declare class CreateElementDTO {
+    userId: string;
     title: string;
     description: string;
     status: string;

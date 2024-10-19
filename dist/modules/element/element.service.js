@@ -23,6 +23,10 @@ let ElementService = class ElementService {
         const elements = await this.elementModel.find({ participants: userEmail });
         return elements;
     }
+    async findAllAvailableElementsByUserId(id) {
+        const elements = await this.elementModel.find({ userId: id });
+        return elements;
+    }
     async createElement(element) {
         try {
             const existingElement = await this.elementModel.findOne({ title: element.title });

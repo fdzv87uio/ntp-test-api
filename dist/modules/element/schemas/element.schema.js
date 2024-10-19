@@ -17,6 +17,10 @@ exports.Element = Element;
 __decorate([
     (0, mongoose_1.Prop)(),
     __metadata("design:type", String)
+], Element.prototype, "userId", void 0);
+__decorate([
+    (0, mongoose_1.Prop)(),
+    __metadata("design:type", String)
 ], Element.prototype, "title", void 0);
 __decorate([
     (0, mongoose_1.Prop)({

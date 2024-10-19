@@ -26,8 +26,11 @@ let ElementController = class ElementController {
     async getAllElements() {
         return this.elementService.findAllElements();
     }
-    async getAllElementsByUserId(userEmail) {
+    async getAllElementsByUserEmail(userEmail) {
         return this.elementService.findAllAvailableElementsByUserEmail(userEmail);
+    }
+    async getAllElementsByUserId(id) {
+        return this.elementService.findAllAvailableElementsByUserId(id);
     }
     async createElement(element) {
         return this.elementService.createElement(element);
@@ -59,6 +62,16 @@ __decorate([
     (0, swagger_1.ApiOperation)({ summary: 'Get All Available Elements by User Email' }),
     (0, common_1.Get)('getAllAvaliableByUserEmail/:email'),
     __param(0, (0, common_1.Param)('email')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", Promise)
+], ElementController.prototype, "getAllElementsByUserEmail", null);
+__decorate([
+    (0, common_1.UseGuards)(guard_1.JwtAuthGuard),
+    (0, swagger_1.ApiBearerAuth)(),
+    (0, swagger_1.ApiOperation)({ summary: 'Get All Available Elements by User Id' }),
+    (0, common_1.Get)('getAllAvaliableByUserId/:id'),
+    __param(0, (0, common_1.Param)('id')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", Promise)

@@ -19,7 +19,7 @@ export class ElementService {
     }
 
     async findAllAvailableElementsByUserId(id: string): Promise<Element[]> {
-        const elements = await this.elementModel.find({ _id: id });
+        const elements = await this.elementModel.find({ userId: id });
         return elements;
     }
 
