@@ -57,6 +57,8 @@ export class Element {
 
     @Prop()
     videos?: string[];
+    
+
 }
 
 export const ElementSchema = SchemaFactory.createForClass(Element);

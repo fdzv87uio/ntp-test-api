@@ -10,7 +10,7 @@ export class MailService {
         const mail: MailDataRequired = {
             to: recipient,
             from: 'fausto.zambrano@tekbees.com', //Approved sender ID in Sendgrid
-            subject: 'Curcle App',
+            subject: 'tienes un mensaje de LAPELIROJA',
             text: body
         };
         await this.sendGridClient.send(mail);
