@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
-import { IsString, IsDate, IsEmail, IsOptional, IsArray } from 'class-validator';
+import { IsString, IsDate, IsEmail, IsOptional, IsArray, IsNumber } from 'class-validator';
 
 export class UpdateUserDto {
   @ApiProperty({ required: false })
@@ -83,4 +83,16 @@ export class UpdateUserDto {
   @IsArray()
   @IsOptional()
   account_balance?: number[];
+
+  @ApiProperty({ required: false })
+  @IsNumber()
+  @IsOptional()
+  quota?: number;
+
+  @ApiProperty({ required: false, default: "none" })
+  @IsString()
+  @IsOptional()
+  deadline?: string;
+
+
 }

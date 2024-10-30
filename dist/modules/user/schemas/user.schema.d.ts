@@ -5,6 +5,8 @@ export declare const UserSchema: Schema<any, import("mongoose").Model<any, any, 
     roles: string[];
     plan: string[];
     account_balance: number[];
+    quota: number;
+    deadline: string;
     name?: string;
     lastname?: string;
     password?: string;
@@ -24,6 +26,8 @@ export declare const UserSchema: Schema<any, import("mongoose").Model<any, any, 
     roles: string[];
     plan: string[];
     account_balance: number[];
+    quota: number;
+    deadline: string;
     name?: string;
     lastname?: string;
     password?: string;
@@ -43,6 +47,8 @@ export declare const UserSchema: Schema<any, import("mongoose").Model<any, any, 
     roles: string[];
     plan: string[];
     account_balance: number[];
+    quota: number;
+    deadline: string;
     name?: string;
     lastname?: string;
     password?: string;

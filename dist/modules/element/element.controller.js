@@ -19,6 +19,8 @@ const guard_1 = require("../auth/guard");
 const element_service_1 = require("./element.service");
 const createElement_dto_1 = require("./dtos/createElement.dto");
 const updateElement_dto_1 = require("./dtos/updateElement.dto");
+const query_dto_1 = require("./dtos/query.dto");
+const scrapePage_dto_1 = require("./dtos/scrapePage.dto");
 let ElementController = class ElementController {
     constructor(elementService) {
         this.elementService = elementService;
@@ -34,6 +36,12 @@ let ElementController = class ElementController {
     }
     async createElement(element) {
         return this.elementService.createElement(element);
+    }
+    async createElementFromPrepagos(element) {
+        return this.elementService.createElementFromPrepagos(element.page);
+    }
+    async findElementsByQuery(query) {
+        return this.elementService.findAllElementsByQuery(query);
     }
     async getElementBySlug(slug) {
         return this.elementService.findElementBySlug(slug);
@@ -86,6 +94,22 @@ __decorate([
     __metadata("design:paramtypes", [createElement_dto_1.CreateElementDTO]),
     __metadata("design:returntype", Promise)
 ], ElementController.prototype, "createElement", null);
+__decorate([
+    (0, swagger_1.ApiOperation)({ summary: 'Crawl And Create New Element from Prepagos.com' }),
+    (0, common_1.Post)('newFromPrepagos'),
+    __param(0, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [scrapePage_dto_1.ScrapePageDTO]),
+    __metadata("design:returntype", Promise)
+], ElementController.prototype, "createElementFromPrepagos", null);
+__decorate([
+    (0, swagger_1.ApiOperation)({ summary: 'Find Elements By Query' }),
+    (0, common_1.Post)('findElementsByQuery'),
+    __param(0, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [query_dto_1.QueryDTO]),
+    __metadata("design:returntype", Promise)
+], ElementController.prototype, "findElementsByQuery", null);
 __decorate([
     (0, swagger_1.ApiOperation)({ summary: 'Get Element By ID' }),
     (0, common_1.Get)('getElementBySlug/:slug'),

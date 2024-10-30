@@ -42,6 +42,34 @@ __decorate([
     __metadata("design:type", String)
 ], Element.prototype, "status", void 0);
 __decorate([
+    (0, mongoose_1.Prop)({
+        type: String,
+        default: "mujeres",
+    }),
+    __metadata("design:type", String)
+], Element.prototype, "category", void 0);
+__decorate([
+    (0, mongoose_1.Prop)({
+        type: String,
+        default: "-0.15899762074480503",
+    }),
+    __metadata("design:type", String)
+], Element.prototype, "latitude", void 0);
+__decorate([
+    (0, mongoose_1.Prop)({
+        type: String,
+        default: "-78.46525402178685",
+    }),
+    __metadata("design:type", String)
+], Element.prototype, "longitude", void 0);
+__decorate([
+    (0, mongoose_1.Prop)({
+        type: [String],
+        default: ["J"],
+    }),
+    __metadata("design:type", String)
+], Element.prototype, "schedule", void 0);
+__decorate([
     (0, mongoose_1.Prop)(),
     __metadata("design:type", String)
 ], Element.prototype, "location", void 0);
@@ -73,6 +101,14 @@ __decorate([
     (0, mongoose_1.Prop)(),
     __metadata("design:type", String)
 ], Element.prototype, "authorEmail", void 0);
+__decorate([
+    (0, mongoose_1.Prop)({ default: "none" }),
+    __metadata("design:type", String)
+], Element.prototype, "plan", void 0);
+__decorate([
+    (0, mongoose_1.Prop)({ default: "none" }),
+    __metadata("design:type", String)
+], Element.prototype, "deadline", void 0);
 __decorate([
     (0, mongoose_1.Prop)(),
     __metadata("design:type", Array)

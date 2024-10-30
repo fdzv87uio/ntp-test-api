@@ -18,5 +18,7 @@ export interface User extends Document {
   tasks?: any[];
   answers?: any[];
   account_balance?: [number];
+  quota?: number;
+  deadline?: string;
   plan: string;
 }

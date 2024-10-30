@@ -29,6 +29,25 @@ export class UpdateElementDTO {
     @IsString()
     status: string;
 
+    @ApiProperty({ default: 'mujeres' })
+    @IsNotEmpty()
+    @IsString()
+    category: string;
+
+    @ApiProperty({ default: '-0.15899762074480503' })
+    @IsOptional()
+    @IsString()
+    latitude?: string;
+
+    @ApiProperty({ default: '-78.46525402178685' })
+    @IsOptional()
+    @IsString()
+    longitude?: string;
+
+    @ApiProperty({ required: false })
+    @IsOptional()
+    @IsArray()
+    schedule: string[];
 
     @ApiProperty({ required: false })
     @IsOptional()
@@ -69,6 +88,16 @@ export class UpdateElementDTO {
     @IsOptional()
     @IsString()
     authorEmail?: string;
+
+    @ApiProperty({ required: false })
+    @IsOptional()
+    @IsString()
+    plan?: string;
+
+    @ApiProperty({ required: false, default: "none" })
+    @IsOptional()
+    @IsString()
+    deadline?: string;
 
     @ApiProperty({ required: false })
     @IsOptional()

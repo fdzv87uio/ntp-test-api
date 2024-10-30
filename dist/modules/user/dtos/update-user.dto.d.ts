@@ -15,4 +15,6 @@ export declare class UpdateUserDto {
     tasks?: any[];
     answers?: any[];
     account_balance?: number[];
+    quota?: number;
+    deadline?: string;
 }

@@ -112,4 +112,16 @@ __decorate([
     (0, class_validator_1.IsOptional)(),
     __metadata("design:type", Array)
 ], UpdateUserDto.prototype, "account_balance", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ required: false }),
+    (0, class_validator_1.IsNumber)(),
+    (0, class_validator_1.IsOptional)(),
+    __metadata("design:type", Number)
+], UpdateUserDto.prototype, "quota", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ required: false, default: "none" }),
+    (0, class_validator_1.IsString)(),
+    (0, class_validator_1.IsOptional)(),
+    __metadata("design:type", String)
+], UpdateUserDto.prototype, "deadline", void 0);
 //# sourceMappingURL=update-user.dto.js.map

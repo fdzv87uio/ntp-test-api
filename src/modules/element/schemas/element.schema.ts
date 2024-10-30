@@ -28,6 +28,30 @@ export class Element {
     })
     status: string;
 
+    @Prop({
+        type: String,
+        default: "mujeres",
+    })
+    category: string;
+
+    @Prop({
+        type: String,
+        default: "-0.15899762074480503",
+    })
+    latitude?: string;
+
+    @Prop({
+        type: String,
+        default: "-78.46525402178685",
+    })
+    longitude?: string;
+
+    @Prop({
+        type: [String],
+        default: ["J"],
+    })
+    schedule?: string;
+
     @Prop()
     location?: string;
 
@@ -52,12 +76,18 @@ export class Element {
     @Prop()
     authorEmail?: string;
 
+    @Prop({ default: "none" })
+    plan?: string;
+
+    @Prop({ default: "none" })
+    deadline?: string;
+
     @Prop()
     images?: string[];
 
     @Prop()
     videos?: string[];
-    
+
 
 }
 

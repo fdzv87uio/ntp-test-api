@@ -3,6 +3,12 @@ import { Element } from './schemas/element.schema';
 import { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
 import { UpdateElementDTO } from './dtos/updateElement.dto';
+// import axios from 'axios';
+// import { Builder, By, Key, until } from 'selenium-webdriver'
+import { Builder, By } from 'selenium-webdriver'
+import { uploadImageWithWatermark } from './utils/elementUtils';
+import axios from 'axios';
+
 
 @Injectable()
 export class ElementService {
@@ -11,6 +17,55 @@ export class ElementService {
     async findAllElements(): Promise<Element[]> {
         const elements = await this.elementModel.find();
         return elements;
+    }
+
+    async findAllElementsByQuery(query: any): Promise<Element[]> {
+        const date = new Date();
+        const options: any = { weekday: 'long' };
+        const dayName = new Intl.DateTimeFormat('es-ES', options).format(date);
+        console.log(dayName);
+        if (query.query === "all") {
+            const elements = await this.elementModel.find({
+                $and: [
+                    { category: { $regex: query.category, $options: 'i' } },
+                    { city: { $regex: query.city, $options: 'i' } },
+                    { country: { $regex: query.country, $options: 'i' } },
+                    { status: 'active' },
+                    { schedule: { $in: [dayName] } },
+                    {
+                        $or: [
+                            { deadline: { $lt: date.toISOString() } },
+                            { deadline: "none" },
+                        ]
+                    },
+
+                ]
+            }).sort({ createdAt: -1 });
+            return elements;
+        } else if (query.query !== "all") {
+            const formattedQuery = query.query.replace("-", " ");
+            console.log('formated query:');
+            console.log(formattedQuery);
+            const elements = await this.elementModel.find({
+                $and: [
+                    { category: { $regex: query.category, $options: 'i' } },
+                    { city: { $regex: query.city, $options: 'i' } },
+                    { country: { $regex: query.country, $options: 'i' } },
+                    { status: 'active' },
+                    { schedule: { $in: [dayName] } },
+                    { description: { $regex: formattedQuery, $options: 'i' } },
+                    {
+                        $or: [
+                            { title: { $regex: formattedQuery, $options: 'i' } },
+                            { authorName: { $regex: formattedQuery, $options: 'i' } },
+                            { deadline: { $lt: date.toISOString() } },
+                            { deadline: "none" },
+                        ]
+                    },
+                ]
+            }).sort({ createdAt: -1 });
+            return elements;
+        }
     }
 
     async findAllAvailableElementsByUserEmail(userEmail: string): Promise<Element[]> {
@@ -57,6 +112,20 @@ export class ElementService {
         }
     }
 
+    async createElementFromPrepagos(page: string): Promise<any> {
+        try {
+            //scrape from prepagos
+            const driver = await new Builder().forBrowser("chrome").build();
+            const newItem: any = await this.scrapePrepagos(driver, page);
+            console.log(newItem);
+            const result = await this.createElement(newItem);
+            return result;
+        } catch (err) {
+            console.log("error creating element " + err);
+            throw new NotFoundException(`Error creating element: ${err.message}`);
+        }
+    }
+
 
     async findElementById(id: string): Promise<Element> {
         const res = await this.elementModel.findById(id);
@@ -85,4 +154,112 @@ export class ElementService {
         const res = await this.elementModel.findByIdAndDelete(id);
         return res;
     }
+
+    //Utils
+
+    // Scrapper Function - Prepagos.com
+    async scrapePrepagos(driver, page) {
+        const randomNumber = Math.floor(Math.random() * 2) + 1;
+        const waitInterval = 20000;
+        const url = `${page}`;
+        try {
+            await driver.get(url);
+            await driver.manage().window().setRect({ width: 1366, height: 720 });
+            await driver.manage().setTimeouts({ implicit: waitInterval });
+            // const allWindowHandles = await driver.getAllWindowHandles();
+            // Get ad description
+            const adDescription = await driver.findElement(
+                By.xpath(
+                    "/html/body/div/div[4]/div/div"
+                )
+            ).getText();
+            // Get model name
+            const modelName = await driver.findElement(
+                By.xpath(
+                    "/html/body/div/div[2]/div[1]/h1/span[1]"
+                )
+            ).getText();
+            // Get ad title from description
+            const newTitle = modelName + ', ' + adDescription.slice(0, 50) + "...";
+
+            // Get Address and City
+            const modelCity = await driver.findElement(
+                By.xpath(
+                    "/html/body/div/div[2]/div[2]/span"
+                )
+            ).getText();
+            const modelCityArr = modelCity.split(',')
+            const modelAddress = modelCityArr[0];
+            const modelCityName = modelCityArr[1];
+            // Get Images
+            const image1 = await driver
+                .findElement(
+                    By.xpath(
+                        "/html/body/div[1]/div[3]/img"
+                    )
+                )
+                .getAttribute("src");
+            const imageBuffer1 = await this.fetchImageFromUrl(image1);
+            const image1Url = await uploadImageWithWatermark(imageBuffer1);
+
+            const image2 = await driver
+                .findElement(
+                    By.xpath(
+                        "/html/body/div[1]/div[5]/div[1]/img"
+                    )
+                )
+                .getAttribute("src");
+            const imageBuffer2 = await this.fetchImageFromUrl(image2);
+            const image2Url = await uploadImageWithWatermark(imageBuffer2);
+
+            const image3 = await driver
+                .findElement(
+                    By.xpath(
+                        "/html/body/div[1]/div[5]/div[2]/img"
+                    )
+                )
+                .getAttribute("src");
+            const imageBuffer3 = await this.fetchImageFromUrl(image3);
+            const image3Url = await uploadImageWithWatermark(imageBuffer3);
+            //Get Phone
+            const phoneNum = await driver
+                .findElement(
+                    By.xpath(
+                        "/html/body/div[1]/div[12]/div/div/button"
+                    )
+                )
+                .getText();
+
+            const newItem = {
+                userId: '671d11005b8296252591f282',
+                title: newTitle,
+                description: adDescription,
+                authorName: modelName,
+                authorNationality: randomNumber > 1 ? 'Ecuador' : "Venezuela",
+                authorPhone: "+593" + phoneNum,
+                authorEmail: "support@picosa.net",
+                location: modelCityName,
+                address: modelAddress,
+                city: 'Quito',
+                country: "Ecuador",
+                plan: "none",
+                status: "active",
+                category: "mujeres",
+                schedule: ['lunes', 'martes', 'miércoles', 'jueves', 'viernes', 'sábado', 'domingo'],
+                images: [image1Url, image2Url, image3Url]
+            }
+            console.log(newItem);
+            await driver.close();
+            return newItem;
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    async fetchImageFromUrl(url: string): Promise<Buffer> {
+        const response = await axios.get(url, { responseType: 'arraybuffer' });
+        return Buffer.from(response.data, 'binary');
+    }
+
 }
+

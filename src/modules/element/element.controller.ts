@@ -4,6 +4,9 @@ import { JwtAuthGuard } from '../auth/guard';
 import { ElementService } from './element.service';
 import { CreateElementDTO } from './dtos/createElement.dto';
 import { UpdateElementDTO } from './dtos/updateElement.dto';
+import { QueryDTO } from './dtos/query.dto';
+import { ScrapePageDTO } from './dtos/scrapePage.dto';
+
 
 @ApiTags('Elements')
 @Controller('element')
@@ -46,6 +49,21 @@ export class ElementController {
         return this.elementService.createElement(element)
     }
 
+    //Create New Element From Prepagos
+    @ApiOperation({ summary: 'Crawl And Create New Element from Prepagos.com' })
+    @Post('newFromPrepagos')
+    async createElementFromPrepagos(@Body() element: ScrapePageDTO): Promise<any> {
+
+        return this.elementService.createElementFromPrepagos(element.page)
+    }
+
+    //Find Elements By Query
+    @ApiOperation({ summary: 'Find Elements By Query' })
+    @Post('findElementsByQuery')
+    async findElementsByQuery(@Body() query: QueryDTO): Promise<any> {
+        return this.elementService.findAllElementsByQuery(query)
+    }
+
     // Get Element By ID
     @ApiOperation({ summary: 'Get Element By ID' })
     @Get('getElementBySlug/:slug')
@@ -84,3 +102,4 @@ export class ElementController {
         return this.elementService.deleteElementById(id);
     }
 }
+

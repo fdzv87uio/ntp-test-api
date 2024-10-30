@@ -40,6 +40,30 @@ __decorate([
     __metadata("design:type", String)
 ], CreateElementDTO.prototype, "status", void 0);
 __decorate([
+    (0, swagger_1.ApiProperty)({ default: 'mujeres' }),
+    (0, class_validator_1.IsNotEmpty)(),
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
+], CreateElementDTO.prototype, "category", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ default: '-0.15899762074480503' }),
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
+], CreateElementDTO.prototype, "latitude", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ default: '-78.46525402178685' }),
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
+], CreateElementDTO.prototype, "longitude", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ required: false }),
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsArray)(),
+    __metadata("design:type", Array)
+], CreateElementDTO.prototype, "schedule", void 0);
+__decorate([
     (0, swagger_1.ApiProperty)({ required: false }),
     (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsString)(),
@@ -87,6 +111,18 @@ __decorate([
     (0, class_validator_1.IsString)(),
     __metadata("design:type", String)
 ], CreateElementDTO.prototype, "authorEmail", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ required: false }),
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
+], CreateElementDTO.prototype, "plan", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ required: false, default: "none" }),
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
+], CreateElementDTO.prototype, "deadline", void 0);
 __decorate([
     (0, swagger_1.ApiProperty)({ required: false }),
     (0, class_validator_1.IsOptional)(),

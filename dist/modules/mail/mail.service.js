@@ -20,7 +20,7 @@ let MailService = class MailService {
         const mail = {
             to: recipient,
             from: 'fausto.zambrano@tekbees.com',
-            subject: 'Curcle App',
+            subject: 'Tienes un mensaje de LA PIKOSA',
             text: body
         };
         await this.sendGridClient.send(mail);
