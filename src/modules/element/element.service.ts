@@ -68,6 +68,8 @@ export class ElementService {
         }
     }
 
+
+
     async findAllAvailableElementsByUserEmail(userEmail: string): Promise<Element[]> {
         const elements = await this.elementModel.find({ participants: userEmail });
         return elements;
