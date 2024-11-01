@@ -24,6 +24,7 @@ const login_dto_1 = require("../dtos/login.dto");
 const create_user_dto_1 = require("../../user/dtos/create-user.dto");
 const forgotPassword_dto_1 = require("../dtos/forgotPassword.dto");
 const resetPassword_dto_1 = require("../dtos/resetPassword.dto");
+const verifyAccount_sto_1 = require("../dtos/verifyAccount.sto");
 let AuthController = class AuthController {
     constructor(authService, userService) {
         this.authService = authService;
@@ -57,6 +58,10 @@ let AuthController = class AuthController {
     }
     async resetPassword(resetPasswordDTO) {
         const res = await this.authService.resetPassword(resetPasswordDTO);
+        return res;
+    }
+    async verifyPassword(verifyAccount) {
+        const res = await this.authService.verifyAccount(verifyAccount.email, verifyAccount.token);
         return res;
     }
 };
@@ -111,6 +116,14 @@ __decorate([
     __metadata("design:paramtypes", [resetPassword_dto_1.ResetPasswordDTO]),
     __metadata("design:returntype", Promise)
 ], AuthController.prototype, "resetPassword", null);
+__decorate([
+    (0, swagger_1.ApiOperation)({ summary: 'Verify Account' }),
+    (0, common_1.Post)('verifyAccount'),
+    __param(0, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [verifyAccount_sto_1.VerifyAccountDTO]),
+    __metadata("design:returntype", Promise)
+], AuthController.prototype, "verifyPassword", null);
 exports.AuthController = AuthController = __decorate([
     (0, swagger_1.ApiTags)('Auth'),
     (0, common_1.Controller)('auth'),

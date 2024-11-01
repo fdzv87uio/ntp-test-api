@@ -22,7 +22,7 @@ export class UserService {
   async create(createUserDto: any): Promise<User> {
     try {
       const createdUser: any = new this.userModel(createUserDto);
-      createdUser.user_status = "enabled";
+      createdUser.user_status = "pending";
       createdUser.plan = "none";
       createdUser.email = createdUser.email.toLowerCase();
       await createdUser.save();

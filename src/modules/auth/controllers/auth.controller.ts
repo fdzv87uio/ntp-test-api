@@ -11,6 +11,7 @@ import { CreateUserDto } from '../../user/dtos/create-user.dto';
 import { log } from 'console';
 import { ForgotPasswordDTO } from '../dtos/forgotPassword.dto';
 import { ResetPasswordDTO } from '../dtos/resetPassword.dto';
+import { VerifyAccountDTO } from '../dtos/verifyAccount.sto';
 
 @ApiTags('Auth')
 @Controller('auth')
@@ -68,6 +69,13 @@ export class AuthController {
     @Post('resetPassword')
     async resetPassword(@Body() resetPasswordDTO: ResetPasswordDTO) {
         const res = await this.authService.resetPassword(resetPasswordDTO);
+        return res;
+    }
+
+    @ApiOperation({ summary: 'Verify Account' })
+    @Post('verifyAccount')
+    async verifyPassword(@Body() verifyAccount: VerifyAccountDTO) {
+        const res = await this.authService.verifyAccount(verifyAccount.email, verifyAccount.token);
         return res;
     }
 }

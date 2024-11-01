@@ -19,8 +19,8 @@ let MailService = class MailService {
     async sendSimpleEmail(recipient, body) {
         const mail = {
             to: recipient,
-            from: 'fausto.zambrano@tekbees.com',
-            subject: 'Tienes un mensaje de LA PIKOSA',
+            from: 'support@picosa.net',
+            subject: 'Tienes un mensaje de PICOSA.NET',
             text: body
         };
         await this.sendGridClient.send(mail);

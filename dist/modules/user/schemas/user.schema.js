@@ -28,8 +28,8 @@ exports.UserSchema = new mongoose_1.Schema({
     },
     user_status: {
         type: [String],
-        enum: ["enabled", "disabled", "deleted"],
-        default: "enabled",
+        enum: ["pending", "enabled", "disabled", "deleted"],
+        default: "pending",
         required: true,
     },
     plan: {

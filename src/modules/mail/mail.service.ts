@@ -9,8 +9,8 @@ export class MailService {
     async sendSimpleEmail(recipient: string, body: string): Promise<void> {
         const mail: MailDataRequired = {
             to: recipient,
-            from: 'fausto.zambrano@tekbees.com', //Approved sender ID in Sendgriddd
-            subject: 'Tienes un mensaje de LA PIKOSA',
+            from: 'support@picosa.net', //Approved sender ID in Sendgrid
+            subject: 'Tienes un mensaje de PICOSA.NET',
             text: body
         };
         await this.sendGridClient.send(mail);

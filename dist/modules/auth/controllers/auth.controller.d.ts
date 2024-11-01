@@ -4,6 +4,7 @@ import { LoginDTO } from '../dtos/login.dto';
 import { CreateUserDto } from '../../user/dtos/create-user.dto';
 import { ForgotPasswordDTO } from '../dtos/forgotPassword.dto';
 import { ResetPasswordDTO } from '../dtos/resetPassword.dto';
+import { VerifyAccountDTO } from '../dtos/verifyAccount.sto';
 export declare class AuthController {
     private readonly authService;
     private readonly userService;
@@ -28,4 +29,5 @@ export declare class AuthController {
         status: string;
         message: string;
     }>;
+    verifyPassword(verifyAccount: VerifyAccountDTO): Promise<any>;
 }

@@ -14,6 +14,7 @@ export declare class AuthService {
         user: import("../../user/interfaces/user.interface").User;
     }>;
     register(createUserDto: CreateUserDto): Promise<any>;
+    verifyAccount(email: string, token: string): Promise<any>;
     resetPasswordEmail(email: string): Promise<void>;
     resetPassword(resetPassword: ResetPasswordDTO): Promise<{
         status: string;

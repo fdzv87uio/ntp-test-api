@@ -32,10 +32,8 @@ export class AuthService {
             }
         } catch (error) {
             console.log('err', error);
-            return null
+            throw new Error(error.message);
         }
-
-        return null
     }
 
     async login(user: any) {
@@ -44,10 +42,17 @@ export class AuthService {
             sub: email,
             ...rest,
         };
-        return {
-            accessToken: this.jwtService.sign(payload),
-            user: await this.userService.findOne(email)
-        };
+
+        const foundUser = await this.userService.findOne(email);
+        if (foundUser && foundUser.user_status[0] === "enabled") {
+            return {
+                accessToken: this.jwtService.sign(payload),
+                user: foundUser
+            }
+        } else {
+            throw new UnauthorizedException("Your Account Needs Verification")
+        }
+
     }
 
     async register(createUserDto: CreateUserDto): Promise<any> {
@@ -61,13 +66,42 @@ export class AuthService {
         const encryptedPassword = aesEncrypt(currentPassword);
         currentData.password = encryptedPassword;
         const user = await this.userService.create(currentData);
-        const token = await this.login(user);
-        const accessToken = token.accessToken;
+        const payload = { id: user.id, email: user.email };
+        const token = this.createToken(payload, user);
+        // const token = await this.login(user);
+        // const accessToken = token.accessToken;
+        // Send email with the Access Token
+        const msgEmail = user.email;
+        const tokenURL = `${process.env.PICOSA_APP_URI}/verify-email/${msgEmail}/${token}`
+        const msg = `Estimdo Usuario de PICOSA.net: Utilice el siguiente link y cópielo en su explorador para verificar su cuenta: ${tokenURL}`
+        await this.mailService.sendSimpleEmail(msgEmail, msg);
         return {
-            accessToken,
             user
         }
 
+    }
+
+    async verifyAccount(email: string, token: string): Promise<any> {
+        const user: any = await this.userService.findOne(email);
+        try {
+            const secret = JSON.stringify({
+                secret: process.env.JWT_SECRET,
+                updatedAt: user.updatedAt,
+            });
+            this.jwtService.verify(token, {
+                secret,
+            });
+        } catch (err) {
+            throw new ForbiddenException('expired or invalid token');
+        }
+        if (!user)
+            throw new NotFoundException("user doesn't exist");
+        if (!(await this.userService.updateByEmail(email, { user_status: 'enabled' })))
+            throw new ServiceUnavailableException('something went wrong, please try again later');
+        return {
+            status: "success",
+            message: 'Account verified successfully',
+        };
     }
 
     async resetPasswordEmail(email: string) {
