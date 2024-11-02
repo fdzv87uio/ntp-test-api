@@ -88,6 +88,10 @@ __decorate([
 ], UpdateTaskDTO.prototype, "participants", void 0);
 __decorate([
     (0, swagger_1.ApiProperty)(),
+    __metadata("design:type", String)
+], UpdateTaskDTO.prototype, "project", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)(),
     __metadata("design:type", Array)
 ], UpdateTaskDTO.prototype, "blacklist", void 0);
 __decorate([

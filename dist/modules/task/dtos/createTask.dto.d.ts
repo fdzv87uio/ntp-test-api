@@ -15,6 +15,7 @@ export declare class CreateTaskDTO {
     images?: string[];
     videos?: string[];
     participants?: string[];
+    project: string;
     blacklist?: string[];
     classes?: string[];
 }

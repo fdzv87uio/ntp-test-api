@@ -75,6 +75,9 @@ export class Task {
     participants?: string[];
 
     @Prop()
+    project: string;
+
+    @Prop()
     blacklist?: string[];
 
     @Prop()

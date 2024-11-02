@@ -13,6 +13,9 @@ exports.UploadService = void 0;
 const common_1 = require("@nestjs/common");
 const multer = require("multer");
 const axios_1 = require("axios");
+const fs_1 = require("fs");
+const sharp = require("sharp");
+const path = require("path");
 let UploadService = class UploadService {
     constructor() {
     }
@@ -23,39 +26,24 @@ let UploadService = class UploadService {
     }
     async uploadImage(img, id) {
         try {
-            console.log("Uploading Image...");
+            const absolutePath = path.resolve('src/img/watermark.png');
+            console.log(absolutePath);
+            const watermark = await fs_1.promises.readFile(absolutePath);
+            const watermarkedImage = await sharp(img).composite([{ input: watermark, gravity: 'center' }]).toBuffer();
+            console.log(watermarkedImage);
             const myApiKey = process.env.IMGBB_KEY;
-            console.log("Key:");
-            console.log(myApiKey);
-            const blob = new Blob([img.buffer]);
             const formData = new FormData();
-            formData.append('image', blob);
-            console.log("form Data:");
-            console.log(formData);
-            const res = await axios_1.default.post(`https://api.imgbb.com/1/upload?key=${myApiKey}&name=${id}`, formData);
-            console.log('***********************IMGBB DATA*******************************');
-            console.log(res);
-            const imageUrl = res.data.data.url;
-            return {
-                success: true,
-                statusCode: 'Upload Successful',
-                data: {
-                    url: imageUrl,
-                    signedurl: id
-                }
-            };
+            formData.append("image", watermarkedImage.toString('base64'));
+            const { data } = await axios_1.default.post(`https://api.imgbb.com/1/upload?key=${myApiKey}&name=${id}`, formData);
+            console.log("data");
+            console.log(data);
+            const imageUrl = data.data.url;
+            return imageUrl;
         }
         catch (error) {
             console.log(error.message);
-            console.error('Error uploading file:', JSON.stringify(error, null, 2));
-            return {
-                success: false,
-                statusCode: 'Upload Failed',
-                error: error,
-            };
         }
     }
-    ;
 };
 exports.UploadService = UploadService;
 exports.UploadService = UploadService = __decorate([

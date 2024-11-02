@@ -84,6 +84,11 @@ export class CreateTaskDTO {
     @IsArray()
     participants?: string[];
 
+    @ApiProperty({ required: true, default: 'Ecuid' })
+    @IsNotEmpty()
+    @IsString()
+    project: string;
+
     @ApiProperty({ required: false })
     @IsOptional()
     @IsArray()

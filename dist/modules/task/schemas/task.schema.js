@@ -99,6 +99,10 @@ __decorate([
 ], Task.prototype, "participants", void 0);
 __decorate([
     (0, mongoose_1.Prop)(),
+    __metadata("design:type", String)
+], Task.prototype, "project", void 0);
+__decorate([
+    (0, mongoose_1.Prop)(),
     __metadata("design:type", Array)
 ], Task.prototype, "blacklist", void 0);
 __decorate([

@@ -57,6 +57,9 @@ export class UpdateTaskDTO {
     participants?: string[];
 
     @ApiProperty()
+    project?: string;
+
+    @ApiProperty()
     blacklist?: string[];
 
     @ApiProperty()

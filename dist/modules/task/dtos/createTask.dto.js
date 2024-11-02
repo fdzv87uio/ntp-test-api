@@ -112,6 +112,12 @@ __decorate([
     __metadata("design:type", Array)
 ], CreateTaskDTO.prototype, "participants", void 0);
 __decorate([
+    (0, swagger_1.ApiProperty)({ required: true, default: 'Ecuid' }),
+    (0, class_validator_1.IsNotEmpty)(),
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
+], CreateTaskDTO.prototype, "project", void 0);
+__decorate([
     (0, swagger_1.ApiProperty)({ required: false }),
     (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsArray)(),

@@ -28,45 +28,87 @@ let ElementService = class ElementService {
         const dayName = new Intl.DateTimeFormat('es-ES', options).format(date);
         console.log(dayName);
         if (query.query === "all") {
-            const elements = await this.elementModel.find({
-                $and: [
-                    { category: { $regex: query.category, $options: 'i' } },
-                    { city: { $regex: query.city, $options: 'i' } },
-                    { country: { $regex: query.country, $options: 'i' } },
-                    { status: 'active' },
-                    { schedule: { $in: [dayName] } },
-                    {
-                        $or: [
-                            { deadline: { $lt: date.toISOString() } },
-                            { deadline: "none" },
+            const elements = await this.elementModel.aggregate([
+                {
+                    $match: {
+                        $and: [
+                            { category: { $regex: query.category, $options: 'i' } },
+                            { city: { $regex: query.city, $options: 'i' } },
+                            { country: { $regex: query.country, $options: 'i' } },
+                            { status: 'active' },
+                            {
+                                $or: [
+                                    { deadline: { $lt: date.toISOString() } },
+                                    { deadline: "none" },
+                                ]
+                            },
                         ]
-                    },
-                ]
-            }).sort({ createdAt: -1 });
+                    }
+                },
+                {
+                    $addFields: {
+                        isToday: {
+                            $in: [dayName, "$schedule"]
+                        }
+                    }
+                },
+                {
+                    $sort: {
+                        isToday: -1,
+                        createdAt: -1
+                    }
+                },
+                {
+                    $project: {
+                        isToday: 0
+                    }
+                }
+            ]);
             return elements;
         }
         else if (query.query !== "all") {
             const formattedQuery = query.query.replace("-", " ");
             console.log('formated query:');
             console.log(formattedQuery);
-            const elements = await this.elementModel.find({
-                $and: [
-                    { category: { $regex: query.category, $options: 'i' } },
-                    { city: { $regex: query.city, $options: 'i' } },
-                    { country: { $regex: query.country, $options: 'i' } },
-                    { status: 'active' },
-                    { schedule: { $in: [dayName] } },
-                    { description: { $regex: formattedQuery, $options: 'i' } },
-                    {
-                        $or: [
-                            { title: { $regex: formattedQuery, $options: 'i' } },
-                            { authorName: { $regex: formattedQuery, $options: 'i' } },
-                            { deadline: { $lt: date.toISOString() } },
-                            { deadline: "none" },
+            const elements = await this.elementModel.aggregate([
+                {
+                    $match: {
+                        $and: [
+                            { category: { $regex: query.category, $options: 'i' } },
+                            { city: { $regex: query.city, $options: 'i' } },
+                            { country: { $regex: query.country, $options: 'i' } },
+                            { status: 'active' },
+                            { description: { $regex: formattedQuery, $options: 'i' } },
+                            {
+                                $or: [
+                                    { title: { $regex: formattedQuery, $options: 'i' } },
+                                    { authorName: { $regex: formattedQuery, $options: 'i' } },
+                                    { deadline: { $lt: date.toISOString() } },
+                                    { deadline: "none" },
+                                ]
+                            },
                         ]
-                    },
-                ]
-            }).sort({ createdAt: -1 });
+                    }
+                },
+                {
+                    $addFields: {
+                        isToday: {
+                            $in: [dayName, "$schedule"]
+                        }
+                    }
+                },
+                {
+                    $sort: {
+                        isToday: -1,
+                        createdAt: -1
+                    }
+                },
+                {
+                    $project: {
+                        isToday: 0
+                    }
+                }
+            ]);
             return elements;
         }
     }
