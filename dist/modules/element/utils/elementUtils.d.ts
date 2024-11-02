@@ -1,1 +1,1 @@
-export declare function uploadImageWithWatermark(img: any): Promise<any>;
+export declare function uploadImageWithWatermark(img: any, id?: string): Promise<any>;

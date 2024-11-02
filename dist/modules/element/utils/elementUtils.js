@@ -5,7 +5,7 @@ const axios_1 = require("axios");
 const fs_1 = require("fs");
 const sharp = require("sharp");
 const path = require("path");
-async function uploadImageWithWatermark(img) {
+async function uploadImageWithWatermark(img, id) {
     try {
         const absolutePath = path.resolve('src/img/watermark.png');
         console.log(absolutePath);
@@ -15,7 +15,7 @@ async function uploadImageWithWatermark(img) {
         const myApiKey = process.env.IMGBB_KEY;
         const formData = new FormData();
         formData.append("image", watermarkedImage.toString('base64'));
-        const { data } = await axios_1.default.post(`https://api.imgbb.com/1/upload?key=${myApiKey}`, formData);
+        const { data } = await axios_1.default.post(`https://api.imgbb.com/1/upload?key=${myApiKey}${id ? `&name=${id}` : ''}`, formData);
         console.log("data");
         console.log(data);
         const imageUrl = data.data.url;

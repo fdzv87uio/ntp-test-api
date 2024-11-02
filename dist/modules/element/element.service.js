@@ -199,30 +199,30 @@ let ElementService = class ElementService {
             await driver.get(url);
             await driver.manage().window().setRect({ width: 1366, height: 720 });
             await driver.manage().setTimeouts({ implicit: waitInterval });
-            const adDescription = await driver.findElement(selenium_webdriver_1.By.xpath("/html/body/div/div[4]/div/div")).getText();
-            const modelName = await driver.findElement(selenium_webdriver_1.By.xpath("/html/body/div/div[2]/div[1]/h1/span[1]")).getText();
+            const adDescription = await driver.findElement(selenium_webdriver_1.By.xpath("/html/body/div[1]/div[2]/div[4]/div/div")).getText();
+            const modelName = await driver.findElement(selenium_webdriver_1.By.xpath("/html/body/div/div[2]/div[1]/div[1]/h1/span[1]")).getText();
             const newTitle = modelName + ', ' + adDescription.slice(0, 50) + "...";
-            const modelCity = await driver.findElement(selenium_webdriver_1.By.xpath("/html/body/div/div[2]/div[2]/span")).getText();
+            const modelCity = await driver.findElement(selenium_webdriver_1.By.xpath("/html/body/div[1]/div[2]/div[1]/div[2]/span")).getText();
             const modelCityArr = modelCity.split(',');
             const modelAddress = modelCityArr[0];
             const modelCityName = modelCityArr[1];
             const image1 = await driver
-                .findElement(selenium_webdriver_1.By.xpath("/html/body/div[1]/div[3]/img"))
+                .findElement(selenium_webdriver_1.By.xpath("/html/body/div[1]/div[2]/div[3]/img"))
                 .getAttribute("src");
             const imageBuffer1 = await this.fetchImageFromUrl(image1);
             const image1Url = await (0, elementUtils_1.uploadImageWithWatermark)(imageBuffer1);
             const image2 = await driver
-                .findElement(selenium_webdriver_1.By.xpath("/html/body/div[1]/div[5]/div[1]/img"))
+                .findElement(selenium_webdriver_1.By.xpath("/html/body/div[1]/div[2]/div[5]/div[1]/img"))
                 .getAttribute("src");
             const imageBuffer2 = await this.fetchImageFromUrl(image2);
             const image2Url = await (0, elementUtils_1.uploadImageWithWatermark)(imageBuffer2);
             const image3 = await driver
-                .findElement(selenium_webdriver_1.By.xpath("/html/body/div[1]/div[5]/div[2]/img"))
+                .findElement(selenium_webdriver_1.By.xpath("/html/body/div[1]/div[2]/div[5]/div[2]/img"))
                 .getAttribute("src");
             const imageBuffer3 = await this.fetchImageFromUrl(image3);
             const image3Url = await (0, elementUtils_1.uploadImageWithWatermark)(imageBuffer3);
             const phoneNum = await driver
-                .findElement(selenium_webdriver_1.By.xpath("/html/body/div[1]/div[12]/div/div/button"))
+                .findElement(selenium_webdriver_1.By.xpath("/html/body/div[1]/div[2]/div[11]/div/div/button"))
                 .getText();
             const newItem = {
                 userId: '671d11005b8296252591f282',

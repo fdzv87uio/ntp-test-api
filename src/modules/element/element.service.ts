@@ -215,13 +215,13 @@ export class ElementService {
             // Get ad description
             const adDescription = await driver.findElement(
                 By.xpath(
-                    "/html/body/div/div[4]/div/div"
+                    "/html/body/div[1]/div[2]/div[4]/div/div"
                 )
             ).getText();
             // Get model name
             const modelName = await driver.findElement(
                 By.xpath(
-                    "/html/body/div/div[2]/div[1]/h1/span[1]"
+                    "/html/body/div/div[2]/div[1]/div[1]/h1/span[1]"
                 )
             ).getText();
             // Get ad title from description
@@ -230,7 +230,7 @@ export class ElementService {
             // Get Address and City
             const modelCity = await driver.findElement(
                 By.xpath(
-                    "/html/body/div/div[2]/div[2]/span"
+                    "/html/body/div[1]/div[2]/div[1]/div[2]/span"
                 )
             ).getText();
             const modelCityArr = modelCity.split(',')
@@ -240,7 +240,7 @@ export class ElementService {
             const image1 = await driver
                 .findElement(
                     By.xpath(
-                        "/html/body/div[1]/div[3]/img"
+                        "/html/body/div[1]/div[2]/div[3]/img"
                     )
                 )
                 .getAttribute("src");
@@ -250,7 +250,7 @@ export class ElementService {
             const image2 = await driver
                 .findElement(
                     By.xpath(
-                        "/html/body/div[1]/div[5]/div[1]/img"
+                        "/html/body/div[1]/div[2]/div[5]/div[1]/img"
                     )
                 )
                 .getAttribute("src");
@@ -260,7 +260,7 @@ export class ElementService {
             const image3 = await driver
                 .findElement(
                     By.xpath(
-                        "/html/body/div[1]/div[5]/div[2]/img"
+                        "/html/body/div[1]/div[2]/div[5]/div[2]/img"
                     )
                 )
                 .getAttribute("src");
@@ -270,7 +270,7 @@ export class ElementService {
             const phoneNum = await driver
                 .findElement(
                     By.xpath(
-                        "/html/body/div[1]/div[12]/div/div/button"
+                        "/html/body/div[1]/div[2]/div[11]/div/div/button"
                     )
                 )
                 .getText();
