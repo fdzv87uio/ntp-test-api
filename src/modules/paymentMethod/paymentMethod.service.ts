@@ -27,6 +27,8 @@ export class PaymentMethodService {
 
     async createPaymentMethod(paymentMethod: PaymentMethod): Promise<PaymentMethod> {
         const res = await this.paymentMethodModel.create(paymentMethod);
+        const msg = `Estimado Administrador, Le notificamos que el usuario ${paymentMethod.userEmail} ha creado el siguiente método de pago: ${paymentMethod.description}. Ingrese al sistema para activarla.`
+        await this.mailService.sendSimpleEmail(paymentMethod.userEmail, msg)
         return res;
     }
 
@@ -48,7 +50,7 @@ export class PaymentMethodService {
             });
             if (!res) { throw new NotFoundException('Payment Method Not Found not found'); } else {
                 //send email
-                const msg = `Estimado usuario, Le notificamos que el siguente método de ppago ha sido activado: ${current.description}, Ahora puede realizar compras en nuestras plataforma.`
+                const msg = `Estimado usuario, Le notificamos que el siguente método de pago ha sido activado: ${current.description}, Ahora puede realizar compras en nuestras plataforma.`
                 await this.mailService.sendSimpleEmail(current.userEmail, msg)
                 return res;
             }

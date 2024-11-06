@@ -46,6 +46,8 @@ export class OrderService {
                 const result = await this.orderModel.create(order);
                 const msg = `Estimado usuario, Muchas Gracias por preferir PICOSA:NET. El siguente plan ha sido activado: ${order.item}. Su plan caduca el ${dealine}.`
                 await this.mailService.sendSimpleEmail(currentUser.email, msg)
+                const msg2 = `Estimado Administrador, Le notificamos que el usuario ${currentUser.email} ha creado una orden. Ingrese al sistema para activarla.`
+                await this.mailService.sendSimpleEmail(currentUser.email, msg2)
                 return result;
             }
         }
