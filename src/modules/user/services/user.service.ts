@@ -19,6 +19,12 @@ export class UserService {
     return user;
   }
 
+  async findOneById(id: string): Promise<User> {
+    const user = await this.userModel.findOne({ _id: id }).exec()
+    if (!user) return null;
+    return user;
+  }
+
   async create(createUserDto: any): Promise<User> {
     try {
       const createdUser: any = new this.userModel(createUserDto);
@@ -35,6 +41,28 @@ export class UserService {
 
   async updateByEmail(email: string, user: UpdateUserDto): Promise<User> {
     const res = await this.userModel.findOneAndUpdate({ email: email }, user, {
+      new: true,
+      runValidators: false
+    });
+    if (!res) throw new NotFoundException('User not found');
+    return res;
+  }
+
+  async resetUserStatus(email: string): Promise<User> {
+    const newObj = {
+      plan: ['none'],
+      deadline: 'none'
+    }
+    const res = await this.userModel.findOneAndUpdate({ email: email }, newObj, {
+      new: true,
+      runValidators: false
+    });
+    if (!res) throw new NotFoundException('User not found');
+    return res;
+  }
+
+  async updateById(id: string, user: UpdateUserDto): Promise<User> {
+    const res = await this.userModel.findOneAndUpdate({ _id: id }, user, {
       new: true,
       runValidators: false
     });

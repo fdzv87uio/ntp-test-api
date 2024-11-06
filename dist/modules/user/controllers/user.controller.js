@@ -20,7 +20,6 @@ const user_service_1 = require("../services/user.service");
 const has_role_decorator_1 = require("../../auth/decorators/has-role.decorator");
 const role_enum_1 = require("../../auth/models/role.enum");
 const roles_guard_1 = require("../../auth/guard/roles.guard");
-const update_user_dto_1 = require("../dtos/update-user.dto");
 let UserController = class UserController {
     constructor(userService) {
         this.userService = userService;
@@ -31,8 +30,8 @@ let UserController = class UserController {
     findById(email) {
         return this.userService.findOne(email);
     }
-    updateByEmail(email, updateUser) {
-        return this.userService.updateByEmail(email, updateUser);
+    updateByEmail(email) {
+        return this.userService.resetUserStatus(email);
     }
 };
 exports.UserController = UserController;
@@ -57,15 +56,12 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], UserController.prototype, "findById", null);
 __decorate([
-    (0, has_role_decorator_1.HasRoles)(role_enum_1.Role.Admin, role_enum_1.Role.User),
-    (0, common_1.UseGuards)(guard_1.JwtAuthGuard, roles_guard_1.RolesGuard),
     (0, swagger_1.ApiBearerAuth)(),
-    (0, swagger_1.ApiOperation)({ summary: 'Update user by email' }),
-    (0, common_1.Put)(':email'),
+    (0, swagger_1.ApiOperation)({ summary: 'Reset user status by Email' }),
+    (0, common_1.Put)('resetUserStatusByEmail/:email'),
     __param(0, (0, common_1.Param)('email')),
-    __param(1, (0, common_1.Body)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String, update_user_dto_1.UpdateUserDto]),
+    __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", Promise)
 ], UserController.prototype, "updateByEmail", null);
 exports.UserController = UserController = __decorate([

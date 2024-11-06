@@ -14,6 +14,8 @@ import { MailModule } from './modules/mail/mail.module';
 import { TaskModule } from './modules/task/task.module';
 import { AnswerModule } from './modules/answer/answer.module';
 import { ElementModule } from './modules/element/element.module';
+import { PaymentMethodModule } from './modules/paymentMethod/paymentMethod.module';
+import { OrderModule } from './modules/order/order.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -25,7 +27,7 @@ import { ElementModule } from './modules/element/element.module';
     UserModule,
     EventModule,
     TransactionModule,
-    UploadModule, ConfigModule, MailModule, TaskModule, AnswerModule, TaskModule, ElementModule
+    UploadModule, ConfigModule, MailModule, TaskModule, AnswerModule, TaskModule, ElementModule, PaymentMethodModule, OrderModule
   ],
   controllers: [AppController, MailController],
   providers: [AppService, MailService],

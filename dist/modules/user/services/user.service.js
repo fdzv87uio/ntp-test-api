@@ -30,6 +30,12 @@ let UserService = class UserService {
             return null;
         return user;
     }
+    async findOneById(id) {
+        const user = await this.userModel.findOne({ _id: id }).exec();
+        if (!user)
+            return null;
+        return user;
+    }
     async create(createUserDto) {
         try {
             const createdUser = new this.userModel(createUserDto);
@@ -46,6 +52,28 @@ let UserService = class UserService {
     }
     async updateByEmail(email, user) {
         const res = await this.userModel.findOneAndUpdate({ email: email }, user, {
+            new: true,
+            runValidators: false
+        });
+        if (!res)
+            throw new common_1.NotFoundException('User not found');
+        return res;
+    }
+    async resetUserStatus(email) {
+        const newObj = {
+            plan: ['none'],
+            deadline: 'none'
+        };
+        const res = await this.userModel.findOneAndUpdate({ email: email }, newObj, {
+            new: true,
+            runValidators: false
+        });
+        if (!res)
+            throw new common_1.NotFoundException('User not found');
+        return res;
+    }
+    async updateById(id, user) {
+        const res = await this.userModel.findOneAndUpdate({ _id: id }, user, {
             new: true,
             runValidators: false
         });
