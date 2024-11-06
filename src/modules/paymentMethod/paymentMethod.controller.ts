@@ -13,7 +13,7 @@ export class PaymentMethodController {
     ) {}
 
     // Get All Existing PaymentMethods
-    @ApiOperation({ summary: 'Get All PaymentMethods' })
+    @ApiOperation({ summary: 'Get All Payment Methods' })
     @ApiBearerAuth()
     @Get()
     async getAllPaymentMethods(): Promise<PaymentMethodType[]> {
@@ -21,7 +21,7 @@ export class PaymentMethodController {
     }
 
     // Get All Existing PaymentMethods by User ID
-    @ApiOperation({ summary: 'Get All PaymentMethods by User Email' })
+    @ApiOperation({ summary: 'Get All Payment Methods by User Email' })
     @ApiBearerAuth()
     @Get('getAllByUserEmail/:email')
     async getAllPaymentMethodsByUserEmail(@Param('email') email: string): Promise<PaymentMethodType[]> {
@@ -29,7 +29,7 @@ export class PaymentMethodController {
     }
 
     // Create New PaymentMethod
-    @ApiOperation({ summary: 'Create New PaymentMethod' })
+    @ApiOperation({ summary: 'Create New Payment Method' })
     @ApiBearerAuth()
     @Post('new')
     async createPaymentMethod(@Body() paymentMethod: PaymentMethodDTO): Promise<PaymentMethodType> {
@@ -38,7 +38,7 @@ export class PaymentMethodController {
     }
 
     // Delete PaymentMethod
-    @ApiOperation({ summary: 'Delete PaymentMethod' })
+    @ApiOperation({ summary: 'Delete Payment Method' })
     @ApiBearerAuth()
     @Delete(':id')
     async deletePaymentMethod(@Param('id') id: string): Promise<PaymentMethodType> {

@@ -46,6 +46,7 @@ let OrderService = class OrderService {
             const planString = order.item.split('-');
             const dayNumber = parseInt(planString[1]);
             current.plan = [planString[0]];
+            current.quota = parseInt(planString[1]);
             const today = new Date();
             const dealine = new Date(today);
             dealine.setDate(today.getDate() + dayNumber);
@@ -55,6 +56,8 @@ let OrderService = class OrderService {
                 const result = await this.orderModel.create(order);
                 const msg = `Estimado usuario, Muchas Gracias por preferir PICOSA:NET. El siguente plan ha sido activado: ${order.item}. Su plan caduca el ${dealine}.`;
                 await this.mailService.sendSimpleEmail(currentUser.email, msg);
+                const msg2 = `Estimado Administrador, Le notificamos que el usuario ${currentUser.email} ha creado una orden. Ingrese al sistema para activarla.`;
+                await this.mailService.sendSimpleEmail(currentUser.email, msg2);
                 return result;
             }
         }

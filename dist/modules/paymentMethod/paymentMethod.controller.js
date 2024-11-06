@@ -39,7 +39,7 @@ let PaymentMethodController = class PaymentMethodController {
 };
 exports.PaymentMethodController = PaymentMethodController;
 __decorate([
-    (0, swagger_1.ApiOperation)({ summary: 'Get All PaymentMethods' }),
+    (0, swagger_1.ApiOperation)({ summary: 'Get All Payment Methods' }),
     (0, swagger_1.ApiBearerAuth)(),
     (0, common_1.Get)(),
     __metadata("design:type", Function),
@@ -47,7 +47,7 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], PaymentMethodController.prototype, "getAllPaymentMethods", null);
 __decorate([
-    (0, swagger_1.ApiOperation)({ summary: 'Get All PaymentMethods by User Email' }),
+    (0, swagger_1.ApiOperation)({ summary: 'Get All Payment Methods by User Email' }),
     (0, swagger_1.ApiBearerAuth)(),
     (0, common_1.Get)('getAllByUserEmail/:email'),
     __param(0, (0, common_1.Param)('email')),
@@ -56,7 +56,7 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], PaymentMethodController.prototype, "getAllPaymentMethodsByUserEmail", null);
 __decorate([
-    (0, swagger_1.ApiOperation)({ summary: 'Create New PaymentMethod' }),
+    (0, swagger_1.ApiOperation)({ summary: 'Create New Payment Method' }),
     (0, swagger_1.ApiBearerAuth)(),
     (0, common_1.Post)('new'),
     __param(0, (0, common_1.Body)()),
@@ -65,7 +65,7 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], PaymentMethodController.prototype, "createPaymentMethod", null);
 __decorate([
-    (0, swagger_1.ApiOperation)({ summary: 'Delete PaymentMethod' }),
+    (0, swagger_1.ApiOperation)({ summary: 'Delete Payment Method' }),
     (0, swagger_1.ApiBearerAuth)(),
     (0, common_1.Delete)(':id'),
     __param(0, (0, common_1.Param)('id')),
