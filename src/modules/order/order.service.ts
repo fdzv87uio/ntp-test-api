@@ -36,7 +36,7 @@ export class OrderService {
             const planString = order.item.split('-');
             const dayNumber = parseInt(planString[1]);
             current.plan = [planString[0]];
-            current.quota = parseInt(planString[1]);
+            current.quota = planString[0] === "pro" ? 3 : 8;
             const today = new Date()
             const dealine = new Date(today);
             dealine.setDate(today.getDate() + dayNumber);
