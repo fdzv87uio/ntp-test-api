@@ -9,6 +9,7 @@ export declare class OrderService {
     constructor(orderModel: Model<Order>, userService: UserService, mailService: MailService);
     findAllOrders(): Promise<Order[]>;
     findAllOrdersByUserEmail(email: string): Promise<Order[]>;
+    getQuota(plan: string): 3 | 8;
     createOrder(order: Order): Promise<Order>;
     deleteOrderById(id: string): Promise<Order>;
 }

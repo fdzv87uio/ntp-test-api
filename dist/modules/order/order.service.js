@@ -36,6 +36,14 @@ let OrderService = class OrderService {
         }
         return res;
     }
+    getQuota(plan) {
+        if (plan === 'pro') {
+            return 3;
+        }
+        else if (plan === 'premium') {
+            return 8;
+        }
+    }
     async createOrder(order) {
         const currentUser = await this.userService.findOneById(order.userId);
         if (!currentUser) {
@@ -46,7 +54,7 @@ let OrderService = class OrderService {
             const planString = order.item.split('-');
             const dayNumber = parseInt(planString[1]);
             current.plan = [planString[0]];
-            current.quota = parseInt(planString[1]);
+            current.quota = this.getQuota(planString[0]);
             const today = new Date();
             const dealine = new Date(today);
             dealine.setDate(today.getDate() + dayNumber);
