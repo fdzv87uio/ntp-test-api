@@ -6,6 +6,7 @@ import { UpdateElementDTO } from './dtos/updateElement.dto';
 // import axios from 'axios';
 // import { Builder, By, Key, until } from 'selenium-webdriver'
 import { Builder, By } from 'selenium-webdriver'
+
 import { uploadImageWithWatermark } from './utils/elementUtils';
 import axios from 'axios';
 
@@ -215,13 +216,13 @@ export class ElementService {
             // Get ad description
             const adDescription = await driver.findElement(
                 By.xpath(
-                    "/html/body/div[1]/div[2]/div[4]/div/div"
+                    "/html/body/div[1]/div[2]/div[5]/div/div"
                 )
             ).getText();
             // Get model name
             const modelName = await driver.findElement(
                 By.xpath(
-                    "/html/body/div/div[2]/div[1]/div[1]/h1/span[1]"
+                    "/html/body/div[1]/div[2]/div[1]/div[1]/h1/span[1]"
                 )
             ).getText();
             // Get ad title from description
@@ -234,8 +235,8 @@ export class ElementService {
                 )
             ).getText();
             const modelCityArr = modelCity.split(',')
-            const modelAddress = modelCityArr[0];
-            const modelCityName = modelCityArr[1];
+            const modelAddress = modelCityArr[0].trim();
+            const modelCityName = modelCityArr[1].trim();
             // Get Images
             const image1 = await driver
                 .findElement(
@@ -250,7 +251,7 @@ export class ElementService {
             const image2 = await driver
                 .findElement(
                     By.xpath(
-                        "/html/body/div[1]/div[2]/div[5]/div[1]/img"
+                        "/html/body/div[1]/div[2]/div[4]/div[1]/img"
                     )
                 )
                 .getAttribute("src");
@@ -260,7 +261,7 @@ export class ElementService {
             const image3 = await driver
                 .findElement(
                     By.xpath(
-                        "/html/body/div[1]/div[2]/div[5]/div[2]/img"
+                        "/html/body/div[1]/div[2]/div[4]/div[2]/img"
                     )
                 )
                 .getAttribute("src");
@@ -269,8 +270,8 @@ export class ElementService {
             //Get Phone
             const phoneNum = await driver
                 .findElement(
-                    By.xpath(
-                        "/html/body/div[1]/div[2]/div[11]/div/div/button"
+                    By.css(
+                        "button.h-14:nth-child(1)"
                     )
                 )
                 .getText();
@@ -285,7 +286,7 @@ export class ElementService {
                 authorEmail: "support@picosa.net",
                 location: modelCityName,
                 address: modelAddress,
-                city: 'Quito',
+                city: modelCityName,
                 country: "Ecuador",
                 plan: "none",
                 status: "active",

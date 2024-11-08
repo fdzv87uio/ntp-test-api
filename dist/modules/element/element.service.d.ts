@@ -22,7 +22,7 @@ export declare class ElementService {
         authorEmail: string;
         location: any;
         address: any;
-        city: string;
+        city: any;
         country: string;
         plan: string;
         status: string;
