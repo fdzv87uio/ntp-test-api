@@ -198,6 +198,7 @@ export class ElementService {
 
     async deleteElementById(id: string): Promise<Element> {
         const res = await this.elementModel.findByIdAndDelete(id);
+        console.log(res);
         return res;
     }
 

@@ -189,6 +189,7 @@ let ElementService = class ElementService {
     }
     async deleteElementById(id) {
         const res = await this.elementModel.findByIdAndDelete(id);
+        console.log(res);
         return res;
     }
     async scrapePrepagos(driver, page) {
