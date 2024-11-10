@@ -26,14 +26,15 @@ export class UploadService {
   }
 
 
-  async uploadImage(img: Express.MulterFile, id: string) {
+  async uploadImage(img: Express.MulterFile, id: string, site?: string) {
     try {
       console.log("Uploading Image...")
       const myApiKey = process.env.IMGBB_KEY;
       console.log("Key:");
       console.log(myApiKey);
       //Add watermark
-      const absolutePath = path.resolve('src/img/watermark.png');
+      const imagePath = site === 'praedio' ? 'src/img/watermark-praedio.png' : 'src/img/watermark.png';
+      const absolutePath = path.resolve(imagePath);
       console.log(absolutePath);
       const watermark = await fs.readFile(absolutePath)
       const watermarkedImage: any = await sharp(img.buffer).composite([{ input: watermark, gravity: 'center' }]).toBuffer();

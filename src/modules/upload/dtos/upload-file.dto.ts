@@ -1,4 +1,4 @@
-import { IsString } from 'class-validator';
+import { IsOptional, IsString } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
 export class UploadFileDto {
@@ -15,4 +15,9 @@ export class UploadFileDto {
   })
   @IsString()
   id: string;
+
+  @ApiProperty()
+  @IsString()
+  @IsOptional()
+  site?: string;
 }

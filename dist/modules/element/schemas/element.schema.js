@@ -51,6 +51,20 @@ __decorate([
 __decorate([
     (0, mongoose_1.Prop)({
         type: String,
+        default: "renta",
+    }),
+    __metadata("design:type", String)
+], Element.prototype, "operation", void 0);
+__decorate([
+    (0, mongoose_1.Prop)({
+        type: Number,
+        default: 0,
+    }),
+    __metadata("design:type", Number)
+], Element.prototype, "price", void 0);
+__decorate([
+    (0, mongoose_1.Prop)({
+        type: String,
         default: "-0.15899762074480503",
     }),
     __metadata("design:type", String)

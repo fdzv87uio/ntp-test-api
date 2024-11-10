@@ -30,7 +30,7 @@ export class UploadController {
     @Body(new ValidationPipe()) body: UploadFileDto
   ) {
     console.log(body.id);
-    const result = await this.uploadService.uploadImage(file, body.id);
+    const result = await this.uploadService.uploadImage(file, body.id, body.site);
     return result;
   }
 

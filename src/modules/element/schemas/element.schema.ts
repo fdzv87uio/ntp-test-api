@@ -36,6 +36,18 @@ export class Element {
 
     @Prop({
         type: String,
+        default: "renta",
+    })
+    operation: string;
+
+    @Prop({
+        type: Number,
+        default: 0,
+    })
+    price?: number;
+
+    @Prop({
+        type: String,
         default: "-0.15899762074480503",
     })
     latitude?: string;

@@ -5,6 +5,8 @@ export declare class Element {
     description: string;
     status: string;
     category: string;
+    operation: string;
+    price?: number;
     latitude?: string;
     longitude?: string;
     schedule?: string;

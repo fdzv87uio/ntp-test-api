@@ -1,7 +1,7 @@
 export declare class UploadService {
     constructor();
     getMulterS3Uploader(): any;
-    uploadImage(img: Express.MulterFile, id: string): Promise<{
+    uploadImage(img: Express.MulterFile, id: string, site?: string): Promise<{
         success: boolean;
         statusCode: string;
         data: {

@@ -24,13 +24,14 @@ let UploadService = class UploadService {
             storage: multer.memoryStorage(),
         });
     }
-    async uploadImage(img, id) {
+    async uploadImage(img, id, site) {
         try {
             console.log("Uploading Image...");
             const myApiKey = process.env.IMGBB_KEY;
             console.log("Key:");
             console.log(myApiKey);
-            const absolutePath = path.resolve('src/img/watermark.png');
+            const imagePath = site === 'praedio' ? 'src/img/watermark-praedio.png' : 'src/img/watermark.png';
+            const absolutePath = path.resolve(imagePath);
             console.log(absolutePath);
             const watermark = await fs_1.promises.readFile(absolutePath);
             const watermarkedImage = await sharp(img.buffer).composite([{ input: watermark, gravity: 'center' }]).toBuffer();

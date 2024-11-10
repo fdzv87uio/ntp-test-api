@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsArray, IsNotEmpty, IsOptional, IsString } from 'class-validator';
+import { IsArray, IsNotEmpty, IsNumber, IsOptional, IsString } from 'class-validator';
 
 export class UpdateElementDTO {
 
@@ -29,10 +29,20 @@ export class UpdateElementDTO {
     @IsString()
     status: string;
 
-    @ApiProperty({ default: 'mujeres' })
+    @ApiProperty()
     @IsNotEmpty()
     @IsString()
     category: string;
+
+    @ApiProperty({ default: 'renta' })
+    @IsOptional()
+    @IsString()
+    operation?: string;
+
+    @ApiProperty({ default: 0 })
+    @IsOptional()
+    @IsNumber()
+    price?: number;
 
     @ApiProperty({ default: '-0.15899762074480503' })
     @IsOptional()

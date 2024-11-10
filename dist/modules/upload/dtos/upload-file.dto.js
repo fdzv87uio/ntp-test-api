@@ -31,4 +31,10 @@ __decorate([
     (0, class_validator_1.IsString)(),
     __metadata("design:type", String)
 ], UploadFileDto.prototype, "id", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)(),
+    (0, class_validator_1.IsString)(),
+    (0, class_validator_1.IsOptional)(),
+    __metadata("design:type", String)
+], UploadFileDto.prototype, "site", void 0);
 //# sourceMappingURL=upload-file.dto.js.map

@@ -29,7 +29,7 @@ let UploadController = class UploadController {
     }
     async uploadFile(file, body) {
         console.log(body.id);
-        const result = await this.uploadService.uploadImage(file, body.id);
+        const result = await this.uploadService.uploadImage(file, body.id, body.site);
         return result;
     }
 };

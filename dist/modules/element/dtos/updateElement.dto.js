@@ -46,11 +46,23 @@ __decorate([
     __metadata("design:type", String)
 ], UpdateElementDTO.prototype, "status", void 0);
 __decorate([
-    (0, swagger_1.ApiProperty)({ default: 'mujeres' }),
+    (0, swagger_1.ApiProperty)(),
     (0, class_validator_1.IsNotEmpty)(),
     (0, class_validator_1.IsString)(),
     __metadata("design:type", String)
 ], UpdateElementDTO.prototype, "category", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ default: 'renta' }),
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
+], UpdateElementDTO.prototype, "operation", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ default: 0 }),
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsNumber)(),
+    __metadata("design:type", Number)
+], UpdateElementDTO.prototype, "price", void 0);
 __decorate([
     (0, swagger_1.ApiProperty)({ default: '-0.15899762074480503' }),
     (0, class_validator_1.IsOptional)(),
