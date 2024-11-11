@@ -17,12 +17,16 @@ const common_1 = require("@nestjs/common");
 const mail_service_1 = require("./mail.service");
 const swagger_1 = require("@nestjs/swagger");
 const test_dto_1 = require("./dtos/test.dto");
+const completeEmail_dto_1 = require("./dtos/completeEmail.dto");
 let MailController = class MailController {
     constructor(mailService) {
         this.mailService = mailService;
     }
     async sendEmail(testEmail) {
         await this.mailService.sendSimpleEmail(testEmail.email, testEmail.message);
+    }
+    async sendCompleteEmail(testEmail) {
+        await this.mailService.sendCompleteEmail(testEmail.email, testEmail.subject, testEmail.message);
     }
 };
 exports.MailController = MailController;
@@ -33,6 +37,13 @@ __decorate([
     __metadata("design:paramtypes", [test_dto_1.TestDTO]),
     __metadata("design:returntype", Promise)
 ], MailController.prototype, "sendEmail", null);
+__decorate([
+    (0, common_1.Post)('sendCompleteEmail'),
+    __param(0, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [completeEmail_dto_1.CompleteEmailDTO]),
+    __metadata("design:returntype", Promise)
+], MailController.prototype, "sendCompleteEmail", null);
 exports.MailController = MailController = __decorate([
     (0, swagger_1.ApiTags)('Mail'),
     (0, common_1.Controller)('mail'),

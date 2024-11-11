@@ -16,6 +16,16 @@ export class MailService {
         await this.sendGridClient.send(mail);
     }
 
+    async sendCompleteEmail(recipient: string, subject: string, body: string): Promise<void> {
+        const mail: MailDataRequired = {
+            to: recipient,
+            from: 'support@picosa.net', //Approved sender ID in Sendgrid
+            subject: subject,
+            text: body
+        };
+        await this.sendGridClient.send(mail);
+    }
+
     async sendEmailWithTemplate(recipient: string, body: string): Promise<void> {
         const mail: MailDataRequired = {
             to: recipient,

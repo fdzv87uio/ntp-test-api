@@ -25,6 +25,15 @@ let MailService = class MailService {
         };
         await this.sendGridClient.send(mail);
     }
+    async sendCompleteEmail(recipient, subject, body) {
+        const mail = {
+            to: recipient,
+            from: 'support@picosa.net',
+            subject: subject,
+            text: body
+        };
+        await this.sendGridClient.send(mail);
+    }
     async sendEmailWithTemplate(recipient, body) {
         const mail = {
             to: recipient,
