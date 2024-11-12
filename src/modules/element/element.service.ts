@@ -5,7 +5,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { UpdateElementDTO } from './dtos/updateElement.dto';
 // import axios from 'axios';
 // import { Bddduilder, By, Key, until } from 'selenium-webdriver'
-import { Builder, By } from 'selenium-webdriver'
+import { Builder, By, until } from 'selenium-webdriver'
 
 import { uploadImageWithWatermark } from './utils/elementUtils';
 import axios from 'axios';
@@ -172,6 +172,20 @@ export class ElementService {
         }
     }
 
+    async createElementFromPlusvalia(page: string): Promise<any> {
+        try {
+            //scrape from prepagos
+            const driver = await new Builder().forBrowser("chrome").build();
+            const newItem: any = await this.scrapePlusvalia(driver, page);
+            // console.log(newItem);
+            // const result = await this.createElement(newItem);
+            return newItem;
+        } catch (err) {
+            console.log("error creating element " + err);
+            throw new NotFoundException(`Error creating element: ${err.message}`);
+        }
+    }
+
 
     async findElementById(id: string): Promise<Element> {
         const res = await this.elementModel.findById(id);
@@ -298,6 +312,149 @@ export class ElementService {
             console.log(newItem);
             await driver.close();
             return newItem;
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    //Scrapper Function - plusvalía.com
+    async scrapePlusvalia(driver, page) {
+        const waitInterval = 20000;
+        const url = page;
+        try {
+            await driver.get(url);
+            await driver.manage().window().setRect({ width: 1366, height: 720 });
+            await driver.manage().setTimeouts({ implicit: waitInterval });
+            await driver.switchTo().defaultContent();
+            await driver.wait(until.elementIsVisible(driver.findElement(By.xpath('//*[@id="map-section"]/div[1]/h4'))), 5000);
+            const title = await driver
+                .findElement(
+                    By.xpath(
+                        '//*[@id="map-section"]/div[1]/h4'
+                    )
+                )
+                .getText();
+            const operation = await driver
+                .findElement(
+                    By.xpath(
+                        '//*[@id="article-container"]/div[1]/div/div[1]/span[1]'
+                    )
+                )
+                .getText();
+            const description = await driver
+                .findElement(
+                    By.xpath(
+                        ' //*[@id="longDescription"]/div'
+                    )
+                )
+                .getText();
+            await driver.wait(until.elementIsVisible(driver.findElement(By.xpath('/html/body/div[2]/div[7]/div/div/div[2]/div[4]/img'))), 3000);
+            const image1 = await driver
+                .findElement(
+                    By.xpath(
+                        '/html/body/div[2]/div[7]/div/div/div[2]/div[4]/img'
+                    )
+                )
+                .getAttribute("src");
+            const imageBuffer1 = await this.fetchImageFromUrl(image1);
+            const image1Url = await uploadImageWithWatermark(imageBuffer1, page, 'praedio');
+
+
+
+            // const price = await driver
+            //     .findElement(
+            //         By.xpath(
+            //             "/html/body/div[1]/div/div[1]/div/div[3]/div/div/div[1]/div[1]/div[2]/div/div/div/div/div/div[1]/div[2]/div/div[2]/div/div[1]/div[1]/div[1]/div[1]/div/span"
+            //         )
+            //     )
+            //     .getText();
+            // await driver.manage().setTimeouts({ implicit: waitInterval });
+            // await driver.actions().scroll(0, 0, 0, 400).perform();
+            // await driver.manage().setTimeouts({ implicit: waitInterval });
+            // const ellipsis = await driver.findElement(
+            //     By.xpath(
+            //         "/html/body/div[1]/div/div[1]/div/div[3]/div/div/div[1]/div[1]/div[2]/div/div/div/div/div/div[1]/div[2]/div/div[2]/div/div[1]/div[1]/div[8]/div[2]/div/div/div/span/div"
+            //     )
+            // );
+            // await await ellipsis.click();
+            // const description = await driver
+            //     .findElement(
+            //         By.xpath(
+            //             "/html/body/div[1]/div/div[1]/div/div[3]/div/div/div[1]/div[1]/div[2]/div/div/div/div/div/div[1]/div[2]/div/div[2]/div/div[1]/div[1]/div[8]/div[2]/div/div/div/span"
+            //         )
+            //     )
+            //     .getAttribute("textContent");
+
+            // const city = await driver
+            //     .findElement(
+            //         By.xpath(
+            //             "/html/body/div[1]/div/div[1]/div/div[3]/div/div/div[1]/div[1]/div[2]/div/div/div/div/div/div[1]/div[2]/div/div[2]/div/div[1]/div[1]/div[7]/div[3]/div/div[1]/span"
+            //         )
+            //     )
+            //     .getText();
+            // const image1 = await driver
+            //     .findElement(
+            //         By.xpath(
+            //             "/html/body/div[1]/div/div[1]/div/div[3]/div/div/div[1]/div[1]/div[2]/div/div/div/div/div/div[1]/div[2]/div/div[1]/div/div[3]/div/div[1]/div/div/img"
+            //         )
+            //     )
+            //     .getAttribute("src");
+            // const image2 = await driver
+            //     .findElement(
+            //         By.xpath(
+            //             "/html/body/div[1]/div/div[1]/div/div[3]/div/div/div[1]/div[1]/div[2]/div/div/div/div/div/div[1]/div[2]/div/div[1]/div/div[3]/div/div[2]/div/div/img"
+            //         )
+            //     )
+            //     .getAttribute("src");
+            // const image3 = await driver
+            //     .findElement(
+            //         By.xpath(
+            //             "/html/body/div[1]/div/div[1]/div/div[3]/div/div/div[1]/div[1]/div[2]/div/div/div/div/div/div[1]/div[2]/div/div[1]/div/div[3]/div/div[3]/div/div/img"
+            //         )
+            //     )
+            //     .getAttribute("src");
+
+
+            // const location = await getGeolocation(address);
+
+            // // const image1Url = await uploadImage(image1);
+            // // const image2Url = await uploadImage(image2);
+            // // const image3Url = await uploadImage(image3);
+            // // const image4Url = await uploadImage(image4);
+            // // const image5Url = await uploadImage(image5);
+            // // const image6Url = await uploadImage(image6);
+            // // const image7Url = await uploadImage(image7);
+            // // const image8Url = await uploadImage(image8);
+            // const rdRooms = Math.floor(Math.random() * 3) + 1;
+            // const rdGarages = Math.floor(Math.random() * 3) + 1;
+            // const rdBathrooms = Math.floor(Math.random() * 3) + 1;
+            // const rdArea = Math.floor(Math.random() * (220 - 120 + 1)) + 120;
+
+            // const resultItems = {
+            //     description: `${title} - ${description.replaceAll("\n", " ")}`,
+            //     // category: cat,
+            //     // operation: op,
+            //     // address: location.formatted,
+            //     price: parseInt(price.replaceAll("$", "").replaceAll(".", "")),
+            //     country: "ecuador",
+            //     area: rdArea,
+            //     rooms: rdRooms,
+            //     bathrooms: rdBathrooms,
+            //     garages: rdGarages,
+            //     city: city.toLowerCase(),
+            //     telefono: "+593999132159",
+            //     email: url,
+            //     name: "Plaza Predial",
+            //     // latitude: location.latitude,
+            //     // longitude: location.longitude,
+            //     image1: image1,
+            //     image2: image2,
+            //     image3: image3,
+            // };
+            // console.log(resultItems);
+            // // const newReferal = await createReferal(resultItems);
+            // return resultItems;
+            return { title: title, operacion: operation, description: description, image: image1Url }
         } catch (error) {
             console.log(error);
         }

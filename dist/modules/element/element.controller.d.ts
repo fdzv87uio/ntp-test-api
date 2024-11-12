@@ -11,6 +11,7 @@ export declare class ElementController {
     getAllElementsByUserId(id: string): Promise<any[]>;
     createElement(element: CreateElementDTO): Promise<any>;
     createElementFromPrepagos(element: ScrapePageDTO): Promise<any>;
+    createElementFromPlusvalia(element: ScrapePageDTO): Promise<any>;
     findElementsByQuery(query: QueryDTO): Promise<any>;
     getElementBySlug(slug: string): Promise<any>;
     getElement(id: string): Promise<any>;

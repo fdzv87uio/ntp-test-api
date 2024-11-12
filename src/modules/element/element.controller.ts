@@ -57,6 +57,15 @@ export class ElementController {
         return this.elementService.createElementFromPrepagos(element.page)
     }
 
+    //Create New Element From Prepagos
+    @ApiOperation({ summary: 'Crawl And Create New Element from plusvalía.com' })
+    @Post('newFromPlusvalia')
+    async createElementFromPlusvalia(@Body() element: ScrapePageDTO): Promise<any> {
+
+        return this.elementService.createElementFromPlusvalia(element.page)
+    }
+
+
     //Find Elements By Query
     @ApiOperation({ summary: 'Find Elements By Query' })
     @Post('findElementsByQuery')
@@ -65,7 +74,7 @@ export class ElementController {
     }
 
     // Get Element By ID
-    @ApiOperation({ summary: 'Get Element By ID' })
+    @ApiOperation({ summary: 'Get Element By Slug' })
     @Get('getElementBySlug/:slug')
     async getElementBySlug(
         @Param('slug')

@@ -5,12 +5,14 @@ import { promises as fs } from 'fs'
 import * as sharp from 'sharp';
 import * as path from 'path';
 
-export async function uploadImageWithWatermark(img: any, id?: string) {
+export async function uploadImageWithWatermark(img: any, id?: string, site?: string) {
     try {
-        const absolutePath = path.resolve('src/img/watermark.png');
+        const wmPath = site && site === "praedio" ? 'src/img/watermark-praedio.png' : 'src/img/watermark.png';
+        const absolutePath = path.resolve(wmPath);
         console.log(absolutePath);
         const watermark = await fs.readFile(absolutePath)
-        const watermarkedImage: any = await sharp(img).composite([{ input: watermark, gravity: 'center' }]).toBuffer();
+        const flipped: any = await sharp(img).flop().resize(520, 410).toBuffer();
+        const watermarkedImage: any = await sharp(flipped).composite([{ input: watermark, gravity: 'center' }]).toBuffer();
         console.log(watermarkedImage);
         const myApiKey = process.env.IMGBB_KEY;
         const formData = new FormData();
@@ -27,3 +29,4 @@ export async function uploadImageWithWatermark(img: any, id?: string) {
         console.log(error.message);
     }
 }
+

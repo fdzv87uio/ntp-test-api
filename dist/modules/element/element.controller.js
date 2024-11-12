@@ -40,6 +40,9 @@ let ElementController = class ElementController {
     async createElementFromPrepagos(element) {
         return this.elementService.createElementFromPrepagos(element.page);
     }
+    async createElementFromPlusvalia(element) {
+        return this.elementService.createElementFromPlusvalia(element.page);
+    }
     async findElementsByQuery(query) {
         return this.elementService.findAllElementsByQuery(query);
     }
@@ -103,6 +106,14 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], ElementController.prototype, "createElementFromPrepagos", null);
 __decorate([
+    (0, swagger_1.ApiOperation)({ summary: 'Crawl And Create New Element from plusvalía.com' }),
+    (0, common_1.Post)('newFromPlusvalia'),
+    __param(0, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [scrapePage_dto_1.ScrapePageDTO]),
+    __metadata("design:returntype", Promise)
+], ElementController.prototype, "createElementFromPlusvalia", null);
+__decorate([
     (0, swagger_1.ApiOperation)({ summary: 'Find Elements By Query' }),
     (0, common_1.Post)('findElementsByQuery'),
     __param(0, (0, common_1.Body)()),
@@ -111,7 +122,7 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], ElementController.prototype, "findElementsByQuery", null);
 __decorate([
-    (0, swagger_1.ApiOperation)({ summary: 'Get Element By ID' }),
+    (0, swagger_1.ApiOperation)({ summary: 'Get Element By Slug' }),
     (0, common_1.Get)('getElementBySlug/:slug'),
     __param(0, (0, common_1.Param)('slug')),
     __metadata("design:type", Function),

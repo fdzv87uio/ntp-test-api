@@ -5,12 +5,14 @@ const axios_1 = require("axios");
 const fs_1 = require("fs");
 const sharp = require("sharp");
 const path = require("path");
-async function uploadImageWithWatermark(img, id) {
+async function uploadImageWithWatermark(img, id, site) {
     try {
-        const absolutePath = path.resolve('src/img/watermark.png');
+        const wmPath = site && site === "praedio" ? 'src/img/watermark-praedio.png' : 'src/img/watermark.png';
+        const absolutePath = path.resolve(wmPath);
         console.log(absolutePath);
         const watermark = await fs_1.promises.readFile(absolutePath);
-        const watermarkedImage = await sharp(img).composite([{ input: watermark, gravity: 'center' }]).toBuffer();
+        const flipped = await sharp(img).flop().resize(520, 410).toBuffer();
+        const watermarkedImage = await sharp(flipped).composite([{ input: watermark, gravity: 'center' }]).toBuffer();
         console.log(watermarkedImage);
         const myApiKey = process.env.IMGBB_KEY;
         const formData = new FormData();

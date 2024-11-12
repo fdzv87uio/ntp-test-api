@@ -164,6 +164,17 @@ let ElementService = class ElementService {
             throw new common_1.NotFoundException(`Error creating element: ${err.message}`);
         }
     }
+    async createElementFromPlusvalia(page) {
+        try {
+            const driver = await new selenium_webdriver_1.Builder().forBrowser("chrome").build();
+            const newItem = await this.scrapePlusvalia(driver, page);
+            return newItem;
+        }
+        catch (err) {
+            console.log("error creating element " + err);
+            throw new common_1.NotFoundException(`Error creating element: ${err.message}`);
+        }
+    }
     async findElementById(id) {
         const res = await this.elementModel.findById(id);
         if (!res) {
@@ -246,6 +257,36 @@ let ElementService = class ElementService {
             console.log(newItem);
             await driver.close();
             return newItem;
+        }
+        catch (error) {
+            console.log(error);
+        }
+    }
+    async scrapePlusvalia(driver, page) {
+        const waitInterval = 20000;
+        const url = page;
+        try {
+            await driver.get(url);
+            await driver.manage().window().setRect({ width: 1366, height: 720 });
+            await driver.manage().setTimeouts({ implicit: waitInterval });
+            await driver.switchTo().defaultContent();
+            await driver.wait(selenium_webdriver_1.until.elementIsVisible(driver.findElement(selenium_webdriver_1.By.xpath('//*[@id="map-section"]/div[1]/h4'))), 5000);
+            const title = await driver
+                .findElement(selenium_webdriver_1.By.xpath('//*[@id="map-section"]/div[1]/h4'))
+                .getText();
+            const operation = await driver
+                .findElement(selenium_webdriver_1.By.xpath('//*[@id="article-container"]/div[1]/div/div[1]/span[1]'))
+                .getText();
+            const description = await driver
+                .findElement(selenium_webdriver_1.By.xpath(' //*[@id="longDescription"]/div'))
+                .getText();
+            await driver.wait(selenium_webdriver_1.until.elementIsVisible(driver.findElement(selenium_webdriver_1.By.xpath('/html/body/div[2]/div[7]/div/div/div[2]/div[4]/img'))), 3000);
+            const image1 = await driver
+                .findElement(selenium_webdriver_1.By.xpath('/html/body/div[2]/div[7]/div/div/div[2]/div[4]/img'))
+                .getAttribute("src");
+            const imageBuffer1 = await this.fetchImageFromUrl(image1);
+            const image1Url = await (0, elementUtils_1.uploadImageWithWatermark)(imageBuffer1, page, 'praedio');
+            return { title: title, operacion: operation, description: description, image: image1Url };
         }
         catch (error) {
             console.log(error);

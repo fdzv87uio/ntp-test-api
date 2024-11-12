@@ -16,6 +16,7 @@ import { AnswerModule } from './modules/answer/answer.module';
 import { ElementModule } from './modules/element/element.module';
 import { PaymentMethodModule } from './modules/paymentMethod/paymentMethod.module';
 import { OrderModule } from './modules/order/order.module';
+import { GeolocationModule } from './modules/geolocation/geolocation.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -27,7 +28,7 @@ import { OrderModule } from './modules/order/order.module';
     UserModule,
     EventModule,
     TransactionModule,
-    UploadModule, ConfigModule, MailModule, TaskModule, AnswerModule, TaskModule, ElementModule, PaymentMethodModule, OrderModule
+    UploadModule, ConfigModule, MailModule, TaskModule, AnswerModule, TaskModule, ElementModule, PaymentMethodModule, OrderModule, GeolocationModule
   ],
   controllers: [AppController, MailController],
   providers: [AppService, MailService],
