@@ -6,6 +6,7 @@ import { CreateElementDTO } from './dtos/createElement.dto';
 import { UpdateElementDTO } from './dtos/updateElement.dto';
 import { QueryDTO } from './dtos/query.dto';
 import { ScrapePageDTO } from './dtos/scrapePage.dto';
+import { PraediaDTO } from './dtos/preadia.dto';
 
 
 @ApiTags('Elements')
@@ -72,6 +73,14 @@ export class ElementController {
     async findElementsByQuery(@Body() query: QueryDTO): Promise<any> {
         return this.elementService.findAllElementsByQuery(query)
     }
+
+    //Find Praedia By Query
+    @ApiOperation({ summary: 'Find Preadia By Query' })
+    @Post('findPraediaByQuery')
+    async findPraediaByQuery(@Body() query: PraediaDTO): Promise<any> {
+        return this.elementService.findAllPraediaByQuery(query)
+    }
+
 
     // Get Element By ID
     @ApiOperation({ summary: 'Get Element By Slug' })

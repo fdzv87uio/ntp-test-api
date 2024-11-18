@@ -3,6 +3,7 @@ import { CreateElementDTO } from './dtos/createElement.dto';
 import { UpdateElementDTO } from './dtos/updateElement.dto';
 import { QueryDTO } from './dtos/query.dto';
 import { ScrapePageDTO } from './dtos/scrapePage.dto';
+import { PraediaDTO } from './dtos/preadia.dto';
 export declare class ElementController {
     private elementService;
     constructor(elementService: ElementService);
@@ -13,6 +14,7 @@ export declare class ElementController {
     createElementFromPrepagos(element: ScrapePageDTO): Promise<any>;
     createElementFromPlusvalia(element: ScrapePageDTO): Promise<any>;
     findElementsByQuery(query: QueryDTO): Promise<any>;
+    findPraediaByQuery(query: PraediaDTO): Promise<any>;
     getElementBySlug(slug: string): Promise<any>;
     getElement(id: string): Promise<any>;
     updateElement(id: string, element: UpdateElementDTO): Promise<any>;

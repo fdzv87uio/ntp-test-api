@@ -116,6 +116,11 @@ export class CreateElementDTO {
     @IsArray()
     videos?: string[];
 
+    @ApiProperty({ default: "picosa" })
+    @IsOptional()
+    @IsString()
+    site?: string;
+
 }
 
 

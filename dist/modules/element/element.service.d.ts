@@ -1,12 +1,12 @@
 import { Element } from './schemas/element.schema';
-import { UpdateElementDTO } from './dtos/updateElement.dto';
 export declare class ElementService {
     private elementModel;
     findAllElements(): Promise<Element[]>;
     findAllElementsByQuery(query: any): Promise<Element[]>;
+    findAllPraediaByQuery(query: any): Promise<Element[]>;
     findAllAvailableElementsByUserEmail(userEmail: string): Promise<Element[]>;
     findAllAvailableElementsByUserId(id: string): Promise<Element[]>;
-    createElement(element: UpdateElementDTO): Promise<Element>;
+    createElement(element: any): Promise<Element>;
     createElementFromPrepagos(page: string): Promise<any>;
     createElementFromPlusvalia(page: string): Promise<any>;
     findElementById(id: string): Promise<Element>;
@@ -32,10 +32,27 @@ export declare class ElementService {
         images: any[];
     }>;
     scrapePlusvalia(driver: any, page: any): Promise<{
+        userId: string;
         title: any;
-        operacion: any;
         description: any;
-        image: any;
+        authorName: any;
+        authorNationality: string;
+        authorPhone: string;
+        authorEmail: string;
+        location: any;
+        address: any;
+        city: any;
+        country: string;
+        plan: string;
+        status: string;
+        latitude: any;
+        longitude: any;
+        category: any;
+        operation: any;
+        price: any;
+        schedule: string[];
+        images: any[];
+        site: string;
     }>;
     fetchImageFromUrl(url: string): Promise<Buffer>;
 }

@@ -100,6 +100,9 @@ export class Element {
     @Prop()
     videos?: string[];
 
+    @Prop({ default: "picosa" })
+    site: string;
+
 
 }
 

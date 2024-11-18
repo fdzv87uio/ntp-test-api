@@ -22,4 +22,5 @@ export declare class UpdateElementDTO {
     deadline?: string;
     images?: string[];
     videos?: string[];
+    site: string;
 }

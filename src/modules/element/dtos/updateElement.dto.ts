@@ -119,6 +119,11 @@ export class UpdateElementDTO {
     @IsArray()
     videos?: string[];
 
+    @ApiProperty({ default: 'picosa' })
+    @IsNotEmpty()
+    @IsString()
+    site: string;
+
 }
 
 

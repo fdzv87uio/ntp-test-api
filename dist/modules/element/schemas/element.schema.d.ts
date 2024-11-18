@@ -22,6 +22,7 @@ export declare class Element {
     deadline?: string;
     images?: string[];
     videos?: string[];
+    site: string;
 }
 export declare const ElementSchema: import("mongoose").Schema<Element, import("mongoose").Model<Element, any, any, any, import("mongoose").Document<unknown, any, Element> & Element & {
     _id: import("mongoose").Types.ObjectId;

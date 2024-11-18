@@ -131,6 +131,10 @@ __decorate([
     (0, mongoose_1.Prop)(),
     __metadata("design:type", Array)
 ], Element.prototype, "videos", void 0);
+__decorate([
+    (0, mongoose_1.Prop)({ default: "picosa" }),
+    __metadata("design:type", String)
+], Element.prototype, "site", void 0);
 exports.Element = Element = __decorate([
     (0, mongoose_1.Schema)({
         timestamps: true

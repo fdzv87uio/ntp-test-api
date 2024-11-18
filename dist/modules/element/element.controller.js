@@ -21,6 +21,7 @@ const createElement_dto_1 = require("./dtos/createElement.dto");
 const updateElement_dto_1 = require("./dtos/updateElement.dto");
 const query_dto_1 = require("./dtos/query.dto");
 const scrapePage_dto_1 = require("./dtos/scrapePage.dto");
+const preadia_dto_1 = require("./dtos/preadia.dto");
 let ElementController = class ElementController {
     constructor(elementService) {
         this.elementService = elementService;
@@ -45,6 +46,9 @@ let ElementController = class ElementController {
     }
     async findElementsByQuery(query) {
         return this.elementService.findAllElementsByQuery(query);
+    }
+    async findPraediaByQuery(query) {
+        return this.elementService.findAllPraediaByQuery(query);
     }
     async getElementBySlug(slug) {
         return this.elementService.findElementBySlug(slug);
@@ -121,6 +125,14 @@ __decorate([
     __metadata("design:paramtypes", [query_dto_1.QueryDTO]),
     __metadata("design:returntype", Promise)
 ], ElementController.prototype, "findElementsByQuery", null);
+__decorate([
+    (0, swagger_1.ApiOperation)({ summary: 'Find Preadia By Query' }),
+    (0, common_1.Post)('findPraediaByQuery'),
+    __param(0, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [preadia_dto_1.PraediaDTO]),
+    __metadata("design:returntype", Promise)
+], ElementController.prototype, "findPraediaByQuery", null);
 __decorate([
     (0, swagger_1.ApiOperation)({ summary: 'Get Element By Slug' }),
     (0, common_1.Get)('getElementBySlug/:slug'),
