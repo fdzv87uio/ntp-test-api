@@ -17,4 +17,5 @@ export declare class UpdateUserDto {
     account_balance?: number[];
     quota?: number;
     deadline?: string;
+    site?: string;
 }

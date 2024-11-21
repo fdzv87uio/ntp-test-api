@@ -10,6 +10,7 @@ export declare class ElementController {
     getAllElements(): Promise<any[]>;
     getAllElementsByUserEmail(userEmail: string): Promise<any[]>;
     getAllElementsByUserId(id: string): Promise<any[]>;
+    getAllPreadiaByUserId(id: string): Promise<any[]>;
     createElement(element: CreateElementDTO): Promise<any>;
     createElementFromPrepagos(element: ScrapePageDTO): Promise<any>;
     createElementFromPlusvalia(element: ScrapePageDTO): Promise<any>;

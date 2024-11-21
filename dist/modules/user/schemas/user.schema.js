@@ -63,6 +63,11 @@ exports.UserSchema = new mongoose_1.Schema({
     deadline: { type: String, trim: true, require: false, default: "none" },
     created_at: { type: Date, required: false, default: Date.now() },
     updated_at: { type: Date },
+    site: {
+        type: String,
+        default: "picosa",
+        required: false,
+    },
 });
 exports.UserSchema.plugin(uniqueValidator);
 exports.UserSchema.plugin(mongooseHidden());

@@ -7,6 +7,7 @@ import { CreateUserDto } from 'src/modules/user/dtos/create-user.dto';
 import { aesDecrypt, aesEncrypt } from '../utils/aes';
 import { MailService } from 'src/modules/mail/mail.service';
 import { ResetPasswordDTO } from '../dtos/resetPassword.dto';
+import { getDomain } from '../utils/formatters';
 
 
 @Injectable()
@@ -68,13 +69,16 @@ export class AuthService {
         const user = await this.userService.create(currentData);
         const payload = { id: user.id, email: user.email };
         const token = this.createToken(payload, user);
+        const currentSite = currentData.site ? currentData.site : "picosa";
+        const currentDomain = getDomain(currentSite);
         // const token = await this.login(user);
         // const accessToken = token.accessToken;
         // Send email with the Access Token
+
         const msgEmail = user.email;
-        const tokenURL = `${process.env.PICOSA_APP_URI}/verify-email/${msgEmail}/${token}`
-        const msg = `Estimdo Usuario de PICOSA.net: Utilice el siguiente link y cópielo en su explorador para verificar su cuenta: ${tokenURL}`
-        await this.mailService.sendSimpleEmail(msgEmail, msg);
+        const tokenURL = `${currentDomain}/verify-email/${msgEmail}/${token}`
+        const msg = `Estimado Usuario de ${currentSite.toUpperCase()}: Utilice el siguiente link y cópielo en su explorador para verificar su cuenta: ${tokenURL}`
+        await this.mailService.sendCompleteEmail(msgEmail, `${currentSite.toUpperCase()} - Verificación de Cuenta`, msg);
         return {
             user
         }

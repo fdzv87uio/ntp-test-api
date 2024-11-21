@@ -94,5 +94,10 @@ export class UpdateUserDto {
   @IsOptional()
   deadline?: string;
 
+  @ApiProperty({ default: "picosa" })
+  @IsString()
+  @IsOptional()
+  site?: string;
+
 
 }

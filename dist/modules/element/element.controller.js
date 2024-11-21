@@ -35,6 +35,9 @@ let ElementController = class ElementController {
     async getAllElementsByUserId(id) {
         return this.elementService.findAllAvailableElementsByUserId(id);
     }
+    async getAllPreadiaByUserId(id) {
+        return this.elementService.findAllAvailablePraediaByUserId(id);
+    }
     async createElement(element) {
         return this.elementService.createElement(element);
     }
@@ -91,6 +94,16 @@ __decorate([
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", Promise)
 ], ElementController.prototype, "getAllElementsByUserId", null);
+__decorate([
+    (0, common_1.UseGuards)(guard_1.JwtAuthGuard),
+    (0, swagger_1.ApiBearerAuth)(),
+    (0, swagger_1.ApiOperation)({ summary: 'Get All Available Praedia by User Id' }),
+    (0, common_1.Get)('getAllAvailablePraediaByUserId/:id'),
+    __param(0, (0, common_1.Param)('id')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", Promise)
+], ElementController.prototype, "getAllPreadiaByUserId", null);
 __decorate([
     (0, common_1.UseGuards)(guard_1.JwtAuthGuard),
     (0, swagger_1.ApiBearerAuth)(),

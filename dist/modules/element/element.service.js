@@ -127,7 +127,7 @@ let ElementService = class ElementService {
                             { city: { $regex: query.city, $options: 'i' } },
                             { country: { $regex: query.country, $options: 'i' } },
                             { status: 'active' },
-                            { operation: query.operation },
+                            { operation: { $regex: query.operation, $options: 'i' } },
                             { site: "praedio" },
                             {
                                 $or: [
@@ -172,7 +172,7 @@ let ElementService = class ElementService {
                             { country: { $regex: query.country, $options: 'i' } },
                             { status: 'active' },
                             { description: { $regex: formattedQuery, $options: 'i' } },
-                            { operation: query.operation },
+                            { operation: { $regex: query.operation, $options: 'i' } },
                             { site: "praedio" },
                             {
                                 $or: [
@@ -213,6 +213,10 @@ let ElementService = class ElementService {
     }
     async findAllAvailableElementsByUserId(id) {
         const elements = await this.elementModel.find({ userId: id });
+        return elements;
+    }
+    async findAllAvailablePraediaByUserId(id) {
+        const elements = await this.elementModel.find({ userId: id, site: "praedio" });
         return elements;
     }
     async createElement(element) {
@@ -393,7 +397,7 @@ let ElementService = class ElementService {
                 .getText();
             const categoryArr = categoryElement.split("·");
             const author = await driver
-                .findElement(selenium_webdriver_1.By.xpath('/html/body/div[2]/main/div/div/article/div/section[5]/div/div[1]/div/div[2]/h3'))
+                .findElement(selenium_webdriver_1.By.xpath('//*[@id="reactPublisherData"]/div/div[1]/div/div/h3'))
                 .getText();
             await driver.wait(selenium_webdriver_1.until.elementIsVisible(driver.findElement(selenium_webdriver_1.By.xpath('/html/body/div[2]/div[7]/div/div/div[2]/div[2]/img'))), 3000);
             const image1 = await driver
@@ -413,7 +417,17 @@ let ElementService = class ElementService {
                 .getAttribute("src");
             const imageBuffer3 = await this.fetchImageFromUrl(image3);
             const image3Url = await (0, elementUtils_1.uploadImageWithWatermark)(imageBuffer3, page, 'praedio');
-            const geolocation = await (0, geolocation_utils_1.getOneGeolocationByQuery)(addressArr[0]);
+            const image4 = await driver
+                .findElement(selenium_webdriver_1.By.xpath('/html/body/div[2]/div[7]/div/div/div[2]/div[1]/img'))
+                .getAttribute("src");
+            const imageBuffer4 = await this.fetchImageFromUrl(image4);
+            const image4Url = await (0, elementUtils_1.uploadImageWithWatermark)(imageBuffer4, page, 'praedio');
+            const image5 = await driver
+                .findElement(selenium_webdriver_1.By.xpath('/html/body/div[2]/div[7]/div/div/div[2]/div[3]/img'))
+                .getAttribute("src");
+            const imageBuffer5 = await this.fetchImageFromUrl(image5);
+            const image5Url = await (0, elementUtils_1.uploadImageWithWatermark)(imageBuffer5, page, 'praedio');
+            const geolocation = await (0, geolocation_utils_1.getOneGeolocationByQuery)(`${addressArr[1]}, ${addressArr[2]}, Ecuador`);
             const newItem = {
                 userId: '671d11005b8296252591f282',
                 title: title,
@@ -434,9 +448,10 @@ let ElementService = class ElementService {
                 operation: operationArr[0],
                 price: operationArr[2].replaceAll('.', ''),
                 schedule: ['lunes', 'martes', 'miércoles', 'jueves', 'viernes', 'sábado', 'domingo'],
-                images: [image1Url, image2Url, image3Url],
+                images: [image1Url, image2Url, image3Url, image4Url, image5Url],
                 site: 'praedio',
             };
+            await driver.close();
             return newItem;
         }
         catch (error) {

@@ -16,6 +16,7 @@ const bcrypt_1 = require("bcrypt");
 const jwt_1 = require("@nestjs/jwt");
 const aes_1 = require("../utils/aes");
 const mail_service_1 = require("../../mail/mail.service");
+const formatters_1 = require("../utils/formatters");
 let AuthService = class AuthService {
     constructor(userService, jwtService, mailService) {
         this.userService = userService;
@@ -70,10 +71,12 @@ let AuthService = class AuthService {
         const user = await this.userService.create(currentData);
         const payload = { id: user.id, email: user.email };
         const token = this.createToken(payload, user);
+        const currentSite = currentData.site ? currentData.site : "picosa";
+        const currentDomain = (0, formatters_1.getDomain)(currentSite);
         const msgEmail = user.email;
-        const tokenURL = `${process.env.PICOSA_APP_URI}/verify-email/${msgEmail}/${token}`;
-        const msg = `Estimdo Usuario de PICOSA.net: Utilice el siguiente link y cópielo en su explorador para verificar su cuenta: ${tokenURL}`;
-        await this.mailService.sendSimpleEmail(msgEmail, msg);
+        const tokenURL = `${currentDomain}/verify-email/${msgEmail}/${token}`;
+        const msg = `Estimado Usuario de ${currentSite.toUpperCase()}: Utilice el siguiente link y cópielo en su explorador para verificar su cuenta: ${tokenURL}`;
+        await this.mailService.sendCompleteEmail(msgEmail, `${currentSite.toUpperCase()} - Verificación de Cuenta`, msg);
         return {
             user
         };

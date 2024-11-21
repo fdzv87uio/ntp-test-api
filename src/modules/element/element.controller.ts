@@ -41,6 +41,15 @@ export class ElementController {
         return this.elementService.findAllAvailableElementsByUserId(id);
     }
 
+    // Get All Existing Praedia by UserID
+    @UseGuards(JwtAuthGuard)
+    @ApiBearerAuth()
+    @ApiOperation({ summary: 'Get All Available Praedia by User Id' })
+    @Get('getAllAvailablePraediaByUserId/:id')
+    async getAllPreadiaByUserId(@Param('id') id: string): Promise<any[]> {
+        return this.elementService.findAllAvailablePraediaByUserId(id);
+    }
+
     //Create New Element
     @UseGuards(JwtAuthGuard)
     @ApiBearerAuth()

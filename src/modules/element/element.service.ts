@@ -127,7 +127,7 @@ export class ElementService {
                             { city: { $regex: query.city, $options: 'i' } },
                             { country: { $regex: query.country, $options: 'i' } },
                             { status: 'active' },
-                            { operation: query.operation },
+                            { operation: { $regex: query.operation, $options: 'i' } },
                             { site: "praedio" },
                             {
                                 $or: [
@@ -173,7 +173,7 @@ export class ElementService {
                             { country: { $regex: query.country, $options: 'i' } },
                             { status: 'active' },
                             { description: { $regex: formattedQuery, $options: 'i' } },
-                            { operation: query.operation },
+                            { operation: { $regex: query.operation, $options: 'i' } },
                             { site: "praedio" },
                             {
                                 $or: [
@@ -219,6 +219,11 @@ export class ElementService {
 
     async findAllAvailableElementsByUserId(id: string): Promise<Element[]> {
         const elements = await this.elementModel.find({ userId: id });
+        return elements;
+    }
+
+    async findAllAvailablePraediaByUserId(id: string): Promise<Element[]> {
+        const elements = await this.elementModel.find({ userId: id, site: "praedio" });
         return elements;
     }
 
@@ -475,7 +480,7 @@ export class ElementService {
             const author = await driver
                 .findElement(
                     By.xpath(
-                        '/html/body/div[2]/main/div/div/article/div/section[5]/div/div[1]/div/div[2]/h3'
+                        '//*[@id="reactPublisherData"]/div/div[1]/div/div/h3'
                     )
                 )
                 .getText();
@@ -513,7 +518,28 @@ export class ElementService {
             const imageBuffer3 = await this.fetchImageFromUrl(image3);
             const image3Url = await uploadImageWithWatermark(imageBuffer3, page, 'praedio');
 
-            const geolocation = await getOneGeolocationByQuery(addressArr[0])
+            const image4 = await driver
+                .findElement(
+                    By.xpath(
+                        '/html/body/div[2]/div[7]/div/div/div[2]/div[1]/img'
+                    )
+                )
+                .getAttribute("src");
+            const imageBuffer4 = await this.fetchImageFromUrl(image4);
+            const image4Url = await uploadImageWithWatermark(imageBuffer4, page, 'praedio');
+
+            const image5 = await driver
+                .findElement(
+                    By.xpath(
+                        '/html/body/div[2]/div[7]/div/div/div[2]/div[3]/img'
+                    )
+                )
+                .getAttribute("src");
+            const imageBuffer5 = await this.fetchImageFromUrl(image5);
+            const image5Url = await uploadImageWithWatermark(imageBuffer5, page, 'praedio');
+
+
+            const geolocation = await getOneGeolocationByQuery(`${addressArr[1]}, ${addressArr[2]}, Ecuador`)
 
 
             const newItem = {
@@ -536,9 +562,10 @@ export class ElementService {
                 operation: operationArr[0],
                 price: operationArr[2].replaceAll('.', ''),
                 schedule: ['lunes', 'martes', 'miércoles', 'jueves', 'viernes', 'sábado', 'domingo'],
-                images: [image1Url, image2Url, image3Url],
+                images: [image1Url, image2Url, image3Url, image4Url, image5Url],
                 site: 'praedio',
             }
+            await driver.close();
             return newItem;
         } catch (error) {
             console.log(error);

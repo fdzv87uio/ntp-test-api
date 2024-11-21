@@ -6,6 +6,7 @@ export declare class ElementService {
     findAllPraediaByQuery(query: any): Promise<Element[]>;
     findAllAvailableElementsByUserEmail(userEmail: string): Promise<Element[]>;
     findAllAvailableElementsByUserId(id: string): Promise<Element[]>;
+    findAllAvailablePraediaByUserId(id: string): Promise<Element[]>;
     createElement(element: any): Promise<Element>;
     createElementFromPrepagos(page: string): Promise<any>;
     createElementFromPlusvalia(page: string): Promise<any>;

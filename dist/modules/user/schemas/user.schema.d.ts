@@ -18,6 +18,7 @@ export declare const UserSchema: Schema<any, import("mongoose").Model<any, any, 
     idType?: string;
     tasks?: any[];
     answers?: any[];
+    site?: string;
     created_at?: Date;
     updated_at?: Date;
 }, import("mongoose").Document<unknown, {}, import("mongoose").FlatRecord<{
@@ -39,6 +40,7 @@ export declare const UserSchema: Schema<any, import("mongoose").Model<any, any, 
     idType?: string;
     tasks?: any[];
     answers?: any[];
+    site?: string;
     created_at?: Date;
     updated_at?: Date;
 }>> & import("mongoose").FlatRecord<{
@@ -60,6 +62,7 @@ export declare const UserSchema: Schema<any, import("mongoose").Model<any, any, 
     idType?: string;
     tasks?: any[];
     answers?: any[];
+    site?: string;
     created_at?: Date;
     updated_at?: Date;
 }> & {
