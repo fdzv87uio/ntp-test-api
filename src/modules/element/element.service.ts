@@ -539,7 +539,7 @@ export class ElementService {
             const image5Url = await uploadImageWithWatermark(imageBuffer5, page, 'praedio');
 
 
-            const geolocation = await getOneGeolocationByQuery(`${addressArr[1]}, ${addressArr[2]}, Ecuador`)
+            const geolocation = await getOneGeolocationByQuery(`${addressArr[0]}, ${addressArr[1]}, ${addressArr[2]}, Ecuador`)
 
 
             const newItem = {

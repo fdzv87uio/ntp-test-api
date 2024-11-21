@@ -427,7 +427,7 @@ let ElementService = class ElementService {
                 .getAttribute("src");
             const imageBuffer5 = await this.fetchImageFromUrl(image5);
             const image5Url = await (0, elementUtils_1.uploadImageWithWatermark)(imageBuffer5, page, 'praedio');
-            const geolocation = await (0, geolocation_utils_1.getOneGeolocationByQuery)(`${addressArr[1]}, ${addressArr[2]}, Ecuador`);
+            const geolocation = await (0, geolocation_utils_1.getOneGeolocationByQuery)(`${addressArr[0]}, ${addressArr[1]}, ${addressArr[2]}, Ecuador`);
             const newItem = {
                 userId: '671d11005b8296252591f282',
                 title: title,
