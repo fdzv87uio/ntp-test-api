@@ -17,6 +17,7 @@ import { ElementModule } from './modules/element/element.module';
 import { PaymentMethodModule } from './modules/paymentMethod/paymentMethod.module';
 import { OrderModule } from './modules/order/order.module';
 import { GeolocationModule } from './modules/geolocation/geolocation.module';
+import { RealtorModule } from './modules/realtor/realtor.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -28,7 +29,7 @@ import { GeolocationModule } from './modules/geolocation/geolocation.module';
     UserModule,
     EventModule,
     TransactionModule,
-    UploadModule, ConfigModule, MailModule, TaskModule, AnswerModule, TaskModule, ElementModule, PaymentMethodModule, OrderModule, GeolocationModule
+    UploadModule, ConfigModule, MailModule, RealtorModule, TaskModule, AnswerModule, TaskModule, ElementModule, PaymentMethodModule, OrderModule, GeolocationModule
   ],
   controllers: [AppController, MailController],
   providers: [AppService, MailService],
