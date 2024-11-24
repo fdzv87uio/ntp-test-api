@@ -51,9 +51,7 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], RealtorController.prototype, "getAllRealtors", null);
 __decorate([
-    (0, common_1.UseGuards)(guard_1.JwtAuthGuard),
-    (0, swagger_1.ApiBearerAuth)(),
-    (0, swagger_1.ApiOperation)({ summary: 'Get  Realtor by User Id' }),
+    (0, swagger_1.ApiOperation)({ summary: 'Get Realtor by User Id' }),
     (0, common_1.Get)('getByUserId/:id'),
     __param(0, (0, common_1.Param)('id')),
     __metadata("design:type", Function),
@@ -61,9 +59,7 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], RealtorController.prototype, "getRealtorByUserId", null);
 __decorate([
-    (0, common_1.UseGuards)(guard_1.JwtAuthGuard),
-    (0, swagger_1.ApiBearerAuth)(),
-    (0, swagger_1.ApiOperation)({ summary: 'Get Realtor by User Id' }),
+    (0, swagger_1.ApiOperation)({ summary: 'Get Realtor by Id' }),
     (0, common_1.Get)('getById/:id'),
     __param(0, (0, common_1.Param)('id')),
     __metadata("design:type", Function),

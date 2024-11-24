@@ -75,8 +75,6 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], ElementController.prototype, "getAllElements", null);
 __decorate([
-    (0, common_1.UseGuards)(guard_1.JwtAuthGuard),
-    (0, swagger_1.ApiBearerAuth)(),
     (0, swagger_1.ApiOperation)({ summary: 'Get All Available Elements by User Email' }),
     (0, common_1.Get)('getAllAvaliableByUserEmail/:email'),
     __param(0, (0, common_1.Param)('email')),
@@ -85,8 +83,6 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], ElementController.prototype, "getAllElementsByUserEmail", null);
 __decorate([
-    (0, common_1.UseGuards)(guard_1.JwtAuthGuard),
-    (0, swagger_1.ApiBearerAuth)(),
     (0, swagger_1.ApiOperation)({ summary: 'Get All Available Elements by User Id' }),
     (0, common_1.Get)('getAllAvaliableByUserId/:id'),
     __param(0, (0, common_1.Param)('id')),
@@ -95,8 +91,6 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], ElementController.prototype, "getAllElementsByUserId", null);
 __decorate([
-    (0, common_1.UseGuards)(guard_1.JwtAuthGuard),
-    (0, swagger_1.ApiBearerAuth)(),
     (0, swagger_1.ApiOperation)({ summary: 'Get All Available Praedia by User Id' }),
     (0, common_1.Get)('getAllAvailablePraediaByUserId/:id'),
     __param(0, (0, common_1.Param)('id')),

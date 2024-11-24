@@ -21,18 +21,14 @@ export class RealtorController {
     }
 
     // Get Realtor by User Id
-    @UseGuards(JwtAuthGuard)
-    @ApiBearerAuth()
-    @ApiOperation({ summary: 'Get  Realtor by User Id' })
+    @ApiOperation({ summary: 'Get Realtor by User Id' })
     @Get('getByUserId/:id')
     async getRealtorByUserId(@Param('id') id: string): Promise<any> {
         return this.realtorService.findRealtorByUserId(id);
     }
 
     // Get Realtor by Id
-    @UseGuards(JwtAuthGuard)
-    @ApiBearerAuth()
-    @ApiOperation({ summary: 'Get Realtor by User Id' })
+    @ApiOperation({ summary: 'Get Realtor by Id' })
     @Get('getById/:id')
     async getRealtorByd(@Param('id') id: string): Promise<any> {
         return this.realtorService.findRealtorById(id);

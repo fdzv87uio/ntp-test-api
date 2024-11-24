@@ -32,6 +32,11 @@ let UploadController = class UploadController {
         const result = await this.uploadService.uploadImage(file, body.id, body.site);
         return result;
     }
+    async uploadFileNoWatermark(file, body) {
+        console.log(body.id);
+        const result = await this.uploadService.uploadImageNoWatermark(file, body.id);
+        return result;
+    }
 };
 exports.UploadController = UploadController;
 __decorate([
@@ -49,6 +54,21 @@ __decorate([
     __metadata("design:paramtypes", [Object, upload_file_dto_1.UploadFileDto]),
     __metadata("design:returntype", Promise)
 ], UploadController.prototype, "uploadFile", null);
+__decorate([
+    (0, has_role_decorator_1.HasRoles)(role_enum_1.Role.Admin, role_enum_1.Role.User),
+    (0, common_1.UseGuards)(guard_1.JwtAuthGuard, roles_guard_1.RolesGuard),
+    (0, swagger_1.ApiBearerAuth)(),
+    (0, swagger_1.ApiOperation)({ summary: 'Upload an image file with no watermark' }),
+    (0, common_1.Post)('/imageNoWatermark'),
+    (0, swagger_1.ApiConsumes)('multipart/form-data'),
+    (0, swagger_1.ApiBody)({ type: upload_file_dto_1.UploadFileDto }),
+    (0, common_1.UseInterceptors)(upload_interceptor_1.MulterS3Interceptor),
+    __param(0, (0, common_1.UploadedFile)()),
+    __param(1, (0, common_1.Body)(new common_1.ValidationPipe())),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, upload_file_dto_1.UploadFileDto]),
+    __metadata("design:returntype", Promise)
+], UploadController.prototype, "uploadFileNoWatermark", null);
 exports.UploadController = UploadController = __decorate([
     (0, swagger_1.ApiTags)('Upload'),
     (0, common_1.Controller)('upload'),

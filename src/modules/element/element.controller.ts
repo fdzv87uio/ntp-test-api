@@ -24,8 +24,6 @@ export class ElementController {
     }
 
     // Get All Existing Elements by User Email
-    @UseGuards(JwtAuthGuard)
-    @ApiBearerAuth()
     @ApiOperation({ summary: 'Get All Available Elements by User Email' })
     @Get('getAllAvaliableByUserEmail/:email')
     async getAllElementsByUserEmail(@Param('email') userEmail: string): Promise<any[]> {
@@ -33,8 +31,6 @@ export class ElementController {
     }
 
     // Get All Existing Elements by UserID
-    @UseGuards(JwtAuthGuard)
-    @ApiBearerAuth()
     @ApiOperation({ summary: 'Get All Available Elements by User Id' })
     @Get('getAllAvaliableByUserId/:id')
     async getAllElementsByUserId(@Param('id') id: string): Promise<any[]> {
@@ -42,8 +38,7 @@ export class ElementController {
     }
 
     // Get All Existing Praedia by UserID
-    @UseGuards(JwtAuthGuard)
-    @ApiBearerAuth()
+
     @ApiOperation({ summary: 'Get All Available Praedia by User Id' })
     @Get('getAllAvailablePraediaByUserId/:id')
     async getAllPreadiaByUserId(@Param('id') id: string): Promise<any[]> {

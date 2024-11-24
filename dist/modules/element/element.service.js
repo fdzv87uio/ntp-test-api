@@ -142,18 +142,31 @@ let ElementService = class ElementService {
                     $addFields: {
                         isToday: {
                             $in: [dayName, "$schedule"]
+                        },
+                        sortKey: {
+                            $cond: {
+                                if: {
+                                    $or: [
+                                        { $regexMatch: { input: "$plan", regex: "pro", options: "i" } },
+                                        { $regexMatch: { input: "$plan", regex: "premium", options: "i" } },
+                                        { $regexMatch: { input: "$plan", regex: "realtor", options: "i" } }
+                                    ]
+                                }, then: 1, else: 2
+                            }
                         }
                     }
                 },
                 {
                     $sort: {
+                        sortKey: 1,
                         isToday: -1,
-                        createdAt: -1
+                        createdAt: -1,
                     }
                 },
                 {
                     $project: {
-                        isToday: 0
+                        isToday: 0,
+                        sortKey: 0
                     }
                 }
             ]);
@@ -189,18 +202,31 @@ let ElementService = class ElementService {
                     $addFields: {
                         isToday: {
                             $in: [dayName, "$schedule"]
+                        },
+                        sortKey: {
+                            $cond: {
+                                if: {
+                                    $or: [
+                                        { $regexMatch: { input: "$plan", regex: "pro", options: "i" } },
+                                        { $regexMatch: { input: "$plan", regex: "premium", options: "i" } },
+                                        { $regexMatch: { input: "$plan", regex: "realtor", options: "i" } }
+                                    ]
+                                }, then: 1, else: 2
+                            }
                         }
                     }
                 },
                 {
                     $sort: {
+                        sortKey: 1,
                         isToday: -1,
-                        createdAt: -1
+                        createdAt: -1,
                     }
                 },
                 {
                     $project: {
-                        isToday: 0
+                        isToday: 0,
+                        sortKey: 0,
                     }
                 }
             ]);
@@ -438,7 +464,7 @@ let ElementService = class ElementService {
                 authorEmail: "support@praedio.net",
                 location: addressArr[1],
                 address: addressArr[0],
-                city: addressArr[2],
+                city: addressArr[2].trim(),
                 country: "Ecuador",
                 plan: "none",
                 status: "active",
