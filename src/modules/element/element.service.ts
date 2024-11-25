@@ -442,8 +442,8 @@ export class ElementService {
             console.log(newItem);
             await driver.close();
             return newItem;
-        } catch (error) {
-            console.log(error);
+        } catch (error: any) {
+            console.log(error.message);
         }
     }
 

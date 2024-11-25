@@ -385,7 +385,7 @@ let ElementService = class ElementService {
             return newItem;
         }
         catch (error) {
-            console.log(error);
+            console.log(error.message);
         }
     }
     async scrapePlusvalia(driver, page) {

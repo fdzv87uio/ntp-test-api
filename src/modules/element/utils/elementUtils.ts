@@ -44,14 +44,18 @@ export async function uploadImageWithWatermarkNoScale(img: any, id?: string, sit
         formData.append("image", watermarkedImage.toString('base64'));
         const { data } = await axios.post(
             `https://api.imgbb.com/1/upload?key=${myApiKey}${id ? `&name=${id}` : ''}`,
-            formData
+            formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data'
+            }
+        }
         );
         console.log("data");
         console.log(data);
         const imageUrl = data.data.url;
         return imageUrl;
     } catch (error) {
-        console.log(error.message);
+        console.log(error);
     }
 }
 

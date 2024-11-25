@@ -40,14 +40,18 @@ async function uploadImageWithWatermarkNoScale(img, id, site) {
         const myApiKey = process.env.IMGBB_KEY;
         const formData = new FormData();
         formData.append("image", watermarkedImage.toString('base64'));
-        const { data } = await axios_1.default.post(`https://api.imgbb.com/1/upload?key=${myApiKey}${id ? `&name=${id}` : ''}`, formData);
+        const { data } = await axios_1.default.post(`https://api.imgbb.com/1/upload?key=${myApiKey}${id ? `&name=${id}` : ''}`, formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data'
+            }
+        });
         console.log("data");
         console.log(data);
         const imageUrl = data.data.url;
         return imageUrl;
     }
     catch (error) {
-        console.log(error.message);
+        console.log(error);
     }
 }
 //# sourceMappingURL=elementUtils.js.map
