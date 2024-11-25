@@ -276,10 +276,10 @@ let ElementService = class ElementService {
             throw new common_1.NotFoundException(`Error creating element: ${err.message}`);
         }
     }
-    async createElementFromPrepagos(page) {
+    async createElementFromPrepagos(page, country) {
         try {
             const driver = await new selenium_webdriver_1.Builder().forBrowser("chrome").build();
-            const newItem = await this.scrapePrepagos(driver, page);
+            const newItem = await this.scrapePrepagos(driver, page, country);
             console.log(newItem);
             const result = await this.createElement(newItem);
             return result;
@@ -329,7 +329,7 @@ let ElementService = class ElementService {
         console.log(res);
         return res;
     }
-    async scrapePrepagos(driver, page) {
+    async scrapePrepagos(driver, page, country) {
         const randomNumber = Math.floor(Math.random() * 2) + 1;
         const waitInterval = 20000;
         const url = `${page}`;
@@ -348,32 +348,32 @@ let ElementService = class ElementService {
                 .findElement(selenium_webdriver_1.By.xpath("/html/body/div[1]/div[2]/div[3]/img"))
                 .getAttribute("src");
             const imageBuffer1 = await this.fetchImageFromUrl(image1);
-            const image1Url = await (0, elementUtils_1.uploadImageWithWatermark)(imageBuffer1);
+            const image1Url = await (0, elementUtils_1.uploadImageWithWatermarkNoScale)(imageBuffer1);
             const image2 = await driver
                 .findElement(selenium_webdriver_1.By.xpath("/html/body/div[1]/div[2]/div[4]/div[1]/img"))
                 .getAttribute("src");
             const imageBuffer2 = await this.fetchImageFromUrl(image2);
-            const image2Url = await (0, elementUtils_1.uploadImageWithWatermark)(imageBuffer2);
+            const image2Url = await (0, elementUtils_1.uploadImageWithWatermarkNoScale)(imageBuffer2);
             const image3 = await driver
                 .findElement(selenium_webdriver_1.By.xpath("/html/body/div[1]/div[2]/div[4]/div[2]/img"))
                 .getAttribute("src");
             const imageBuffer3 = await this.fetchImageFromUrl(image3);
-            const image3Url = await (0, elementUtils_1.uploadImageWithWatermark)(imageBuffer3);
+            const image3Url = await (0, elementUtils_1.uploadImageWithWatermarkNoScale)(imageBuffer3);
             const phoneNum = await driver
                 .findElement(selenium_webdriver_1.By.css("button.h-14:nth-child(1)"))
                 .getText();
             const newItem = {
                 userId: '671d11005b8296252591f282',
                 title: newTitle,
-                description: adDescription,
+                description: adDescription + 'Sexo Anal Posiciones Sexo Oral Trato de Pareja Fetiches Escorts Prepagos Putas',
                 authorName: modelName,
                 authorNationality: randomNumber > 1 ? 'Ecuador' : "Venezuela",
                 authorPhone: "+593" + phoneNum,
                 authorEmail: "support@picosa.net",
-                location: modelCityName,
-                address: modelAddress,
-                city: modelCityName,
-                country: "Ecuador",
+                location: modelCityName.trim(),
+                address: modelAddress.trim(),
+                city: modelCityName.trim(),
+                country: country,
                 plan: "none",
                 status: "active",
                 category: "mujeres",

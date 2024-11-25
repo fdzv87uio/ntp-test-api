@@ -42,7 +42,7 @@ let ElementController = class ElementController {
         return this.elementService.createElement(element);
     }
     async createElementFromPrepagos(element) {
-        return this.elementService.createElementFromPrepagos(element.page);
+        return this.elementService.createElementFromPrepagos(element.page, element.country);
     }
     async createElementFromPlusvalia(element) {
         return this.elementService.createElementFromPlusvalia(element.page);

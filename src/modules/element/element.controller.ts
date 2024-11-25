@@ -59,7 +59,7 @@ export class ElementController {
     @Post('newFromPrepagos')
     async createElementFromPrepagos(@Body() element: ScrapePageDTO): Promise<any> {
 
-        return this.elementService.createElementFromPrepagos(element.page)
+        return this.elementService.createElementFromPrepagos(element.page, element.country);
     }
 
     //Create New Element From Prepagos

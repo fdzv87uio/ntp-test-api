@@ -8,16 +8,16 @@ export declare class ElementService {
     findAllAvailableElementsByUserId(id: string): Promise<Element[]>;
     findAllAvailablePraediaByUserId(id: string): Promise<Element[]>;
     createElement(element: any): Promise<Element>;
-    createElementFromPrepagos(page: string): Promise<any>;
+    createElementFromPrepagos(page: string, country: string): Promise<any>;
     createElementFromPlusvalia(page: string): Promise<any>;
     findElementById(id: string): Promise<Element>;
     findElementBySlug(slug: string): Promise<Element>;
     updateElementById(id: string, element: any): Promise<Element>;
     deleteElementById(id: string): Promise<Element>;
-    scrapePrepagos(driver: any, page: any): Promise<{
+    scrapePrepagos(driver: any, page: any, country: any): Promise<{
         userId: string;
         title: string;
-        description: any;
+        description: string;
         authorName: any;
         authorNationality: string;
         authorPhone: string;
@@ -25,7 +25,7 @@ export declare class ElementService {
         location: any;
         address: any;
         city: any;
-        country: string;
+        country: any;
         plan: string;
         status: string;
         category: string;

@@ -6,7 +6,7 @@ import { InjectModel } from '@nestjs/mongoose';
 // import { Bddduilder, By, Key, until } from 'selenium-webdriver'
 import { Builder, By, until } from 'selenium-webdriver'
 
-import { uploadImageWithWatermark } from './utils/elementUtils';
+import { uploadImageWithWatermark, uploadImageWithWatermarkNoScale } from './utils/elementUtils';
 import axios from 'axios';
 import { getOneGeolocationByQuery } from '../geolocation/utils/geolocation.utils';
 
@@ -288,11 +288,11 @@ export class ElementService {
         }
     }
 
-    async createElementFromPrepagos(page: string): Promise<any> {
+    async createElementFromPrepagos(page: string, country: string): Promise<any> {
         try {
             //scrape from prepagos
             const driver = await new Builder().forBrowser("chrome").build();
-            const newItem: any = await this.scrapePrepagos(driver, page);
+            const newItem: any = await this.scrapePrepagos(driver, page, country);
             console.log(newItem);
             const result = await this.createElement(newItem);
             return result;
@@ -348,7 +348,7 @@ export class ElementService {
     //Utils
 
     // Scrapper Function - Prepagos.com
-    async scrapePrepagos(driver, page) {
+    async scrapePrepagos(driver, page, country) {
         const randomNumber = Math.floor(Math.random() * 2) + 1;
         const waitInterval = 20000;
         const url = `${page}`;
@@ -390,7 +390,7 @@ export class ElementService {
                 )
                 .getAttribute("src");
             const imageBuffer1 = await this.fetchImageFromUrl(image1);
-            const image1Url = await uploadImageWithWatermark(imageBuffer1);
+            const image1Url = await uploadImageWithWatermarkNoScale(imageBuffer1);
 
             const image2 = await driver
                 .findElement(
@@ -400,7 +400,7 @@ export class ElementService {
                 )
                 .getAttribute("src");
             const imageBuffer2 = await this.fetchImageFromUrl(image2);
-            const image2Url = await uploadImageWithWatermark(imageBuffer2);
+            const image2Url = await uploadImageWithWatermarkNoScale(imageBuffer2);
 
             const image3 = await driver
                 .findElement(
@@ -410,7 +410,7 @@ export class ElementService {
                 )
                 .getAttribute("src");
             const imageBuffer3 = await this.fetchImageFromUrl(image3);
-            const image3Url = await uploadImageWithWatermark(imageBuffer3);
+            const image3Url = await uploadImageWithWatermarkNoScale(imageBuffer3);
             //Get Phone
             const phoneNum = await driver
                 .findElement(
@@ -424,15 +424,15 @@ export class ElementService {
             const newItem = {
                 userId: '671d11005b8296252591f282',
                 title: newTitle,
-                description: adDescription,
+                description: adDescription + 'Sexo Anal Posiciones Sexo Oral Trato de Pareja Fetiches Escorts Prepagos Putas',
                 authorName: modelName,
                 authorNationality: randomNumber > 1 ? 'Ecuador' : "Venezuela",
                 authorPhone: "+593" + phoneNum,
                 authorEmail: "support@picosa.net",
-                location: modelCityName,
-                address: modelAddress,
-                city: modelCityName,
-                country: "Ecuador",
+                location: modelCityName.trim(),
+                address: modelAddress.trim(),
+                city: modelCityName.trim(),
+                country: country,
                 plan: "none",
                 status: "active",
                 category: "mujeres",
