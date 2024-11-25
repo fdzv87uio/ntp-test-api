@@ -67,6 +67,46 @@ let UploadService = class UploadService {
         }
     }
     ;
+    async uploadImageNoRescale(img, id, site) {
+        try {
+            console.log("Uploading Image...");
+            const myApiKey = process.env.IMGBB_KEY;
+            console.log("Key:");
+            console.log(myApiKey);
+            const imagePath = site === 'praedio' ? 'src/img/watermark-praedio.png' : 'src/img/watermark.png';
+            const absolutePath = path.resolve(imagePath);
+            console.log(absolutePath);
+            const watermark = await fs_1.promises.readFile(absolutePath);
+            const watermarkedImage = await sharp(img.buffer).composite([{ input: watermark, gravity: 'center' }]).toBuffer();
+            console.log(watermarkedImage);
+            const formData = new FormData();
+            formData.append("image", watermarkedImage.toString('base64'));
+            console.log("form Data:");
+            console.log(formData);
+            const res = await axios_1.default.post(`https://api.imgbb.com/1/upload?key=${myApiKey}&name=${id}`, formData);
+            console.log('***********************IMGBB DATA*******************************');
+            console.log(res);
+            const imageUrl = res.data.data.url;
+            return {
+                success: true,
+                statusCode: 'Upload Successful',
+                data: {
+                    url: imageUrl,
+                    signedurl: id
+                }
+            };
+        }
+        catch (error) {
+            console.log(error.message);
+            console.error('Error uploading file:', JSON.stringify(error, null, 2));
+            return {
+                success: false,
+                statusCode: 'Upload Failed',
+                error: error,
+            };
+        }
+    }
+    ;
     async uploadImageNoWatermark(img, id) {
         try {
             console.log("Uploading Image...");

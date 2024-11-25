@@ -238,7 +238,7 @@ let ElementService = class ElementService {
         return elements;
     }
     async findAllAvailableElementsByUserId(id) {
-        const elements = await this.elementModel.find({ userId: id });
+        const elements = await this.elementModel.find({ userId: id, site: 'picosa' });
         return elements;
     }
     async findAllAvailablePraediaByUserId(id) {

@@ -32,4 +32,18 @@ export declare class UploadController {
         error: any;
         data?: undefined;
     }>;
+    uploadFileNoRescale(file: Express.MulterFile, body: UploadFileDto): Promise<{
+        success: boolean;
+        statusCode: string;
+        data: {
+            url: any;
+            signedurl: string;
+        };
+        error?: undefined;
+    } | {
+        success: boolean;
+        statusCode: string;
+        error: any;
+        data?: undefined;
+    }>;
 }

@@ -15,6 +15,20 @@ export declare class UploadService {
         error: any;
         data?: undefined;
     }>;
+    uploadImageNoRescale(img: Express.MulterFile, id: string, site?: string): Promise<{
+        success: boolean;
+        statusCode: string;
+        data: {
+            url: any;
+            signedurl: string;
+        };
+        error?: undefined;
+    } | {
+        success: boolean;
+        statusCode: string;
+        error: any;
+        data?: undefined;
+    }>;
     uploadImageNoWatermark(img: Express.MulterFile, id: string): Promise<{
         success: boolean;
         statusCode: string;

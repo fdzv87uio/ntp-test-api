@@ -21,5 +21,5 @@ export declare class CreateElementDTO {
     deadline?: string;
     images?: string[];
     videos?: string[];
-    site?: string;
+    site: string;
 }

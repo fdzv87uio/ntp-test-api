@@ -117,9 +117,9 @@ export class CreateElementDTO {
     videos?: string[];
 
     @ApiProperty({ default: "picosa" })
-    @IsOptional()
+    @IsNotEmpty()
     @IsString()
-    site?: string;
+    site: string;
 
 }
 

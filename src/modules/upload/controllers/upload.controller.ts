@@ -51,6 +51,24 @@ export class UploadController {
     return result;
   }
 
+  @HasRoles(Role.Admin, Role.User)
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Upload an image file with no rescalling' })
+  @Post('/imageNoRescale')
+  @ApiConsumes('multipart/form-data')
+  @ApiBody({ type: UploadFileDto })
+  @UseInterceptors(MulterS3Interceptor)
+  async uploadFileNoRescale(
+    @UploadedFile() file: Express.MulterFile,
+    @Body(new ValidationPipe()) body: UploadFileDto
+  ) {
+    console.log(body.id);
+    const result = await this.uploadService.uploadImageNoRescale(file, body.id);
+    return result;
+  }
+
+
 
 
 }
