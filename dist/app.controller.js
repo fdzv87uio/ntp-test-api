@@ -12,22 +12,12 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.AppController = void 0;
 const common_1 = require("@nestjs/common");
 const app_service_1 = require("./app.service");
-const swagger_1 = require("@nestjs/swagger");
-const guard_1 = require("./modules/auth/guard");
 let AppController = class AppController {
     constructor(appService) {
         this.appService = appService;
     }
     getHello() {
         return this.appService.getHello();
-    }
-    getCredentials() {
-        const creds = {
-            AES_KEY: process.env.AES_KEY,
-            AES_IV: process.env.AES_IV,
-            AES_METHOD: process.env.AES_METHOD,
-        };
-        return creds;
     }
 };
 exports.AppController = AppController;
@@ -37,14 +27,6 @@ __decorate([
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", String)
 ], AppController.prototype, "getHello", null);
-__decorate([
-    (0, common_1.Get)('getCreds'),
-    (0, common_1.UseGuards)(guard_1.JwtAuthGuard),
-    (0, swagger_1.ApiBearerAuth)(),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", []),
-    __metadata("design:returntype", Object)
-], AppController.prototype, "getCredentials", null);
 exports.AppController = AppController = __decorate([
     (0, common_1.Controller)(),
     __metadata("design:paramtypes", [app_service_1.AppService])

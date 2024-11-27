@@ -11,6 +11,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
+var _a;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.UserService = void 0;
 const common_1 = require("@nestjs/common");
@@ -30,17 +31,10 @@ let UserService = class UserService {
             return null;
         return user;
     }
-    async findOneById(id) {
-        const user = await this.userModel.findOne({ _id: id }).exec();
-        if (!user)
-            return null;
-        return user;
-    }
     async create(createUserDto) {
         try {
             const createdUser = new this.userModel(createUserDto);
-            createdUser.user_status = "pending";
-            createdUser.plan = "none";
+            createdUser.user_status = "enabled";
             createdUser.email = createdUser.email.toLowerCase();
             await createdUser.save();
             return await this.findOne(createdUser.email);
@@ -49,37 +43,6 @@ let UserService = class UserService {
             (0, console_1.log)("create User " + err.message);
             throw new common_1.BadRequestException("user not registered");
         }
-    }
-    async updateByEmail(email, user) {
-        const res = await this.userModel.findOneAndUpdate({ email: email }, user, {
-            new: true,
-            runValidators: false
-        });
-        if (!res)
-            throw new common_1.NotFoundException('User not found');
-        return res;
-    }
-    async resetUserStatus(email) {
-        const newObj = {
-            plan: ['none'],
-            deadline: 'none'
-        };
-        const res = await this.userModel.findOneAndUpdate({ email: email }, newObj, {
-            new: true,
-            runValidators: false
-        });
-        if (!res)
-            throw new common_1.NotFoundException('User not found');
-        return res;
-    }
-    async updateById(id, user) {
-        const res = await this.userModel.findOneAndUpdate({ _id: id }, user, {
-            new: true,
-            runValidators: false
-        });
-        if (!res)
-            throw new common_1.NotFoundException('User not found');
-        return res;
     }
     async myProfile(email, needPassword = true) {
         const select = ['email'];
@@ -97,6 +60,6 @@ exports.UserService = UserService;
 exports.UserService = UserService = __decorate([
     (0, common_1.Injectable)(),
     __param(0, (0, mongoose_1.InjectModel)('User')),
-    __metadata("design:paramtypes", [mongoose_2.Model])
+    __metadata("design:paramtypes", [typeof (_a = typeof mongoose_2.Model !== "undefined" && mongoose_2.Model) === "function" ? _a : Object])
 ], UserService);
 //# sourceMappingURL=user.service.js.map

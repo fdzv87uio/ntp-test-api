@@ -3,6 +3,6 @@ import { Injectable } from '@nestjs/common';
 @Injectable()
 export class AppService {
   getHello(): string {
-    return 'Welcome to SAVY WORKER Backend';
+    return 'Welcome to NEST.js Test';
   }
 }

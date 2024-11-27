@@ -12,11 +12,7 @@ const auth_controller_1 = require("./controllers/auth.controller");
 const auth_service_1 = require("./services/auth.service");
 const passport_1 = require("@nestjs/passport");
 const jwt_1 = require("@nestjs/jwt");
-const config_1 = require("@nestjs/config");
 const user_module_1 = require("../user/user.module");
-const local_strategy_1 = require("./strategies/local.strategy");
-const jwt_strategy_1 = require("./strategies/jwt.strategy");
-const mail_module_1 = require("../mail/mail.module");
 let AuthModule = class AuthModule {
 };
 exports.AuthModule = AuthModule;
@@ -26,17 +22,13 @@ exports.AuthModule = AuthModule = __decorate([
             passport_1.PassportModule.register({
                 defaultStrategy: 'jwt'
             }),
-            jwt_1.JwtModule.registerAsync({
-                inject: [config_1.ConfigService],
-                useFactory: (config) => ({
-                    secret: config.get('JWT_SECRET'),
-                    signOptions: { expiresIn: '24h' }
-                })
+            jwt_1.JwtModule.register({
+                secret: 'aksjd12LKLkjlkdjf3ilkaslk.232',
+                signOptions: { expiresIn: '24h' }
             }),
             user_module_1.UserModule,
-            mail_module_1.MailModule
         ],
-        providers: [auth_service_1.AuthService, local_strategy_1.LocalStrategy, jwt_strategy_1.JwtStrategy],
+        providers: [auth_service_1.AuthService],
         exports: [auth_service_1.AuthService],
         controllers: [auth_controller_1.AuthController]
     })

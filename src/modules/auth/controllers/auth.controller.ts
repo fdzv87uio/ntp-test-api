@@ -1,17 +1,12 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { Controller, Get, Post, UseGuards, Body, Req } from '@nestjs/common';
+import { Controller, Get, Post, UseGuards, Body, Req, Param } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { UserService } from '../../user/services/user.service';
-import { Email } from '../../common/decorators';
 import { AuthService } from '../services/auth.service';
-import { JwtAuthGuard } from '../guard'
 import { LoginDTO } from '../dtos/login.dto'
 import { CreateUserDto } from '../../user/dtos/create-user.dto';
-import { log } from 'console';
-import { ForgotPasswordDTO } from '../dtos/forgotPassword.dto';
-import { ResetPasswordDTO } from '../dtos/resetPassword.dto';
-import { VerifyAccountDTO } from '../dtos/verifyAccount.sto';
+
 
 @ApiTags('Auth')
 @Controller('auth')
@@ -22,7 +17,6 @@ export class AuthController {
         private readonly userService: UserService
     ) {}
 
-    @UseGuards(AuthGuard('local'))
     @Post('login')
     async login(@Body() user: LoginDTO) {
         const dataAuth = await this.authService.login(user);
@@ -30,20 +24,6 @@ export class AuthController {
             message: 'Login success',
             dataAuth: dataAuth
         }
-    }
-
-    @UseGuards(JwtAuthGuard)
-    @ApiBearerAuth()
-    @Get('test')
-    test(@Req() req) {
-        return 'Test Token service';
-    }
-
-    @UseGuards(JwtAuthGuard)
-    @ApiBearerAuth()
-    @Get('profile')
-    profile(@Email() email: string) {
-        return this.userService.myProfile(email);
     }
 
     @ApiOperation({ summary: 'Registry new user' })
@@ -56,26 +36,10 @@ export class AuthController {
         }
     }
 
-    @ApiOperation({ summary: 'Create Password Reset email' })
-    @Post('forgotPassword')
-    async forgotPassword(@Body() forgotPasswordDTO: ForgotPasswordDTO) {
-        await this.authService.resetPasswordEmail(forgotPasswordDTO.email);
-        return {
-            message: 'password reset email sent',
-        }
-    }
 
-    @ApiOperation({ summary: 'Reset Password' })
-    @Post('resetPassword')
-    async resetPassword(@Body() resetPasswordDTO: ResetPasswordDTO) {
-        const res = await this.authService.resetPassword(resetPasswordDTO);
-        return res;
-    }
-
-    @ApiOperation({ summary: 'Verify Account' })
-    @Post('verifyAccount')
-    async verifyPassword(@Body() verifyAccount: VerifyAccountDTO) {
-        const res = await this.authService.verifyAccount(verifyAccount.email, verifyAccount.token);
-        return res;
+    @ApiOperation({ summary: 'Validate token' })
+    @Get('validateToken/:token')
+    findById(@Param('token') token: string): Promise<any> {
+        return this.authService.validateToken(token);
     }
 }

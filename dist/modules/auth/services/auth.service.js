@@ -8,6 +8,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
+var _a;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AuthService = void 0;
 const common_1 = require("@nestjs/common");
@@ -15,13 +16,10 @@ const user_service_1 = require("../../user/services/user.service");
 const bcrypt_1 = require("bcrypt");
 const jwt_1 = require("@nestjs/jwt");
 const aes_1 = require("../utils/aes");
-const mail_service_1 = require("../../mail/mail.service");
-const formatters_1 = require("../utils/formatters");
 let AuthService = class AuthService {
-    constructor(userService, jwtService, mailService) {
+    constructor(userService, jwtService) {
         this.userService = userService;
         this.jwtService = jwtService;
-        this.mailService = mailService;
     }
     async validateUser(email, password) {
         try {
@@ -70,83 +68,31 @@ let AuthService = class AuthService {
         currentData.password = encryptedPassword;
         const user = await this.userService.create(currentData);
         const payload = { id: user.id, email: user.email };
-        const token = this.createToken(payload, user);
-        const currentSite = currentData.site ? currentData.site : "picosa";
-        const currentDomain = (0, formatters_1.getDomain)(currentSite);
-        const msgEmail = user.email;
-        const tokenURL = `${currentDomain}/verify-email/${msgEmail}/${token}`;
-        const msg = `Estimado Usuario de ${currentSite.toUpperCase()}: Utilice el siguiente link y cópielo en su explorador para verificar su cuenta: ${tokenURL}`;
-        await this.mailService.sendCompleteEmail(msgEmail, `${currentSite.toUpperCase()} - Verificación de Cuenta`, msg);
+        const token = this.createToken(payload);
         return {
-            user
+            user: user,
+            token: token,
         };
     }
-    async verifyAccount(email, token) {
-        const user = await this.userService.findOne(email);
+    async validateToken(token) {
         try {
             const secret = JSON.stringify({
                 secret: process.env.JWT_SECRET,
-                updatedAt: user.updatedAt,
             });
-            this.jwtService.verify(token, {
-                secret,
-            });
+            const info = this.jwtService.verify(token);
+            return {
+                status: "success",
+                data: info,
+            };
         }
         catch (err) {
             throw new common_1.ForbiddenException('expired or invalid token');
         }
-        if (!user)
-            throw new common_1.NotFoundException("user doesn't exist");
-        if (!(await this.userService.updateByEmail(email, { user_status: 'enabled' })))
-            throw new common_1.ServiceUnavailableException('something went wrong, please try again later');
-        return {
-            status: "success",
-            message: 'Account verified successfully',
-        };
     }
-    async resetPasswordEmail(email) {
-        const user = await this.userService.findOne(email);
-        if (!user)
-            throw new common_1.NotFoundException("user doesn't exist");
-        const payload = { id: user.id, email: user.email };
-        const token = this.createToken(payload, user);
-        const link = `${process.env.CURCLE_APP_URI}/passwordRecovery/${user.email}/${token}`;
-        const message = `Hello ${user.email}, Please, follow the following link to rest your password: ${link}`;
-        await this.mailService.sendSimpleEmail(user.email, message);
-    }
-    async resetPassword(resetPassword) {
-        const email = resetPassword.email;
-        const token = resetPassword.token;
-        const user = await this.userService.findOne(email);
-        try {
-            const secret = JSON.stringify({
-                secret: process.env.JWT_SECRET,
-                updatedAt: user.updatedAt,
-            });
-            this.jwtService.verify(token, {
-                secret,
-            });
-        }
-        catch (err) {
-            throw new common_1.ForbiddenException('expired or invalid token');
-        }
-        if (!user)
-            throw new common_1.NotFoundException("user doesn't exist");
-        if (resetPassword.password !== resetPassword.confirmPassword)
-            throw new common_1.ConflictException("passwords don't match");
-        const password = (0, aes_1.aesEncrypt)(resetPassword.password);
-        if (!(await this.userService.updateByEmail(email, { password: password })))
-            throw new common_1.ServiceUnavailableException('something went wrong, please try again later');
-        return {
-            status: "success",
-            message: 'password reset successfully',
-        };
-    }
-    createToken(payload, user) {
+    createToken(payload) {
         return this.jwtService.sign(payload, {
             secret: JSON.stringify({
                 secret: process.env.JWT_SECRET,
-                updatedAt: user.updatedAt,
             }),
         });
     }
@@ -154,8 +100,6 @@ let AuthService = class AuthService {
 exports.AuthService = AuthService;
 exports.AuthService = AuthService = __decorate([
     (0, common_1.Injectable)(),
-    __metadata("design:paramtypes", [user_service_1.UserService,
-        jwt_1.JwtService,
-        mail_service_1.MailService])
+    __metadata("design:paramtypes", [user_service_1.UserService, typeof (_a = typeof jwt_1.JwtService !== "undefined" && jwt_1.JwtService) === "function" ? _a : Object])
 ], AuthService);
 //# sourceMappingURL=auth.service.js.map

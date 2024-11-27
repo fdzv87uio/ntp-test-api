@@ -1,13 +1,10 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { BadRequestException, ConflictException, ForbiddenException, Injectable, NotFoundException, ServiceUnavailableException, UnauthorizedException } from '@nestjs/common';
+import { ForbiddenException, Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { UserService } from '../../user/services/user.service';
 import { compare } from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
 import { CreateUserDto } from 'src/modules/user/dtos/create-user.dto';
 import { aesDecrypt, aesEncrypt } from '../utils/aes';
-import { MailService } from 'src/modules/mail/mail.service';
-import { ResetPasswordDTO } from '../dtos/resetPassword.dto';
-import { getDomain } from '../utils/formatters';
 
 
 @Injectable()
@@ -15,8 +12,7 @@ export class AuthService {
 
     constructor(
         private readonly userService: UserService,
-        private readonly jwtService: JwtService,
-        private readonly mailService: MailService
+        private readonly jwtService: JwtService
     ) {}
 
     async validateUser(email: string, password: string): Promise<any> {
@@ -68,91 +64,36 @@ export class AuthService {
         currentData.password = encryptedPassword;
         const user = await this.userService.create(currentData);
         const payload = { id: user.id, email: user.email };
-        const token = this.createToken(payload, user);
-        const currentSite = currentData.site ? currentData.site : "picosa";
-        const currentDomain = getDomain(currentSite);
-        // const token = await this.login(user);
-        // const accessToken = token.accessToken;
-        // Send email with the Access Token
-
-        const msgEmail = user.email;
-        const tokenURL = `${currentDomain}/verify-email/${msgEmail}/${token}`
-        const msg = `Estimado Usuario de ${currentSite.toUpperCase()}: Utilice el siguiente link y cópielo en su explorador para verificar su cuenta: ${tokenURL}`
-        await this.mailService.sendCompleteEmail(msgEmail, `${currentSite.toUpperCase()} - Verificación de Cuenta`, msg);
+        const token = this.createToken(payload);
         return {
-            user
+            user: user,
+            token: token,
         }
 
     }
 
-    async verifyAccount(email: string, token: string): Promise<any> {
-        const user: any = await this.userService.findOne(email);
+    async validateToken(token: string) {
         try {
             const secret = JSON.stringify({
                 secret: process.env.JWT_SECRET,
-                updatedAt: user.updatedAt,
             });
-            this.jwtService.verify(token, {
-                secret,
-            });
+            const info = this.jwtService.verify(token);
+            return {
+                status: "success",
+                data: info,
+            };
         } catch (err) {
             throw new ForbiddenException('expired or invalid token');
         }
-        if (!user)
-            throw new NotFoundException("user doesn't exist");
-        if (!(await this.userService.updateByEmail(email, { user_status: 'enabled' })))
-            throw new ServiceUnavailableException('something went wrong, please try again later');
-        return {
-            status: "success",
-            message: 'Account verified successfully',
-        };
+
     }
 
-    async resetPasswordEmail(email: string) {
-        const user = await this.userService.findOne(email);
-        if (!user)
-            throw new NotFoundException("user doesn't exist");
-        const payload = { id: user.id, email: user.email };
-        const token = this.createToken(payload, user);
-        const link = `${process.env.CURCLE_APP_URI}/passwordRecovery/${user.email}/${token}`;
-        const message = `Hello ${user.email}, Please, follow the following link to rest your password: ${link}`
-        await this.mailService.sendSimpleEmail(user.email, message);
-    }
+    //Utils
 
-    async resetPassword(resetPassword: ResetPasswordDTO) {
-        const email = resetPassword.email;
-        const token = resetPassword.token;
-        const user: any = await this.userService.findOne(email);
-
-        try {
-            const secret = JSON.stringify({
-                secret: process.env.JWT_SECRET,
-                updatedAt: user.updatedAt,
-            });
-            this.jwtService.verify(token, {
-                secret,
-            });
-        } catch (err) {
-            throw new ForbiddenException('expired or invalid token');
-        }
-        if (!user)
-            throw new NotFoundException("user doesn't exist");
-        if (resetPassword.password !== resetPassword.confirmPassword)
-            throw new ConflictException("passwords don't match");
-        const password = aesEncrypt(resetPassword.password);
-        if (!(await this.userService.updateByEmail(email, { password: password })))
-            throw new ServiceUnavailableException('something went wrong, please try again later');
-        return {
-            status: "success",
-            message: 'password reset successfully',
-        };
-    }
-
-    createToken(payload: object, user: any) {
+    createToken(payload: object) {
         return this.jwtService.sign(payload, {
             secret: JSON.stringify({
                 secret: process.env.JWT_SECRET,
-                updatedAt: user.updatedAt,
             }),
         });
     }
