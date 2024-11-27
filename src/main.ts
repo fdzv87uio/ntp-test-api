@@ -2,8 +2,6 @@ import { Logger, ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
-import helmet from 'helmet';
-import * as cookieParser from 'cookie-parser';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
@@ -14,10 +12,10 @@ async function bootstrap() {
   const globalPrefix = 'v1';
   app.setGlobalPrefix(globalPrefix);
   const options = new DocumentBuilder()
-    .setTitle('Savy Worker Backend')
+    .setTitle('NTP-TEST-API')
     .addBearerAuth()
     .setDescription(
-      'A Nest.js REST API Service for the SAVY WORKER System',
+      'A Nest.js REST API Service for the NTP Test',
     )
     .setVersion('1.0')
     .build();
@@ -38,8 +36,6 @@ async function bootstrap() {
     res.header('Access-Control-Allow-Headers', 'Content-Type, Accept');
     next();
   });
-  app.use(cookieParser());
-  app.use(helmet());
 
   await app.listen(process.env.PORT ? parseInt(process.env.PORT) : 3000);
   logger.log(

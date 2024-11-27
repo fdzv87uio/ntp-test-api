@@ -6,5 +6,5 @@ export declare class UserService {
     findAll(): Promise<User[]>;
     findOne(email: string): Promise<User>;
     create(createUserDto: any): Promise<User>;
-    myProfile(email: string, needPassword?: boolean): unknown;
+    myProfile(email: string, needPassword?: boolean): Promise<User>;
 }

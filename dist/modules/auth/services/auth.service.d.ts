@@ -6,8 +6,14 @@ export declare class AuthService {
     private readonly jwtService;
     constructor(userService: UserService, jwtService: JwtService);
     validateUser(email: string, password: string): Promise<any>;
-    login(user: any): unknown;
+    login(user: any): Promise<{
+        accessToken: string;
+        user: import("../../user/interfaces/user.interface").User;
+    }>;
     register(createUserDto: CreateUserDto): Promise<any>;
-    validateToken(token: string): unknown;
-    createToken(payload: object): any;
+    validateToken(token: string): Promise<{
+        status: string;
+        data: any;
+    }>;
+    createToken(payload: object): string;
 }

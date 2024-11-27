@@ -4,8 +4,6 @@ const common_1 = require("@nestjs/common");
 const core_1 = require("@nestjs/core");
 const app_module_1 = require("./app.module");
 const swagger_1 = require("@nestjs/swagger");
-const helmet_1 = require("helmet");
-const cookieParser = require("cookie-parser");
 async function bootstrap() {
     const app = await core_1.NestFactory.create(app_module_1.AppModule, {
         cors: true,
@@ -14,9 +12,9 @@ async function bootstrap() {
     const globalPrefix = 'v1';
     app.setGlobalPrefix(globalPrefix);
     const options = new swagger_1.DocumentBuilder()
-        .setTitle('Savy Worker Backend')
+        .setTitle('NTP-TEST-API')
         .addBearerAuth()
-        .setDescription('A Nest.js REST API Service for the SAVY WORKER System')
+        .setDescription('A Nest.js REST API Service for the NTP Test')
         .setVersion('1.0')
         .build();
     const document = swagger_1.SwaggerModule.createDocument(app, options);
@@ -32,8 +30,6 @@ async function bootstrap() {
         res.header('Access-Control-Allow-Headers', 'Content-Type, Accept');
         next();
     });
-    app.use(cookieParser());
-    app.use((0, helmet_1.default)());
     await app.listen(process.env.PORT ? parseInt(process.env.PORT) : 3000);
     logger.log(`Server running on port ${process.env.PORT ? parseInt(process.env.PORT) : 3000}`);
 }

@@ -1,2 +1,2 @@
-export declare function aesEncrypt(data: string): any;
-export declare function aesDecrypt(encryptedData: string): any;
+export declare function aesEncrypt(data: string): string;
+export declare function aesDecrypt(encryptedData: string): string;
